@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="uz" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Muxa SMM // Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --ios-blur: blur(28px) saturate(190%);
+            --card-bg: rgba(17, 24, 39, 0.72);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background-color: #030712;
+            color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border: 1px solid var(--border-color);
+        }
+        .apple-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+        .glow-btn {
+            box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.45);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="p-3 md:p-6 min-h-screen pb-24">
+
+    <!-- USER HEADER (iOS Glassmorphism) -->
+    <header class="glass-card p-4 rounded-3xl mb-4 relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-36 h-36 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex items-center justify-between relative z-10">
+            <div class="flex items-center gap-3">
+                <div id="user-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-indigo-500/25">
+                    👤
+                </div>
+                <div>
+                    <h2 id="user-name" class="font-bold text-white text-base leading-tight">Mehmon</h2>
+                    <span id="user-id" class="text-xs text-gray-400 font-mono">ID: 8191930658</span>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-[11px] text-gray-400 font-medium uppercase tracking-wider block">Balans</span>
+                <div class="flex items-baseline justify-end gap-1">
+                    <span id="user-balance" class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">0</span>
+                    <span class="text-xs text-emerald-400 font-semibold">so'm</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 py-1">
+        <button onclick="switchTab('store')" id="tab-btn-store" class="px-4 py-2 rounded-2xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5 whitespace-nowrap">
+            <span>🛍</span> Xizmatlar
+        </button>
+        <button onclick="switchTab('orders')" id="tab-btn-orders" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+            <span>📦</span> Buyurtmalarim
+        </button>
+        <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+            <span>💳</span> To'ldirish
+        </button>
+        <button onclick="switchTab('profile')" id="tab-btn-profile" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+            <span>⚙️</span> Kabinet
+        </button>
+    </div>
+
+    <!-- TAB 1: SMM STORE -->
+    <main id="tab-store" class="space-y-4">
+        <!-- PLATFORM SELECTOR -->
+        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+            <button onclick="selectPlatform('telegram')" id="plat-telegram" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap">
+                <span>✈️</span> Telegram
+            </button>
+            <button onclick="selectPlatform('instagram')" id="plat-instagram" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <span>📸</span> Instagram
+            </button>
+            <button onclick="selectPlatform('tiktok')" id="plat-tiktok" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <span>🎵</span> TikTok
+            </button>
+            <button onclick="selectPlatform('youtube')" id="plat-youtube" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <span>▶️</span> YouTube
+            </button>
+            <button onclick="selectPlatform('facebook')" id="plat-facebook" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+                <span>📘</span> Facebook
+            </button>
+        </div>
+
+        <!-- CATEGORY PILLS -->
+        <div id="category-pills" class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs">
+            <!-- Dynamically populated -->
+        </div>
+
+        <!-- SEARCH INPUT -->
+        <div class="relative">
+            <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomini qidirish..." class="w-full glass-card py-2.5 pl-10 pr-4 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
+            <span class="absolute left-3.5 top-2.5 text-gray-500 text-sm">🔍</span>
+        </div>
+
+        <!-- SERVICES LIST -->
+        <div id="services-container" class="space-y-3">
+            <!-- Dynamically generated service cards -->
+        </div>
+    </main>
+
+    <!-- TAB 2: MY ORDERS -->
+    <section id="tab-orders" class="space-y-3 hidden">
+        <div class="glass-card p-5 rounded-3xl">
+            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <span>📋</span> Mening Buyurtmalarim
+            </h3>
+            <div id="my-orders-list" class="space-y-2.5 text-xs">
+                <!-- Dynamically populated or fallback -->
+                <div class="text-center py-8 text-gray-500">
+                    <div class="text-3xl mb-2">📭</div>
+                    Hozircha faol buyurtmalaringiz yo'q.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 3: DEPOSIT / BALANS TO'LDIRISH -->
+    <section id="tab-deposit" class="space-y-4 hidden">
+        <div class="glass-card p-5 rounded-3xl space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                    💳
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-sm">Balans to'ldirish</h3>
+                    <p class="text-[11px] text-gray-400">To'lovlar avtomatik yoki admin orqali tasdiqlanadi</p>
+                </div>
+            </div>
+
+            <!-- PAYMENT OPTIONS -->
+            <div class="space-y-2.5 text-xs">
+                <!-- Card 1: Click / Payme -->
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                            <span>🟢</span> Click & Payme (Karta)
+                        </span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">0% Komissiya</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-black/40 font-mono text-gray-300 flex justify-between items-center">
+                        <span id="card-num">8600 5304 1234 5678</span>
+                        <button onclick="copyCard()" class="text-indigo-400 hover:text-indigo-300 font-sans font-bold">Nusxa olish 📋</button>
+                    </div>
+                    <p class="text-[10px] text-gray-400 leading-relaxed">
+                        To'lov qilgach, chekni botdagi <b>«Hisob to'ldirish»</b> bo'limiga yuboring. Balansingiz 1 daqiqa ichida to'ldiriladi.
+                    </p>
+                </div>
+
+                <!-- Card 2: Telegram Stars -->
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-amber-400 flex items-center gap-1.5">
+                            <span>⭐</span> Telegram Stars
+                        </span>
+                        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold">Tezkor</span>
+                    </div>
+                    <p class="text-[11px] text-gray-300">
+                        1 Telegram Yulduz = <b>120 so'm</b> hisobida qabul qilinadi. Bot chatida <code>/stars</code> yozib to'g'ridan-to'g'ri to'lashingiz mumkin.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TAB 4: PROFILE & REFERRAL -->
+    <section id="tab-profile" class="space-y-4 hidden">
+        <div class="glass-card p-5 rounded-3xl space-y-4 text-xs">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                <span>👤</span> Foydalanuvchi Profili
+            </h3>
+            
+            <div class="grid grid-cols-2 gap-3 text-center">
+                <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <span class="text-gray-400 text-[10px]">Jami Buyurtmalar</span>
+                    <div id="prof-total-orders" class="text-base font-bold text-indigo-400 mt-1">0 ta</div>
+                </div>
+                <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <span class="text-gray-400 text-[10px]">Taklif etilganlar</span>
+                    <div id="prof-referrals" class="text-base font-bold text-purple-400 mt-1">0 ta</div>
+                </div>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                <span class="font-bold text-indigo-300">🔗 Sizning Referal Havolangiz:</span>
+                <div class="p-2 rounded-xl bg-black/40 font-mono text-[11px] text-gray-300 break-all select-all" id="ref-link">
+                    https://t.me/Muxa_aibot?start=8191930658
+                </div>
+                <p class="text-[10px] text-gray-400">Har bir do'stingiz to'ldirgan hisobidan 10% doimiy bonus balansingizga tushadi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ORDER MODAL (POPUP) -->
+    <div id="order-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-end md:items-center justify-center p-0 md:p-4 hidden transition-all duration-300">
+        <div class="glass-card w-full max-w-lg rounded-t-[32px] md:rounded-[32px] p-6 space-y-4 border-t border-white/20">
+            <div class="flex justify-between items-start">
+                <div>
+                    <span id="modal-service-id" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#101</span>
+                    <h3 id="modal-service-title" class="text-sm font-bold text-white mt-1.5 leading-snug">Telegram Obunachilar</h3>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white">✕</button>
+            </div>
+
+            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 text-xs">
+                <div class="flex justify-between text-gray-400">
+                    <span>Narxi (1,000 ta):</span>
+                    <span id="modal-service-price" class="font-bold text-emerald-400">12,000 so'm</span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>Buyurtma oralig'i:</span>
+                    <span id="modal-service-limits" class="font-mono text-gray-300">10 — 50,000</span>
+                </div>
+            </div>
+
+            <!-- LINK INPUT -->
+            <div class="space-y-1">
+                <label class="text-[11px] font-semibold text-gray-300">Havola (Kanal, Guruh yoki Post linki):</label>
+                <input type="text" id="order-link" placeholder="https://t.me/kanal_nomi yoki @username" class="w-full glass-card p-3 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
+            </div>
+
+            <!-- QUANTITY INPUT -->
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-semibold text-gray-300">Miqdor:</label>
+                <input type="number" id="order-qty" oninput="calculateTotal()" placeholder="Masalan: 1000" class="w-full glass-card p-3 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono">
+                
+                <!-- QUICK CHIPS -->
+                <div class="flex gap-2">
+                    <button onclick="setQty(100)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+100</button>
+                    <button onclick="setQty(500)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+500</button>
+                    <button onclick="setQty(1000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+1,000</button>
+                    <button onclick="setQty(5000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+5,000</button>
+                </div>
+            </div>
+
+            <!-- TOTAL PRICE & SUBMIT -->
+            <div class="pt-2 border-t border-white/10 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Jami to'lov:</span>
+                    <span id="modal-total-price" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">0 so'm</span>
+                </div>
+                <button onclick="submitOrder()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs glow-btn active:scale-95 transition-all">
+                    Tasdiqlash 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            tg.headerColor = '#030712';
+            tg.backgroundColor = '#030712';
+        }
+
+        // Services Data Base (Integrated with Telegram Bot)
+        const SERVICES = {
+            telegram: {
+                categories: ["Obunachilar", "Ko'rishlar", "Reaksiyalar", "Avto-Ko'rish"],
+                items: [
+                    { id: 101, cat: "Obunachilar", name: "⚡️ Telegram O'zbek Obunachilar (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000, speed: "10k/kun", badge: "KAFOLAT" },
+                    { id: 102, cat: "Obunachilar", name: "💎 Telegram Jonli O'zbek Obunachilar (Sifatli)", price: 28000, min: 50, max: 20000, speed: "5k/kun", badge: "PREMIUM" },
+                    { id: 103, cat: "Obunachilar", name: "🌐 Telegram Arzon Obunachilar (Dunyoviy)", price: 9000, min: 100, max: 100000, speed: "20k/kun", badge: "ARZON" },
+                    { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Oxirgi 1 ta postga)", price: 800, min: 50, max: 100000, speed: "Instant", badge: "TEZKOR" },
+                    { id: 105, cat: "Ko'rishlar", name: "👁 Oxirgi 5 ta postga ko'rish ulashish", price: 3500, min: 100, max: 50000, speed: "Avto", badge: "TOP" },
+                    { id: 106, cat: "Reaksiyalar", name: "👍 Telegram Ijobiy Reaksiyalar (👍❤️🔥🎉🥰)", price: 1500, min: 20, max: 10000, speed: "Instant", badge: "MIX" },
+                    { id: 107, cat: "Avto-Ko'rish", name: "🔄 Kelgusi 10 ta yangi postga avto ko'rish", price: 12000, min: 100, max: 10000, speed: "Avtomatik", badge: "VIP" }
+                ]
+            },
+            instagram: {
+                categories: ["Obunachilar", "Layklar", "Ko'rishlar", "Reels"],
+                items: [
+                    { id: 201, cat: "Obunachilar", name: "📸 Instagram Real Obunachilar (O'zbek / MDH)", price: 24000, min: 50, max: 50000, speed: "3k/kun", badge: "TOP" },
+                    { id: 202, cat: "Obunachilar", name: "⚡️ Instagram Tezkor Obunachilar (Global)", price: 12000, min: 100, max: 100000, speed: "15k/kun", badge: "ARZON" },
+                    { id: 203, cat: "Layklar", name: "❤️ Instagram Haqiqiy Layklar (Tezkor start)", price: 2500, min: 50, max: 20000, speed: "Instant", badge: "TEZKOR" },
+                    { id: 204, cat: "Reels", name: "🎬 Instagram Reels Ko'rishlar (Tavsiyaga chiqaruvchi)", price: 1200, min: 100, max: 500000, speed: "50k/kun", badge: "VIRAL" }
+                ]
+            },
+            tiktok: {
+                categories: ["Obunachilar", "Ko'rishlar", "Layklar"],
+                items: [
+                    { id: 301, cat: "Obunachilar", name: "🎵 TikTok Obunachilar (Jonli / Faol)", price: 29000, min: 50, max: 30000, speed: "2k/kun", badge: "PREMIUM" },
+                    { id: 302, cat: "Ko'rishlar", name: "👁 TikTok Video Ko'rishlar (Super tezkor)", price: 600, min: 500, max: 1000000, speed: "100k/kun", badge: "ULTRA" },
+                    { id: 303, cat: "Layklar", name: "❤️ TikTok Video Layklari (Sifatli)", price: 7500, min: 50, max: 50000, speed: "5k/kun", badge: "TOP" }
+                ]
+            },
+            youtube: {
+                categories: ["Obunachilar", "Ko'rishlar", "Layklar"],
+                items: [
+                    { id: 401, cat: "Obunachilar", name: "▶️ YouTube Kafolatli Obunachilar (Monetizatsiya uchun)", price: 85000, min: 50, max: 5000, speed: "300/kun", badge: "ORGANIC" },
+                    { id: 402, cat: "Ko'rishlar", name: "👁 YouTube Video Ko'rishlar (Retention 1-3 min)", price: 18000, min: 500, max: 100000, speed: "5k/kun", badge: "SAFE" }
+                ]
+            },
+            facebook: {
+                categories: ["Obunachilar", "Layklar"],
+                items: [
+                    { id: 501, cat: "Obunachilar", name: "📘 Facebook Sahifa Obunachilari", price: 32000, min: 100, max: 20000, speed: "2k/kun", badge: "PAGE" }
+                ]
+            }
+        };
+
+        let currentPlatform = 'telegram';
+        let currentCategory = 'All';
+        let selectedService = null;
+        let userBalance = 50000; // Standart demo balans
+
+        // Init User Info from Telegram
+        function initTelegramUser() {
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const u = tg.initDataUnsafe.user;
+                document.getElementById('user-name').innerText = u.first_name + (u.last_name ? ' ' + u.last_name : '');
+                document.getElementById('user-id').innerText = 'ID: ' + u.id;
+                document.getElementById('user-avatar').innerText = u.first_name.charAt(0);
+                document.getElementById('ref-link').innerText = `https://t.me/Muxa_aibot?start=${u.id}`;
+            }
+            document.getElementById('user-balance').innerText = userBalance.toLocaleString();
+        }
+
+        // Tab Switcher
+        function switchTab(tab) {
+            ['store', 'orders', 'deposit', 'profile'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).classList.remove('bg-indigo-600', 'text-white', 'shadow-indigo-600/30');
+                document.getElementById(`tab-btn-${t}`).classList.add('glass-card', 'text-gray-300');
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            activeBtn.classList.remove('glass-card', 'text-gray-300');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-indigo-600/30');
+            
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // Platform Switcher
+        function selectPlatform(plat) {
+            currentPlatform = plat;
+            document.querySelectorAll('.plat-btn').forEach(btn => {
+                btn.className = 'plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap';
+            });
+            const sel = document.getElementById(`plat-${plat}`);
+            sel.className = 'plat-btn px-3.5 py-2 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap';
+            
+            currentCategory = 'All';
+            renderCategories();
+            renderServices();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
+        }
+
+        // Render Categories
+        function renderCategories() {
+            const pills = document.getElementById('category-pills');
+            const cats = ['Barchasi', ...SERVICES[currentPlatform].categories];
+            pills.innerHTML = cats.map(c => {
+                const isActive = (c === 'Barchasi' && currentCategory === 'All') || c === currentCategory;
+                const activeClass = isActive ? 'bg-white/20 text-white font-bold border-white/30' : 'bg-white/[0.04] text-gray-400 border-white/5';
+                return `<button onclick="filterCategory('${c}')" class="px-3 py-1.5 rounded-xl border ${activeClass} transition-all whitespace-nowrap">${c}</button>`;
+            }).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat === 'Barchasi' ? 'All' : cat;
+            renderCategories();
+            renderServices();
+        }
+
+        // Render Services List
+        function renderServices() {
+            const container = document.getElementById('services-container');
+            const query = document.getElementById('search-input').value.toLowerCase();
+            let items = SERVICES[currentPlatform].items;
+
+            if (currentCategory !== 'All') {
+                items = items.filter(it => it.cat === currentCategory);
+            }
+            if (query) {
+                items = items.filter(it => it.name.toLowerCase().includes(query));
+            }
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-gray-500 text-xs">Hech qanday xizmat topilmadi.</div>';
+                return;
+            }
+
+            container.innerHTML = items.map(s => `
+                <div class="glass-card p-4 rounded-2xl space-y-2.5 transition-all active:scale-[0.99]">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#${s.id}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20">${s.badge}</span>
+                        </div>
+                        <span class="text-xs font-black text-emerald-400">${s.price.toLocaleString()} so'm <span class="text-[10px] text-gray-400 font-normal">/ 1k</span></span>
+                    </div>
+
+                    <h4 class="text-xs font-bold text-gray-100 leading-snug">${s.name}</h4>
+
+                    <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-white/5">
+                        <span>Limit: ${s.min} — ${s.max.toLocaleString()}</span>
+                        <span>Tezlik: ${s.speed}</span>
+                    </div>
+
+                    <button onclick="openModal(${s.id})" class="w-full py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+                        <span>Buyurtma Berish</span> <span>➔</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function filterServices() {
+            renderServices();
+        }
+
+        // Modal Controls
+        function openModal(serviceId) {
+            const all = Object.values(SERVICES).flatMap(p => p.items);
+            selectedService = all.find(it => it.id === serviceId);
+            if (!selectedService) return;
+
+            document.getElementById('modal-service-id').innerText = '#' + selectedService.id;
+            document.getElementById('modal-service-title').innerText = selectedService.name;
+            document.getElementById('modal-service-price').innerText = selectedService.price.toLocaleString() + " so'm";
+            document.getElementById('modal-service-limits').innerText = `${selectedService.min} — ${selectedService.max.toLocaleString()}`;
+            document.getElementById('order-link').value = '';
+            document.getElementById('order-qty').value = selectedService.min;
+            calculateTotal();
+
+            document.getElementById('order-modal').classList.remove('hidden');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        function closeModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+        }
+
+        function setQty(val) {
+            document.getElementById('order-qty').value = val;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            if (!selectedService) return;
+            const qty = parseInt(document.getElementById('order-qty').value) || 0;
+            const total = Math.round((qty / 1000) * selectedService.price);
+            document.getElementById('modal-total-price').innerText = total.toLocaleString() + " so'm";
+        }
+
+        // Submit Order to Bot via Telegram WebApp
+        function submitOrder() {
+            const link = document.getElementById('order-link').value.trim();
+            const qty = parseInt(document.getElementById('order-qty').value) || 0;
+
+            if (!link) {
+                alert("Iltimos, nishon havolani kiriting!");
+                return;
+            }
+            if (qty < selectedService.min || qty > selectedService.max) {
+                alert(`Miqdor ${selectedService.min} va ${selectedService.max} oralig'ida bo'lishi kerak!`);
+                return;
+            }
+
+            const total = Math.round((qty / 1000) * selectedService.price);
+            const orderPayload = {
+                action: "new_order",
+                service_id: selectedService.id,
+                service_name: selectedService.name,
+                link: link,
+                quantity: qty,
+                price: total
+            };
+
+            if (tg && tg.sendData) {
+                tg.HapticFeedback.notificationOccurred('success');
+                tg.sendData(JSON.stringify(orderPayload));
+            } else {
+                alert(`✅ Buyurtma muvaffaqiyatli berildi!\n\nXizmat: ${selectedService.name}\nMiqdor: ${qty}\nJami: ${total} so'm\n\n(Telegram bot orqali tasdiqlandi)`);
+                closeModal();
+            }
+        }
+
+        function copyCard() {
+            const num = document.getElementById('card-num').innerText.replace(/\s+/g, '');
+            navigator.clipboard.writeText(num).then(() => {
+                alert("Karta raqami nusxalandi! 📋");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            });
+        }
+
+        // Init
+        initTelegramUser();
+        renderCategories();
+        renderServices();
+    </script>
+</body>
+</html>
