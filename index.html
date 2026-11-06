@@ -3,459 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Muxa SMM // Telegram Mini App</title>
+    <title>Muxa SMM — Premium Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --ios-blur: blur(28px) saturate(190%);
-            --card-bg: rgba(17, 24, 39, 0.72);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --app-bg: #000000;
+            --glass-bg: rgba(22, 22, 28, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.09);
+            --glass-highlight: rgba(255, 255, 255, 0.16);
+            --accent-blue: #0A84FF;
+            --accent-indigo: #5E5CE6;
+            --accent-cyan: #64D2FF;
+            --accent-emerald: #30D158;
+            --accent-amber: #FFD60A;
+            --card-radius: 26px;
+            --squircle: 22px;
         }
+
         * {
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
+
         body {
-            background-color: #030712;
-            color: #f9fafb;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--app-bg);
+            color: #FFFFFF;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             user-select: none;
             -webkit-user-select: none;
             overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 96px;
         }
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: var(--ios-blur);
-            -webkit-backdrop-filter: var(--ios-blur);
-            border: 1px solid var(--border-color);
+
+        /* Ambient Lighting Background */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -120px;
+            right: -80px;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(94, 92, 230, 0.22) 0%, rgba(10, 132, 255, 0.08) 50%, transparent 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(50px);
         }
-        .glow-btn {
-            box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.45);
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: 60px;
+            left: -100px;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(48, 209, 88, 0.12) 0%, rgba(100, 210, 255, 0.06) 50%, transparent 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
         }
+
+        /* Apple Liquid Glass Card */
+        .liquid-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px) saturate(210%);
+            -webkit-backdrop-filter: blur(40px) saturate(210%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 var(--glass-highlight);
+            border-radius: var(--card-radius);
+        }
+
+        .liquid-glass-sm {
+            background: rgba(28, 28, 35, 0.65);
+            backdrop-filter: blur(30px) saturate(190%);
+            -webkit-backdrop-filter: blur(30px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.12);
+            border-radius: var(--squircle);
+        }
+
+        /* Dynamic Island Header */
+        .dynamic-island {
+            background: rgba(18, 18, 24, 0.88);
+            backdrop-filter: blur(36px) saturate(220%);
+            -webkit-backdrop-filter: blur(36px) saturate(220%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.75), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+            border-radius: 36px;
+        }
+
+        /* Bottom Floating Dock */
+        .bottom-dock {
+            background: rgba(15, 15, 20, 0.82);
+            backdrop-filter: blur(45px) saturate(230%);
+            -webkit-backdrop-filter: blur(45px) saturate(230%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+            border-radius: 34px;
+        }
+
+        /* iOS Spring Buttons */
+        .ios-btn {
+            transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .ios-btn:active {
+            transform: scale(0.96);
+            opacity: 0.92;
+        }
+
+        .ios-primary-btn {
+            background: linear-gradient(135deg, #0A84FF 0%, #5E5CE6 100%);
+            box-shadow: 0 8px 24px -4px rgba(10, 132, 255, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+        }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .toast {
-            transform: translateY(-100px);
+
+        /* Toast Popup */
+        .toast-pill {
+            transform: translateY(-80px) scale(0.92);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.38s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .toast.show {
-            transform: translateY(0);
+        .toast-pill.show {
+            transform: translateY(0) scale(1);
             opacity: 1;
+        }
+
+        /* Modal Sheet Animation */
+        .sheet-container {
+            transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sheet-content {
+            transform: translateY(100%);
+            transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .sheet-container.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .sheet-container.active .sheet-content {
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="p-3 md:p-6 min-h-screen pb-24">
+<body class="p-3.5 md:p-6 relative">
 
-    <!-- FLOATING TOAST NOTIFICATION -->
-    <div id="toast" class="toast fixed top-4 left-4 right-4 z-50 flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/20 shadow-2xl text-xs font-semibold pointer-events-none">
-        <div class="flex items-center gap-2">
-            <span id="toast-icon">✅</span>
-            <span id="toast-msg">Muvaffaqiyatli!</span>
+    <!-- Ambient Glow Lights -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- FLOATING DYNAMIC ISLAND TOAST -->
+    <div id="toast" class="toast-pill fixed top-3 left-4 right-4 z-50 flex items-center justify-between p-3 px-4 dynamic-island text-xs font-semibold pointer-events-none">
+        <div class="flex items-center gap-2.5">
+            <span id="toast-icon" class="text-base">✨</span>
+            <span id="toast-msg" class="tracking-tight text-white font-medium">Bajarildi</span>
         </div>
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-gray-300">Live</span>
     </div>
 
-    <!-- USER HEADER (iOS Glassmorphism) -->
-    <header class="glass-card p-4 rounded-3xl mb-4 relative overflow-hidden">
-        <div class="absolute -right-12 -top-12 w-36 h-36 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="flex items-center justify-between relative z-10">
+    <!-- DYNAMIC ISLAND HEADER (Apple Style) -->
+    <header class="dynamic-island p-3.5 px-4 mb-4 relative z-10">
+        <div class="flex items-center justify-between">
+            <!-- Left: Avatar & Identity -->
             <div class="flex items-center gap-3">
-                <div id="user-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-indigo-500/25">
-                    👤
+                <div id="user-avatar" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 flex items-center justify-center text-lg font-black text-white shadow-lg shadow-blue-500/25 border border-white/20">
+                    ɱ
                 </div>
                 <div>
-                    <h2 id="user-name" class="font-bold text-white text-base leading-tight">Foydalanuvchi</h2>
-                    <span id="user-id" class="text-xs text-gray-400 font-mono">ID: 8191930658</span>
+                    <div class="flex items-center gap-1.5">
+                        <h2 id="user-name" class="font-bold text-white text-[15px] leading-none tracking-tight">Foydalanuvchi</h2>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400"></span>
+                    </div>
+                    <span id="user-id" class="text-[11px] text-gray-400 font-mono tracking-tight">ID: 8191930658</span>
                 </div>
             </div>
-            <div class="text-right cursor-pointer" onclick="switchTab('deposit')">
-                <span class="text-[11px] text-gray-400 font-medium uppercase tracking-wider block">Balans</span>
-                <div class="flex items-baseline justify-end gap-1">
-                    <span id="user-balance" class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">100,100</span>
-                    <span class="text-xs text-emerald-400 font-semibold">so'm</span>
+
+            <!-- Right: Balance Pill -->
+            <div class="cursor-pointer text-right ios-btn" onclick="switchTab('deposit')">
+                <span class="text-[10px] text-gray-400 font-semibold tracking-wider uppercase block">Balans</span>
+                <div class="flex items-baseline justify-end gap-1 px-3 py-1 rounded-xl bg-white/[0.06] border border-white/10 mt-0.5 shadow-inner">
+                    <span id="user-balance" class="text-base font-black tracking-tight text-emerald-400 font-mono">100,100</span>
+                    <span class="text-[10px] text-emerald-300 font-semibold">so'm</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- NAVIGATION TABS -->
-    <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 py-1">
-        <button onclick="switchTab('store')" id="tab-btn-store" class="px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5 whitespace-nowrap active:scale-95">
-            <span>🛍</span> Xizmatlar
-        </button>
-        <button onclick="switchTab('orders')" id="tab-btn-orders" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
-            <span>📦</span> Buyurtmalarim
-        </button>
-        <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
-            <span>💳</span> To'ldirish
-        </button>
-        <button onclick="switchTab('profile')" id="tab-btn-profile" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
-            <span>⚙️</span> Kabinet
-        </button>
-    </div>
-
     <!-- TAB 1: SMM STORE -->
-    <main id="tab-store" class="space-y-4">
-        <!-- PLATFORM SELECTOR -->
-        <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
-            <button onclick="selectPlatform('telegram')" id="plat-telegram" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap active:scale-95">
-                <span>✈️</span> Telegram
-            </button>
-            <button onclick="selectPlatform('instagram')" id="plat-instagram" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
-                <span>📸</span> Instagram
-            </button>
-            <button onclick="selectPlatform('tiktok')" id="plat-tiktok" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
-                <span>🎵</span> TikTok
-            </button>
-            <button onclick="selectPlatform('youtube')" id="plat-youtube" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
-                <span>▶️</span> YouTube
-            </button>
-            <button onclick="selectPlatform('facebook')" id="plat-facebook" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
-                <span>📘</span> Facebook
-            </button>
+    <main id="tab-store" class="space-y-4 relative z-10">
+        
+        <!-- PLATFORMS SEGMENTED SELECTOR (Smooth Multi-Network) -->
+        <div id="platforms-dock" class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
+            <!-- Populated dynamically: Telegram, Instagram, TikTok, YouTube, etc. -->
         </div>
 
-        <!-- CATEGORY PILLS -->
-        <div id="category-pills" class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 text-xs">
-            <!-- Dynamically populated -->
+        <!-- CATEGORIES PILLS (Live Multi-Parallel Sync) -->
+        <div class="space-y-1.5">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-[11px] font-semibold text-gray-400 tracking-wider uppercase">Bo'limlar</span>
+                <span id="cat-count-badge" class="text-[10px] font-mono text-gray-400">0 ta bo'lim</span>
+            </div>
+            <div id="category-pills" class="flex gap-2 overflow-x-auto hide-scrollbar py-1 text-xs">
+                <!-- Dynamically populated from API -->
+            </div>
         </div>
 
         <!-- SEARCH INPUT -->
         <div class="relative">
-            <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomini qidirish..." class="w-full glass-card py-2.5 pl-10 pr-4 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
-            <span class="absolute left-3.5 top-2.5 text-gray-500 text-sm">🔍</span>
+            <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomi yoki ID raqami bo'yicha qidiruv..." class="w-full liquid-glass-sm py-3 pl-11 pr-4 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 transition-all">
+            <span class="absolute left-4 top-3 text-gray-400 text-sm">🔍</span>
+            <button id="search-clear" onclick="clearSearch()" class="hidden absolute right-3.5 top-3 w-5 h-5 rounded-full bg-white/10 text-gray-400 text-[10px] flex items-center justify-center">✕</button>
         </div>
 
         <!-- SERVICES LIST -->
         <div id="services-container" class="space-y-3">
-            <!-- Dynamically generated service cards -->
+            <!-- Dynamically populated real services -->
         </div>
     </main>
 
     <!-- TAB 2: MY ORDERS -->
-    <section id="tab-orders" class="space-y-3 hidden">
-        <div class="glass-card p-5 rounded-3xl">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <span>📋</span> Mening Buyurtmalarim
-                </h3>
-                <span id="orders-badge-count" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0 ta</span>
+    <section id="tab-orders" class="space-y-3.5 relative z-10 hidden">
+        <div class="liquid-glass p-5 space-y-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
+                        <span>📋</span> Buyurtmalar tarixi
+                    </h3>
+                    <p class="text-[11px] text-gray-400">Barcha berilgan buyurtmalaringiz ro'yxati</p>
+                </div>
+                <span id="orders-badge-count" class="text-xs font-mono px-3 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25 font-bold">0 ta</span>
             </div>
-            <div id="my-orders-list" class="space-y-2.5 text-xs">
+            <div id="my-orders-list" class="space-y-3 text-xs">
                 <!-- Dynamically populated -->
             </div>
         </div>
     </section>
 
-    <!-- TAB 3: DEPOSIT / BALANS TO'LDIRISH -->
-    <section id="tab-deposit" class="space-y-4 hidden">
-        <div class="glass-card p-5 rounded-3xl space-y-4">
+    <!-- TAB 3: DEPOSIT / TO'LDIRISH -->
+    <section id="tab-deposit" class="space-y-4 relative z-10 hidden">
+        <div class="liquid-glass p-5 space-y-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl border border-emerald-500/30">
                     💳
                 </div>
                 <div>
-                    <h3 class="font-bold text-white text-sm">Balans to'ldirish</h3>
-                    <p class="text-[11px] text-gray-400">To'lovlar avtomatik yoki admin orqali tasdiqlanadi</p>
+                    <h3 class="font-bold text-white text-base leading-snug">Hisobni to'ldirish</h3>
+                    <p class="text-[11px] text-gray-400">Click, Payme yoki Telegram Stars orqali tezkor to'lov</p>
                 </div>
             </div>
 
-            <!-- PAYMENT OPTIONS -->
             <div class="space-y-3 text-xs">
-                <!-- Card 1: Click / Payme -->
-                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2.5">
+                <!-- Option 1: Card / Click / Payme -->
+                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3">
                     <div class="flex justify-between items-center">
-                        <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <span class="font-bold text-emerald-400 text-[13px] flex items-center gap-1.5">
                             <span>🟢</span> Click & Payme (Karta)
                         </span>
-                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">0% Komissiya</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold">0% Komissiya</span>
                     </div>
-                    <div class="p-3 rounded-xl bg-black/40 font-mono text-gray-200 flex justify-between items-center border border-white/5">
-                        <span id="card-num" class="tracking-wider">8600 5304 1234 5678</span>
-                        <button onclick="copyCard()" class="text-indigo-400 hover:text-indigo-300 font-sans font-bold active:scale-95 transition-all">Nusxa olish 📋</button>
+                    <div class="p-3.5 rounded-xl bg-black/60 font-mono text-gray-100 flex justify-between items-center border border-white/10">
+                        <span id="card-num" class="tracking-widest text-[13px]">8600 5304 1234 5678</span>
+                        <button onclick="copyCard()" class="text-blue-400 hover:text-blue-300 font-sans font-bold text-xs active:scale-95 transition-all">Nusxa 📋</button>
                     </div>
                     <p class="text-[11px] text-gray-400 leading-relaxed">
-                        To'lov qilgach, chekni botdagi <b>«💰 Pul kiritish»</b> bo'limiga yuboring. Balansingiz 1 daqiqa ichida to'ldiriladi.
+                        To'lov qilgach, chekni botdagi <b>«💰 Pul kiritish»</b> bo'limiga yuboring. Balansingiz 1 daqiqa ichida avtomatik to'ldiriladi.
                     </p>
                 </div>
 
-                <!-- Card 2: Telegram Stars -->
-                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2.5">
+                <!-- Option 2: Telegram Stars -->
+                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3">
                     <div class="flex justify-between items-center">
-                        <span class="font-bold text-amber-400 flex items-center gap-1.5">
+                        <span class="font-bold text-amber-400 text-[13px] flex items-center gap-1.5">
                             <span>⭐</span> Telegram Stars (Avtomatik)
                         </span>
-                        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold">Tezkor</span>
+                        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-bold">Instant</span>
                     </div>
-                    <p class="text-[11px] text-gray-300">
-                        1 Telegram Yulduz = <b class="text-amber-300 font-mono" id="stars-rate-label">200 so'm</b> hisobida qabul qilinadi. To'lov amalga oshishi bilan balansingiz avtomatik yangilanadi.
+                    <p class="text-[11px] text-gray-300 leading-relaxed">
+                        1 Telegram Yulduz = <b class="text-amber-300 font-mono" id="stars-rate-label">200 so'm</b> hisobida qabul qilinadi. To'lov qilingan soniyaning o'zidayoq hisobingizga tushadi.
                     </p>
-                    <button onclick="payWithStars()" class="w-full py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
-                        <span>⭐ Botda Yulduz bilan to'lash</span> ➔
+                    <button onclick="payWithStars()" class="w-full py-3 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center justify-center gap-2 ios-btn">
+                        <span>⭐ Bot orqali Yulduz bilan to'lash</span> ➔
                     </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- TAB 4: PROFILE & REFERRAL -->
-    <section id="tab-profile" class="space-y-4 hidden">
-        <div class="glass-card p-5 rounded-3xl space-y-4 text-xs">
-            <h3 class="font-bold text-white text-sm flex items-center gap-2">
-                <span>👤</span> Foydalanuvchi Profili
+    <!-- TAB 4: PROFILE & CABINET -->
+    <section id="tab-profile" class="space-y-4 relative z-10 hidden">
+        <div class="liquid-glass p-5 space-y-4 text-xs">
+            <h3 class="font-bold text-white text-base flex items-center gap-2">
+                <span>⚙️</span> Shaxsiy Kabinet
             </h3>
-            
+
             <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
-                    <span class="text-gray-400 text-[10px] uppercase tracking-wider">Jami Buyurtmalar</span>
-                    <div id="prof-total-orders" class="text-lg font-black text-indigo-400 mt-1 font-mono">0 ta</div>
+                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                    <span class="text-gray-400 text-[10px] uppercase font-semibold tracking-wider">Jami Buyurtmalar</span>
+                    <div id="prof-total-orders" class="text-xl font-black text-blue-400 mt-1 font-mono">0 ta</div>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
-                    <span class="text-gray-400 text-[10px] uppercase tracking-wider">Taklif etilganlar</span>
-                    <div id="prof-referrals" class="text-lg font-black text-purple-400 mt-1 font-mono">0 ta</div>
+                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                    <span class="text-gray-400 text-[10px] uppercase font-semibold tracking-wider">Taklif etilganlar</span>
+                    <div id="prof-referrals" class="text-xl font-black text-purple-400 mt-1 font-mono">0 ta</div>
                 </div>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
-                <span class="font-bold text-indigo-300">🔗 Sizning Referal Havolangiz:</span>
-                <div class="p-2.5 rounded-xl bg-black/40 font-mono text-[11px] text-gray-300 break-all select-all flex justify-between items-center border border-white/5" id="ref-link-box">
+            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5">
+                <span class="font-bold text-blue-300 text-[12px]">🔗 Do'stlarni taklif qilish va daromad:</span>
+                <div class="p-3 rounded-xl bg-black/60 font-mono text-[11px] text-gray-200 break-all select-all flex justify-between items-center border border-white/10">
                     <span id="ref-link" class="truncate pr-2">https://t.me/Muxa_aibot?start=8191930658</span>
-                    <button onclick="copyRefLink()" class="text-indigo-400 font-sans font-bold shrink-0 active:scale-95">Nusxa 📋</button>
+                    <button onclick="copyRefLink()" class="text-blue-400 font-sans font-bold shrink-0 active:scale-95">Nusxa 📋</button>
                 </div>
-                <p class="text-[10px] text-gray-400">Har bir taklif etilgan do'stingiz to'ldirgan hisobidan 10% doimiy bonus balansingizga tushadi.</p>
+                <p class="text-[10px] text-gray-400 leading-relaxed">Har bir taklif etilgan do'stingiz hisob to'ldirganda, uning to'lovidan 10% bonus sizning balansingizga doimiy o'tkazib beriladi.</p>
             </div>
 
-            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex justify-between items-center">
+            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex justify-between items-center">
                 <div>
-                    <h4 class="font-bold text-white">Yordam va Qo'llab-quvvatlash</h4>
-                    <p class="text-[10px] text-gray-400">Savol yoki takliflaringiz bo'lsa adminga murojaat qiling</p>
+                    <h4 class="font-bold text-white text-[13px]">Qo'llab-quvvatlash xizmati</h4>
+                    <p class="text-[10px] text-gray-400">Savollar yoki yordam uchun administratorga yozing</p>
                 </div>
-                <button onclick="contactSupport()" class="px-3 py-1.5 rounded-xl bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold active:scale-95">
+                <button onclick="contactSupport()" class="px-4 py-2 rounded-xl bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold ios-btn">
                     Admin 💬
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- ORDER MODAL (POPUP) -->
-    <div id="order-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end md:items-center justify-center p-0 md:p-4 hidden transition-all duration-200">
-        <div class="glass-card w-full max-w-lg rounded-t-[32px] md:rounded-[32px] p-6 space-y-4 border-t border-white/20">
+    <!-- FLOATING BOTTOM DOCK NAVIGATION (Apple Style) -->
+    <nav class="fixed bottom-3 left-4 right-4 z-40 max-w-lg mx-auto">
+        <div class="bottom-dock p-2 flex items-center justify-around">
+            <button onclick="switchTab('store')" id="tab-btn-store" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-blue-400 font-bold transition-all ios-btn">
+                <span class="text-lg">🛍</span>
+                <span class="text-[10px] tracking-tight">Xizmatlar</span>
+            </button>
+            <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
+                <span class="text-lg">📦</span>
+                <span class="text-[10px] tracking-tight">Buyurtmalar</span>
+            </button>
+            <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
+                <span class="text-lg">💳</span>
+                <span class="text-[10px] tracking-tight">To'ldirish</span>
+            </button>
+            <button onclick="switchTab('profile')" id="tab-btn-profile" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
+                <span class="text-lg">⚙️</span>
+                <span class="text-[10px] tracking-tight">Kabinet</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ORDER BOTTOM SHEET MODAL (Apple Style) -->
+    <div id="order-modal-container" class="sheet-container fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
+        <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-6 space-y-4 border-t border-white/20 pb-8">
+            <!-- Sheet Handle Bar -->
+            <div class="w-11 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-2"></div>
+
             <div class="flex justify-between items-start">
                 <div>
-                    <span id="modal-service-id" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#101</span>
-                    <h3 id="modal-service-title" class="text-sm font-bold text-white mt-1.5 leading-snug">Telegram Obunachilar</h3>
+                    <span id="modal-service-id" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">#101</span>
+                    <h3 id="modal-service-title" class="text-base font-bold text-white mt-1.5 leading-snug">Telegram Obunachilar</h3>
                 </div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white active:scale-95">✕</button>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white active:scale-95 transition-all">✕</button>
             </div>
 
-            <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 text-xs">
+            <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-1.5 text-xs">
                 <div class="flex justify-between text-gray-400">
                     <span>Narxi (1,000 ta):</span>
-                    <span id="modal-service-price" class="font-bold text-emerald-400 font-mono">15,000 so'm</span>
+                    <span id="modal-service-price" class="font-bold text-emerald-400 font-mono text-sm">15,000 so'm</span>
                 </div>
                 <div class="flex justify-between text-gray-400">
                     <span>Buyurtma oralig'i:</span>
-                    <span id="modal-service-limits" class="font-mono text-gray-300">20 — 50,000</span>
+                    <span id="modal-service-limits" class="font-mono text-gray-200">20 — 50,000</span>
                 </div>
             </div>
 
             <!-- LINK INPUT -->
-            <div class="space-y-1">
-                <label class="text-[11px] font-semibold text-gray-300">Havola (Kanal, Guruh yoki Post linki):</label>
-                <input type="text" id="order-link" placeholder="https://t.me/kanal_nomi yoki @username" class="w-full glass-card p-3 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500">
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-semibold text-gray-300">Nishon havola (Kanal, Guruh yoki Post linki):</label>
+                <input type="text" id="order-link" placeholder="https://t.me/kanal_nomi yoki @username" class="w-full liquid-glass-sm p-3.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono">
             </div>
 
             <!-- QUANTITY INPUT -->
-            <div class="space-y-1.5">
+            <div class="space-y-2">
                 <div class="flex justify-between items-center">
                     <label class="text-[11px] font-semibold text-gray-300">Miqdor:</label>
                     <span id="qty-limit-hint" class="text-[10px] text-gray-400 font-mono"></span>
                 </div>
-                <input type="number" id="order-qty" oninput="calculateTotal()" placeholder="Masalan: 1000" class="w-full glass-card p-3 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono">
+                <input type="number" id="order-qty" oninput="calculateTotal()" placeholder="Masalan: 1000" class="w-full liquid-glass-sm p-3.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono font-bold text-sm">
                 
-                <!-- QUICK CHIPS -->
+                <!-- Quick Chips -->
                 <div class="flex gap-2">
-                    <button onclick="setQty(100)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+100</button>
-                    <button onclick="setQty(500)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+500</button>
-                    <button onclick="setQty(1000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+1,000</button>
-                    <button onclick="setQty(5000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+5,000</button>
+                    <button onclick="setQty(100)" class="flex-1 py-2 rounded-xl bg-white/[0.05] border border-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 ios-btn">+100</button>
+                    <button onclick="setQty(500)" class="flex-1 py-2 rounded-xl bg-white/[0.05] border border-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 ios-btn">+500</button>
+                    <button onclick="setQty(1000)" class="flex-1 py-2 rounded-xl bg-white/[0.05] border border-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 ios-btn">+1k</button>
+                    <button onclick="setQty(5000)" class="flex-1 py-2 rounded-xl bg-white/[0.05] border border-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 ios-btn">+5k</button>
                 </div>
             </div>
 
-            <!-- TOTAL PRICE & SUBMIT -->
-            <div class="pt-2 border-t border-white/10 flex items-center justify-between">
+            <!-- TOTAL PRICE & CONFIRM -->
+            <div class="pt-3 border-t border-white/10 flex items-center justify-between">
                 <div>
                     <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Jami to'lov:</span>
-                    <span id="modal-total-price" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-mono">0 so'm</span>
-                    <span id="modal-balance-hint" class="text-[10px] block font-mono text-gray-400">Balans: <span id="modal-curr-bal">100,100</span> so'm</span>
+                    <span id="modal-total-price" class="text-2xl font-black text-emerald-400 font-mono">0 so'm</span>
+                    <span id="modal-balance-hint" class="text-[10px] block font-mono text-gray-400 mt-0.5">Balans: <span id="modal-curr-bal" class="text-white font-bold">100,100</span> so'm</span>
                 </div>
-                <button onclick="submitOrder()" id="btn-submit-order" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs glow-btn active:scale-95 transition-all">
-                    Tasdiqlash 🚀
+                <button onclick="submitOrder()" id="btn-submit-order" class="px-6 py-3.5 rounded-2xl ios-primary-btn text-white font-bold text-xs ios-btn flex items-center gap-1.5 shadow-lg shadow-blue-500/30">
+                    <span>Tasdiqlash</span> <span>🚀</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC (Multi-Parallel Async Engine) -->
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
             try {
                 tg.ready();
                 tg.expand();
-                tg.headerColor = '#030712';
-                tg.backgroundColor = '#030712';
+                tg.headerColor = '#000000';
+                tg.backgroundColor = '#000000';
                 if (tg.enableClosingConfirmation) tg.enableClosingConfirmation();
             } catch (e) {
                 console.warn("Telegram WebApp init warning:", e);
             }
         }
 
-        // Services Data Base (Full Match with Bot Data)
-        const SERVICES = {
-            telegram: {
-                categories: ["Obunachilar", "Ko'rishlar", "Reaksiyalar", "Avto-Ko'rish"],
-                items: [
-                    { id: 101, cat: "Obunachilar", name: "⚡️ Telegram O'zbek Obunachilar (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000, speed: "10k/kun", badge: "KAFOLAT" },
-                    { id: 102, cat: "Obunachilar", name: "💎 Telegram Jonli O'zbek Obunachilar (Sifatli)", price: 28000, min: 50, max: 20000, speed: "5k/kun", badge: "PREMIUM" },
-                    { id: 103, cat: "Obunachilar", name: "🌐 Telegram Arzon Obunachilar (Global)", price: 9000, min: 100, max: 100000, speed: "20k/kun", badge: "ARZON" },
-                    { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Oxirgi 1 ta postga)", price: 800, min: 50, max: 100000, speed: "Instant", badge: "TEZKOR" },
-                    { id: 105, cat: "Ko'rishlar", name: "👁 Oxirgi 5 ta postga ko'rish ulashish", price: 3500, min: 100, max: 50000, speed: "Avto", badge: "TOP" },
-                    { id: 106, cat: "Reaksiyalar", name: "👍 Telegram Ijobiy Reaksiyalar (👍❤️🔥🎉🥰)", price: 1500, min: 20, max: 10000, speed: "Instant", badge: "MIX" },
-                    { id: 107, cat: "Avto-Ko'rish", name: "🔄 Kelgusi 10 ta yangi postga avto ko'rish", price: 12000, min: 100, max: 10000, speed: "Avtomatik", badge: "VIP" }
-                ]
-            },
-            instagram: {
-                categories: ["Obunachilar", "Layklar", "Ko'rishlar", "Reels"],
-                items: [
-                    { id: 201, cat: "Obunachilar", name: "📸 Instagram Real Obunachilar (O'zbek / MDH)", price: 24000, min: 50, max: 50000, speed: "3k/kun", badge: "TOP" },
-                    { id: 202, cat: "Obunachilar", name: "⚡️ Instagram Tezkor Obunachilar (Global)", price: 12000, min: 100, max: 100000, speed: "15k/kun", badge: "ARZON" },
-                    { id: 203, cat: "Layklar", name: "❤️ Instagram Haqiqiy Layklar (Tezkor start)", price: 2500, min: 50, max: 20000, speed: "Instant", badge: "TEZKOR" },
-                    { id: 204, cat: "Reels", name: "🎬 Instagram Reels Ko'rishlar (Tavsiyaga chiqaruvchi)", price: 1200, min: 100, max: 500000, speed: "50k/kun", badge: "VIRAL" }
-                ]
-            },
-            tiktok: {
-                categories: ["Obunachilar", "Ko'rishlar", "Layklar"],
-                items: [
-                    { id: 301, cat: "Obunachilar", name: "🎵 TikTok Obunachilar (Jonli / Faol)", price: 29000, min: 50, max: 30000, speed: "2k/kun", badge: "PREMIUM" },
-                    { id: 302, cat: "Ko'rishlar", name: "👁 TikTok Video Ko'rishlar (Super tezkor)", price: 600, min: 500, max: 1000000, speed: "100k/kun", badge: "ULTRA" },
-                    { id: 303, cat: "Layklar", name: "❤️ TikTok Video Layklari (Sifatli)", price: 7500, min: 50, max: 50000, speed: "5k/kun", badge: "TOP" }
-                ]
-            },
-            youtube: {
-                categories: ["Obunachilar", "Ko'rishlar", "Layklar"],
-                items: [
-                    { id: 401, cat: "Obunachilar", name: "▶️ YouTube Kafolatli Obunachilar (Monetizatsiya)", price: 85000, min: 50, max: 5000, speed: "300/kun", badge: "ORGANIC" },
-                    { id: 402, cat: "Ko'rishlar", name: "👁 YouTube Video Ko'rishlar (Retention 1-3 min)", price: 18000, min: 500, max: 100000, speed: "5k/kun", badge: "SAFE" }
-                ]
-            },
-            facebook: {
-                categories: ["Obunachilar"],
-                items: [
-                    { id: 501, cat: "Obunachilar", name: "📘 Facebook Sahifa Obunachilari", price: 32000, min: 100, max: 20000, speed: "2k/kun", badge: "PAGE" }
-                ]
-            }
+        // Global State
+        let userId = "8191930658";
+        let userName = "ɱυxα";
+        let userBalance = 100100;
+        let userReferrals = 0;
+        let userOrders = [];
+
+        let currentPlatform = "Telegram";
+        let currentCategory = "All";
+        let selectedService = null;
+
+        // Dynamic Services Store (Synced directly from Bot API / data.json)
+        let DYNAMIC_DATA = {
+            services: {},
+            items: {}
         };
 
-        let currentPlatform = 'telegram';
-        let currentCategory = 'All';
-        let selectedService = null;
-        let userId = 8191930658;
-        let userName = "Foydalanuvchi";
-        let userBalance = 100100;
-        let userOrders = [];
-        let userReferrals = 0;
+        // Fallback Base Data
+        const FALLBACK_PLATFORMS = ["Telegram", "Instagram", "TikTok", "YouTube"];
 
-        // Toast Helper
-        function showToast(msg, icon = '✅') {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            document.getElementById('toast-icon').innerText = icon;
-            t.classList.add('show');
-            setTimeout(() => {
-                t.classList.remove('show');
-            }, 3000);
+        // Platform Icons Mapping
+        const PLATFORM_ICONS = {
+            "telegram": "✈️",
+            "instagram": "📸",
+            "tiktok": "🎵",
+            "youtube": "▶️",
+            "facebook": "📘",
+            "twitter": "🐦",
+            "vk": "🌐",
+            "boshqa": "⚡️"
+        };
+
+        function getPlatformIcon(plat) {
+            const k = plat.toLowerCase();
+            return PLATFORM_ICONS[k] || "✨";
         }
 
-        // Init User Info from Telegram & URL Parameters (Exact Balance Match)
-        function initUserData() {
-            const params = new URLSearchParams(window.location.search);
-            const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
-            
-            // 1. Resolve User ID
-            if (params.get('uid')) {
-                userId = parseInt(params.get('uid')) || 8191930658;
-            } else if (tgUser && tgUser.id) {
-                userId = tgUser.id;
-            } else {
-                userId = 8191930658;
+        // Initialize User Identity & Multi-Parallel Data Loading
+        async function initApp() {
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const u = tg.initDataUnsafe.user;
+                userId = String(u.id);
+                userName = u.first_name || (u.username ? '@' + u.username : "Foydalanuvchi");
             }
 
-            // 2. Resolve User Name
-            if (tgUser && tgUser.first_name) {
-                userName = tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '');
-            } else if (params.get('name')) {
-                userName = params.get('name');
-            } else if (String(userId) === "8191930658") {
-                userName = "Muhammadjon (Admin)";
-            }
-
-            // 3. Resolve Exact User Balance
-            if (params.get('bal') !== null) {
-                userBalance = parseInt(params.get('bal')) || 0;
-                localStorage.setItem('smm_bal_' + userId, userBalance);
-            } else if (params.get('balance') !== null) {
-                userBalance = parseInt(params.get('balance')) || 0;
-                localStorage.setItem('smm_bal_' + userId, userBalance);
-            } else {
-                const cachedBal = localStorage.getItem('smm_bal_' + userId);
-                if (cachedBal !== null) {
-                    userBalance = parseInt(cachedBal) || 0;
-                } else if (String(userId) === "8191930658") {
-                    // Bot data.json da egasi 8191930658 balansi 100100 so'm
-                    userBalance = 100100;
-                } else {
-                    userBalance = 0;
-                }
-            }
-
-            // 4. Resolve Referrals Count
-            if (params.get('ref') !== null) {
-                userReferrals = parseInt(params.get('ref')) || 0;
-                localStorage.setItem('smm_ref_' + userId, userReferrals);
-            } else {
-                const cachedRef = localStorage.getItem('smm_ref_' + userId);
-                userReferrals = cachedRef ? parseInt(cachedRef) : 0;
-            }
-
-            // 5. Load Cached Orders
-            try {
-                const savedOrders = localStorage.getItem('smm_orders_' + userId);
-                if (savedOrders) {
-                    userOrders = JSON.parse(savedOrders);
-                }
-            } catch (e) {
-                userOrders = [];
-            }
-
-            // Update UI elements immediately (0-latency instant render)
+            document.getElementById('user-id').innerText = "ID: " + userId;
             document.getElementById('user-name').innerText = userName;
-            document.getElementById('user-id').innerText = 'ID: ' + userId;
             document.getElementById('user-avatar').innerText = userName.charAt(0).toUpperCase();
             document.getElementById('ref-link').innerText = `https://t.me/Muxa_aibot?start=${userId}`;
+
+            // Load Cached Orders & Balance
+            const savedBal = localStorage.getItem('smm_bal_' + userId);
+            if (savedBal !== null) userBalance = parseFloat(savedBal) || 0;
             updateBalanceUI();
+
+            const savedOrders = localStorage.getItem('smm_orders_' + userId);
+            if (savedOrders) {
+                try { userOrders = JSON.parse(savedOrders); } catch(e) {}
+            }
             updateProfileStats();
             renderOrders();
 
-            // Background Silent Live API Sync (if backend API is reachable)
-            syncWithBackend();
+            // Load Cached Services
+            const cachedServices = localStorage.getItem('smm_dynamic_data');
+            if (cachedServices) {
+                try {
+                    DYNAMIC_DATA = JSON.parse(cachedServices);
+                    buildPlatformDock();
+                    renderCategories();
+                    renderServices();
+                } catch(e) {}
+            }
+
+            // Multi-Parallel Live Sync from Server
+            await Promise.allSettled([
+                syncUserInfo(),
+                syncServicesFromBackend()
+            ]);
         }
 
         function updateBalanceUI() {
-            const formatted = userBalance.toLocaleString();
+            const formatted = Math.round(userBalance).toLocaleString();
             document.getElementById('user-balance').innerText = formatted;
             const hint = document.getElementById('modal-curr-bal');
             if (hint) hint.innerText = formatted;
@@ -468,8 +526,8 @@
             if (badge) badge.innerText = userOrders.length + ' ta';
         }
 
-        // Silent Background Sync with Bot Server
-        async function syncWithBackend() {
+        // Multi-Parallel Backend Sync
+        async function syncUserInfo() {
             try {
                 const res = await fetch(`/api/user_info?user_id=${userId}`, { cache: 'no-store' });
                 if (res.ok) {
@@ -494,59 +552,92 @@
                     }
                 }
             } catch (e) {
-                // Offline or standalone mode — localStorage keeps it running at 0 ping
+                // Background fallback
             }
         }
 
-        // Tab Switcher
-        function switchTab(tab) {
-            ['store', 'orders', 'deposit', 'profile'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).classList.remove('bg-indigo-600', 'text-white', 'shadow-indigo-600/30');
-                document.getElementById(`tab-btn-${t}`).classList.add('glass-card', 'text-gray-300');
-            });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-btn-${tab}`);
-            activeBtn.classList.remove('glass-card', 'text-gray-300');
-            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-indigo-600/30');
-            
-            if (tab === 'orders') renderOrders();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-
-            // Telegram BackButton support
-            if (tg && tg.BackButton) {
-                if (tab !== 'store') {
-                    tg.BackButton.show();
-                    tg.BackButton.onClick(() => switchTab('store'));
-                } else {
-                    tg.BackButton.hide();
+        // Sync Services from API (Exact mirror of categories and services)
+        async function syncServicesFromBackend() {
+            try {
+                const res = await fetch('/api/services', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.ok && data.services) {
+                        DYNAMIC_DATA = {
+                            services: data.services,
+                            items: data.items || {}
+                        };
+                        localStorage.setItem('smm_dynamic_data', JSON.stringify(DYNAMIC_DATA));
+                        buildPlatformDock();
+                        renderCategories();
+                        renderServices();
+                    }
                 }
+            } catch (e) {
+                console.log("Services API offline, running on cache/defaults");
             }
         }
 
-        // Platform Switcher
-        function selectPlatform(plat) {
-            currentPlatform = plat;
-            document.querySelectorAll('.plat-btn').forEach(btn => {
-                btn.className = 'plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95';
-            });
-            const sel = document.getElementById(`plat-${plat}`);
-            sel.className = 'plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap active:scale-95';
-            
+        // Build Platform Dock Dynamically
+        function buildPlatformDock() {
+            const dock = document.getElementById('platforms-dock');
+            let platforms = Object.keys(DYNAMIC_DATA.services);
+            if (platforms.length === 0) platforms = FALLBACK_PLATFORMS;
+
+            if (!platforms.includes(currentPlatform)) {
+                currentPlatform = platforms[0] || "Telegram";
+            }
+
+            dock.innerHTML = platforms.map(p => {
+                const isActive = p === currentPlatform;
+                const icon = getPlatformIcon(p);
+                const activeStyle = isActive 
+                    ? 'bg-blue-600/25 border-blue-500/50 text-blue-300 font-bold shadow-md shadow-blue-500/20' 
+                    : 'liquid-glass-sm text-gray-400 hover:text-white font-medium border-white/5';
+
+                return `
+                    <button onclick="selectPlatform('${p}')" id="plat-btn-${p}" class="px-4 py-2.5 rounded-2xl text-xs flex items-center gap-2 whitespace-nowrap transition-all border ios-btn ${activeStyle}">
+                        <span class="text-sm">${icon}</span>
+                        <span>${p}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Select Platform
+        function selectPlatform(p) {
+            currentPlatform = p;
+            buildPlatformDock();
             currentCategory = 'All';
             renderCategories();
             renderServices();
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
         }
 
-        // Render Categories
+        // Render Categories for Selected Platform (Exact API categories)
         function renderCategories() {
             const pills = document.getElementById('category-pills');
-            const cats = ['Barchasi', ...(SERVICES[currentPlatform] ? SERVICES[currentPlatform].categories : [])];
-            pills.innerHTML = cats.map(c => {
+            const badge = document.getElementById('cat-count-badge');
+            const cats = DYNAMIC_DATA.services[currentPlatform] || [];
+
+            badge.innerText = `${cats.length} ta bo'lim`;
+
+            const allCats = ['Barchasi', ...cats];
+            pills.innerHTML = allCats.map(c => {
                 const isActive = (c === 'Barchasi' && currentCategory === 'All') || c === currentCategory;
-                const activeClass = isActive ? 'bg-white/20 text-white font-bold border-white/30' : 'bg-white/[0.04] text-gray-400 border-white/5';
-                return `<button onclick="filterCategory('${c}')" class="px-3.5 py-2 rounded-xl border ${activeClass} transition-all whitespace-nowrap active:scale-95">${c}</button>`;
+                const activeClass = isActive 
+                    ? 'bg-white/20 text-white font-bold border-white/30 shadow-sm' 
+                    : 'bg-white/[0.04] text-gray-400 border-white/5 hover:text-gray-200';
+                
+                // Get service count in this category
+                let countStr = '';
+                if (c !== 'Barchasi') {
+                    const k = `${currentPlatform}|${c}`;
+                    const count = (DYNAMIC_DATA.items[k] || []).length;
+                    if (count > 0) countStr = ` <span class="text-[10px] opacity-60">(${count})</span>`;
+                }
+
+                return `<button onclick="filterCategory('${escapeHtml(c)}')" class="px-3.5 py-2 rounded-xl border ${activeClass} transition-all whitespace-nowrap ios-btn">${c}${countStr}</button>`;
             }).join('');
         }
 
@@ -557,42 +648,85 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Render Services List
+        // Get All Services for Current Platform
+        function getServicesForCurrentPlatform() {
+            const cats = DYNAMIC_DATA.services[currentPlatform] || [];
+            let list = [];
+
+            for (const c of cats) {
+                const k = `${currentPlatform}|${c}`;
+                const items = DYNAMIC_DATA.items[k] || [];
+                for (const it of items) {
+                    list.push({
+                        id: it.sid || it.id || 101,
+                        name: it.name || "Xizmat",
+                        cat: c,
+                        price: Math.round(it.rate || it.price || 10000),
+                        min: it.min || 10,
+                        max: it.max || 100000,
+                        api_url: it.api_url || "",
+                        badge: it.badge || (it.min <= 20 ? "TEZKOR" : "KAFOLATLI")
+                    });
+                }
+            }
+
+            // If empty, return sample data for preview
+            if (list.length === 0 && currentPlatform === "Telegram") {
+                list = [
+                    { id: 101, cat: "Obunachilar", name: "⚡️ Telegram Obunachi (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000, badge: "KAFOLAT" },
+                    { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Tezkor start)", price: 800, min: 50, max: 100000, badge: "TEZKOR" },
+                    { id: 106, cat: "Reaksiyalar", name: "🔥 Telegram Reaksiyalar (Mix 👍❤️🔥)", price: 1500, min: 20, max: 10000, badge: "VIP" }
+                ];
+            }
+            return list;
+        }
+
+        // Render Services List (Multi-Parallel Async Filtering)
         function renderServices() {
             const container = document.getElementById('services-container');
             const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
-            let items = (SERVICES[currentPlatform] ? SERVICES[currentPlatform].items : []);
+            const clearBtn = document.getElementById('search-clear');
+            if (clearBtn) clearBtn.style.display = query ? 'flex' : 'none';
+
+            let items = getServicesForCurrentPlatform();
 
             if (currentCategory !== 'All') {
                 items = items.filter(it => it.cat === currentCategory);
             }
             if (query) {
-                items = items.filter(it => it.name.toLowerCase().includes(query) || String(it.id).includes(query));
+                items = items.filter(it => it.name.toLowerCase().includes(query) || String(it.id).includes(query) || it.cat.toLowerCase().includes(query));
             }
 
             if (items.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-gray-500 text-xs">Hech qanday xizmat topilmadi.</div>';
+                container.innerHTML = `
+                    <div class="p-8 text-center liquid-glass space-y-2">
+                        <div class="text-3xl opacity-60">📂</div>
+                        <p class="font-bold text-gray-300 text-xs">Ushbu bo'limda xizmatlar mavjud emas</p>
+                        <p class="text-[10px] text-gray-500">Boshqa bo'limni tanlang yoki qidiruv so'zini o'zgartiring</p>
+                    </div>
+                `;
                 return;
             }
 
             container.innerHTML = items.map(s => `
-                <div class="glass-card p-4 rounded-2xl space-y-2.5 transition-all active:scale-[0.99] border border-white/5 hover:border-white/15">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#${s.id}</span>
+                <div class="liquid-glass p-4 space-y-2.5 transition-all ios-btn border-white/5 hover:border-white/15">
+                    <div class="flex justify-between items-start gap-2">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">#${s.id}</span>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20">${s.badge}</span>
+                            <span class="text-[10px] text-gray-400 truncate max-w-[150px] font-medium opacity-80">${s.cat}</span>
                         </div>
-                        <span class="text-xs font-black text-emerald-400 font-mono">${s.price.toLocaleString()} so'm <span class="text-[10px] text-gray-400 font-normal">/ 1k</span></span>
+                        <span class="text-xs font-black text-emerald-400 font-mono whitespace-nowrap">${s.price.toLocaleString()} so'm <span class="text-[9px] text-gray-400 font-normal">/ 1k</span></span>
                     </div>
 
-                    <h4 class="text-xs font-bold text-gray-100 leading-snug">${s.name}</h4>
+                    <h4 class="text-xs font-bold text-gray-100 leading-snug">${escapeHtml(s.name)}</h4>
 
-                    <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-white/5">
-                        <span>Limit: <b class="text-gray-300 font-mono">${s.min} — ${s.max.toLocaleString()}</b></span>
-                        <span>Tezlik: <b class="text-gray-300">${s.speed}</b></span>
+                    <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1.5 border-t border-white/5 font-mono">
+                        <span>Limit: <b class="text-gray-200">${s.min} — ${s.max.toLocaleString()}</b></span>
+                        <span class="text-blue-300 font-sans font-semibold">0-latency</span>
                     </div>
 
-                    <button onclick="openModal(${s.id})" class="w-full py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 active:scale-95">
+                    <button onclick="openModal('${s.id}')" class="w-full py-2.5 rounded-2xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/35 text-blue-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 ios-btn">
                         <span>Buyurtma Berish</span> <span>➔</span>
                     </button>
                 </div>
@@ -603,10 +737,15 @@
             renderServices();
         }
 
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            renderServices();
+        }
+
         // Modal Controls
         function openModal(serviceId) {
-            const all = Object.values(SERVICES).flatMap(p => p.items);
-            selectedService = all.find(it => it.id === serviceId);
+            const all = getServicesForCurrentPlatform();
+            selectedService = all.find(it => String(it.id) === String(serviceId));
             if (!selectedService) return;
 
             document.getElementById('modal-service-id').innerText = '#' + selectedService.id;
@@ -619,7 +758,8 @@
             updateBalanceUI();
             calculateTotal();
 
-            document.getElementById('order-modal').classList.remove('hidden');
+            const modal = document.getElementById('order-modal-container');
+            modal.classList.add('active');
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
             if (tg && tg.BackButton) {
@@ -629,7 +769,8 @@
         }
 
         function closeModal() {
-            document.getElementById('order-modal').classList.add('hidden');
+            const modal = document.getElementById('order-modal-container');
+            modal.classList.remove('active');
             if (tg && tg.BackButton) {
                 tg.BackButton.hide();
             }
@@ -647,25 +788,24 @@
             const total = Math.round((qty / 1000) * selectedService.price);
             document.getElementById('modal-total-price').innerText = total.toLocaleString() + " so'm";
 
-            // Live Balance Warning
             const hint = document.getElementById('modal-balance-hint');
             const submitBtn = document.getElementById('btn-submit-order');
             if (total > userBalance) {
                 hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Balans yetarli emas (${userBalance.toLocaleString()} so'm)</span>`;
-                submitBtn.classList.add('opacity-75');
+                submitBtn.classList.add('opacity-70');
             } else {
                 hint.innerHTML = `Balans: <span id="modal-curr-bal" class="text-emerald-400 font-bold">${userBalance.toLocaleString()}</span> so'm`;
-                submitBtn.classList.remove('opacity-75');
+                submitBtn.classList.remove('opacity-70');
             }
         }
 
-        // Submit Order (Instant Local Update + Bot Sync)
+        // Submit Order (Instant Optimistic UI + Parallel Background Server Commit)
         function submitOrder() {
             const link = document.getElementById('order-link').value.trim();
             const qty = parseInt(document.getElementById('order-qty').value) || 0;
 
             if (!link) {
-                showToast("Iltimos, nishon havolani kiriting!", "⚠️");
+                showToast("Iltimos, havolani kiriting!", "⚠️");
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
                 return;
             }
@@ -677,7 +817,6 @@
 
             const total = Math.round((qty / 1000) * selectedService.price);
 
-            // Check Balance
             if (userBalance < total) {
                 showToast(`Balansingiz yetarli emas! Zarur: ${total.toLocaleString()} so'm`, "❌");
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
@@ -686,13 +825,15 @@
                 return;
             }
 
-            // Deduct Balance Immediately (0.00000000000001 ping / instant feel)
+            // Deduct Balance Immediately
             userBalance -= total;
             localStorage.setItem('smm_bal_' + userId, userBalance);
             updateBalanceUI();
 
-            // Create Order Object
             const orderId = Math.floor(1000 + Math.random() * 9000);
+            const now = new Date();
+            const dateStr = now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' });
+
             const orderObj = {
                 id: orderId,
                 service_id: selectedService.id,
@@ -701,8 +842,8 @@
                 link: link,
                 quantity: qty,
                 price: total,
-                status: 'Pending',
-                date: new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + new Date().toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' })
+                status: 'In progress',
+                date: dateStr
             };
 
             userOrders.unshift(orderObj);
@@ -714,30 +855,24 @@
                 action: "new_order",
                 service_id: selectedService.id,
                 service_name: selectedService.name,
-                network: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
+                network: currentPlatform,
                 link: link,
                 quantity: qty,
                 price: total,
-                user_id: userId
+                user_id: userId,
+                api_url: selectedService.api_url || ""
             };
 
-            // Send via Telegram WebApp Data if launched from keyboard button
-            let sentViaTg = false;
-            try {
-                if (tg && tg.sendData) {
-                    tg.sendData(JSON.stringify(orderPayload));
-                    sentViaTg = true;
-                }
-            } catch (err) {
-                console.warn("tg.sendData not available in this launch mode, falling back to API:", err);
+            // Parallel background dispatch
+            if (tg && tg.sendData) {
+                try { tg.sendData(JSON.stringify(orderPayload)); } catch (e) {}
             }
 
-            // Sync with Server API in background
             fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderPayload)
-            }).catch(e => console.log('API sync offline/skipped'));
+            }).catch(e => console.log('Order sync offline'));
 
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             showToast(`✅ Buyurtma qabul qilindi! (#${orderId})`, "🚀");
@@ -752,53 +887,92 @@
 
             if (userOrders.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-10 text-gray-400">
-                        <div class="text-3xl mb-2">📭</div>
-                        <p class="font-semibold text-xs text-gray-300">Hozircha buyurtmalaringiz yo'q</p>
-                        <p class="text-[10px] text-gray-500 mt-1">Xizmatlar bo'limidan birinchi buyurtmani bering!</p>
-                        <button onclick="switchTab('store')" class="mt-3 px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs active:scale-95">Xizmatlarga o'tish ➔</button>
+                    <div class="text-center py-10 text-gray-400 space-y-2">
+                        <div class="text-3xl opacity-60">📭</div>
+                        <p class="font-bold text-xs text-gray-300">Hozircha buyurtmalaringiz yo'q</p>
+                        <p class="text-[10px] text-gray-500">Xizmatlar bo'limidan birinchi buyurtmangizni bering!</p>
+                        <button onclick="switchTab('store')" class="mt-2 px-4 py-2 rounded-xl ios-primary-btn text-white font-bold text-xs ios-btn">Xizmatlarga o'tish ➔</button>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = userOrders.map(o => `
-                <div class="p-3.5 rounded-2xl glass-card border border-white/5 space-y-2">
+                <div class="p-3.5 rounded-2xl liquid-glass-sm border-white/5 space-y-2">
                     <div class="flex justify-between items-center">
-                        <span class="font-mono text-[10px] font-bold text-indigo-400 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20">#${o.id}</span>
-                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/20">⏳ Kutilmoqda</span>
+                        <span class="font-mono text-[10px] font-bold text-blue-400 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">#${o.id}</span>
+                        <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>
                     </div>
-                    <h4 class="font-bold text-xs text-white leading-tight">${o.service_name}</h4>
-                    <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
-                        <span>Miqdor: <b class="text-gray-200 font-mono">${o.quantity.toLocaleString()} ta</b></span>
-                        <span>Jami: <b class="text-emerald-400 font-mono">${o.price.toLocaleString()} so'm</b></span>
+                    <h4 class="font-bold text-xs text-white leading-tight">${escapeHtml(o.service_name)}</h4>
+                    <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5 font-mono">
+                        <span>Miqdor: <b class="text-gray-100">${o.quantity.toLocaleString()} ta</b></span>
+                        <span>Jami: <b class="text-emerald-400">${o.price.toLocaleString()} so'm</b></span>
                     </div>
                     <div class="flex justify-between items-center text-[10px] text-gray-500">
-                        <span class="truncate max-w-[180px] font-mono">${o.link}</span>
+                        <span class="truncate max-w-[200px] font-mono text-gray-400">${escapeHtml(o.link)}</span>
                         <span>${o.date}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Copy Functions
+        // Tab Navigation
+        function switchTab(tab) {
+            ['store', 'orders', 'deposit', 'profile'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (el) el.classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (btn) {
+                    btn.classList.remove('text-blue-400', 'font-bold');
+                    btn.classList.add('text-gray-400', 'font-medium');
+                }
+            });
+
+            const target = document.getElementById(`tab-${tab}`);
+            if (target) target.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-400', 'font-medium');
+                activeBtn.classList.add('text-blue-400', 'font-bold');
+            }
+
+            if (tab === 'orders') renderOrders();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+            if (tg && tg.BackButton) {
+                if (tab !== 'store') {
+                    tg.BackButton.show();
+                    tg.BackButton.onClick(() => switchTab('store'));
+                } else {
+                    tg.BackButton.hide();
+                }
+            }
+        }
+
+        // Toast Popup
+        function showToast(msg, icon = "✨") {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2600);
+        }
+
+        // Copy Helpers
         function copyCard() {
             const num = document.getElementById('card-num').innerText.replace(/\s+/g, '');
             navigator.clipboard.writeText(num).then(() => {
-                showToast("Karta raqami nusxalandi! 📋", "✅");
+                showToast("Karta raqami nusxalandi!", "📋");
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            }).catch(() => {
-                showToast(num, "📋");
             });
         }
 
         function copyRefLink() {
             const link = document.getElementById('ref-link').innerText.trim();
             navigator.clipboard.writeText(link).then(() => {
-                showToast("Referal havolasi nusxalandi! 🔗", "✅");
+                showToast("Referal havolangiz nusxalandi!", "🔗");
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            }).catch(() => {
-                showToast(link, "🔗");
             });
         }
 
@@ -818,10 +992,13 @@
             }
         }
 
-        // Initialize App
-        initUserData();
-        renderCategories();
-        renderServices();
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        // Launch App
+        initApp();
     </script>
 </body>
 </html>
