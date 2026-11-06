@@ -198,24 +198,12 @@
                 </div>
             </div>
 
-            <!-- Right: Actions & Balance -->
-            <div class="flex items-center gap-1.5 md:gap-2">
-                <!-- Spotlight Search Trigger -->
-                <button onclick="openSpotlightModal()" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/[0.06] border border-white/10 text-gray-300 hover:text-white flex items-center justify-center text-xs md:text-sm ios-btn active:scale-95" title="Universal Qidiruv (Cmd+K)">
-                    🔍
-                </button>
-                <!-- Currency & Lang Toggle Pill -->
-                <button onclick="toggleCurrencyModal()" class="h-8 md:h-9 px-2 md:px-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-[11px] font-mono text-gray-300 hover:text-white flex items-center gap-1 ios-btn active:scale-95">
-                    <span id="current-currency-flag">🇺🇿</span>
-                    <span id="current-currency-code" class="font-bold">UZS</span>
-                </button>
-                <!-- Balance Pill -->
-                <div class="cursor-pointer text-right ios-btn active:scale-95 pl-0.5" onclick="switchTab('deposit')">
-                    <span class="text-[9px] text-gray-400 font-semibold tracking-wider uppercase block" id="header-balance-title">Balans</span>
-                    <div class="flex items-baseline justify-end gap-1 px-2.5 py-1 rounded-xl bg-white/[0.06] border border-white/10 mt-0.5 shadow-inner">
-                        <span id="user-balance" class="text-xs md:text-sm font-black tracking-tight text-emerald-400 font-mono">100,100</span>
-                        <span id="user-balance-currency" class="text-[9px] md:text-[10px] text-emerald-300 font-semibold">so'm</span>
-                    </div>
+            <!-- Right: Balance Pill -->
+            <div class="cursor-pointer text-right ios-btn active:scale-95" onclick="switchTab('deposit')">
+                <span class="text-[10px] text-gray-400 font-semibold tracking-wider uppercase block">Balans</span>
+                <div class="flex items-baseline justify-end gap-1 px-3 py-1 rounded-xl bg-white/[0.06] border border-white/10 mt-0.5 shadow-inner">
+                    <span id="user-balance" class="text-base font-black tracking-tight text-emerald-400 font-mono">100,100</span>
+                    <span class="text-[10px] text-emerald-300 font-semibold">so'm</span>
                 </div>
             </div>
         </div>
@@ -301,55 +289,15 @@
             </div>
 
             <!-- Quick Action Shortcuts -->
-            <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+            <div class="grid grid-cols-2 gap-2 pt-1 text-center text-xs">
                 <button onclick="switchTab('deposit')" class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-bold flex flex-col items-center gap-1 ios-btn">
                     <span class="text-lg">💳</span>
-                    <span class="text-[10px]">To'ldirish</span>
-                </button>
-                <button onclick="toggleAiDrawer(true)" class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-bold flex flex-col items-center gap-1 ios-btn">
-                    <span class="text-lg">🤖</span>
-                    <span class="text-[10px]">AI Maslahat</span>
+                    <span class="text-xs">Balansni To'ldirish</span>
                 </button>
                 <button onclick="switchTab('orders')" class="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-300 font-bold flex flex-col items-center gap-1 ios-btn">
                     <span class="text-lg">📦</span>
-                    <span class="text-[10px]">Tarix</span>
+                    <span class="text-xs">Buyurtmalar Tarixi</span>
                 </button>
-            </div>
-        </div>
-
-        <!-- SMART AI SMM ASSISTANT CARD -->
-        <div class="liquid-glass p-5 space-y-3.5">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-600/25 border border-indigo-500/40 text-indigo-300 flex items-center justify-center text-lg">
-                        🤖
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-white text-sm">Aqlli SMM AI Maslahatchi</h4>
-                        <p class="text-[10px] text-gray-400">Maqsadingizga mos xizmatni tezkor topib beradi</p>
-                    </div>
-                </div>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">AI Active</span>
-            </div>
-
-            <!-- AI Prompt Suggestions -->
-            <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
-                <button onclick="askAiPrompt('Telegram sifatli obunachi')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">✈️ TG Obunachi</button>
-                <button onclick="askAiPrompt('Instagram reels ko\'rish arzon va tezkor')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">📸 Reels Ko'rish</button>
-                <button onclick="askAiPrompt('TikTok layk va kuzatuvchi')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">🎵 TikTok</button>
-            </div>
-
-            <div class="relative">
-                <input type="text" id="ai-user-query" placeholder="Savolingizni yozing (Masalan: 50k byudjetga nima bor?)..." class="w-full liquid-glass-sm p-3 pr-20 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/60 font-medium">
-                <button onclick="submitAiQuery()" class="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-xl bg-indigo-600/40 text-indigo-200 font-bold text-xs border border-indigo-500/40 flex items-center gap-1 active:scale-95 transition-all">
-                    <span>So'rash</span> <span>➔</span>
-                </button>
-            </div>
-
-            <!-- AI Response Box -->
-            <div id="ai-response-box" class="hidden p-3.5 rounded-2xl bg-indigo-950/20 border border-indigo-500/20 space-y-2 text-xs">
-                <div id="ai-msg-content" class="text-gray-200 text-xs leading-relaxed"></div>
-                <div id="ai-recs-list" class="space-y-1.5 pt-1"></div>
             </div>
         </div>
 
@@ -710,81 +658,6 @@
     </div>
 
     
-    <!-- ==================== CURRENCY & LANGUAGE SETTINGS MODAL ==================== -->
-    <div id="currency-modal" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end md:items-center justify-center opacity-0 pointer-events-none p-0 md:p-4">
-        <div class="sheet-content liquid-glass w-full max-w-sm rounded-t-[32px] md:rounded-[32px] p-5 space-y-4 border-t border-white/20 pb-8">
-            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-1"></div>
-            <div class="flex justify-between items-center pb-2 border-b border-white/10">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <span>🌐</span> Valyuta va Til Sozlamalari
-                </h3>
-                <button onclick="closeCurrencyModal()" class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white text-xs">✕</button>
-            </div>
-
-            <!-- Currency Picker -->
-            <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Asosiy Valyuta</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="setCurrency('UZS')" id="curr-btn-UZS" class="p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs flex flex-col items-center gap-1 ios-btn">
-                        <span class="text-base">🇺🇿</span>
-                        <span>UZS (so'm)</span>
-                    </button>
-                    <button onclick="setCurrency('USD')" id="curr-btn-USD" class="p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn">
-                        <span class="text-base">🇺🇸</span>
-                        <span>USD ($)</span>
-                    </button>
-                    <button onclick="setCurrency('RUB')" id="curr-btn-RUB" class="p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn">
-                        <span class="text-base">🇷🇺</span>
-                        <span>RUB (₽)</span>
-                    </button>
-                </div>
-                <p class="text-[10px] text-gray-400 font-mono text-center pt-1">1 USD ≈ 12,800 UZS • 1 RUB ≈ 135 UZS</p>
-            </div>
-
-            <!-- Language Picker -->
-            <div class="space-y-1.5 pt-2 border-t border-white/10">
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Interfeys Tili</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="setLanguage('uz')" id="lang-btn-uz" class="p-2 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs ios-btn">O'zbekcha</button>
-                    <button onclick="setLanguage('ru')" id="lang-btn-ru" class="p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn">Русский</button>
-                    <button onclick="setLanguage('en')" id="lang-btn-en" class="p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn">English</button>
-                </div>
-            </div>
-
-            <button onclick="closeCurrencyModal()" class="w-full py-3 rounded-2xl ios-primary-btn text-white font-bold text-xs ios-btn">
-                Saqlash va Yopish
-            </button>
-        </div>
-    </div>
-
-    <!-- ==================== UNIVERSAL SPOTLIGHT SEARCH MODAL ==================== -->
-    <div id="spotlight-modal" class="sheet-container fixed inset-0 z-50 bg-black/85 backdrop-blur-lg flex items-start justify-center opacity-0 pointer-events-none p-3 pt-8 md:pt-16">
-        <div class="liquid-glass w-full max-w-lg rounded-[28px] p-4 space-y-3.5 border border-white/20 shadow-2xl">
-            <!-- Spotlight Search Bar -->
-            <div class="relative flex items-center">
-                <span class="absolute left-3.5 text-gray-400 text-base">🔍</span>
-                <input type="text" id="spotlight-input" oninput="handleSpotlightInput()" placeholder="Universal qidiruv: Xizmatlar, Buyurtmalar, ID..." class="w-full liquid-glass-sm py-3 pl-10 pr-20 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/60 font-medium">
-                <button onclick="closeSpotlightModal()" class="absolute right-2 px-2.5 py-1 rounded-lg bg-white/10 text-gray-300 text-[11px] font-mono hover:text-white">Esc ✕</button>
-            </div>
-
-            <!-- Quick Jump Categories -->
-            <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
-                <button onclick="setSpotlightFilter('all')" id="spot-flt-all" class="px-2.5 py-1 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold whitespace-nowrap">Barchasi</button>
-                <button onclick="setSpotlightFilter('services')" id="spot-flt-services" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">🛍 Xizmatlar</button>
-                <button onclick="setSpotlightFilter('orders')" id="spot-flt-orders" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">📦 Buyurtmalar</button>
-                <button onclick="setSpotlightFilter('tickets')" id="spot-flt-tickets" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">💬 Murojaatlar</button>
-            </div>
-
-            <!-- Spotlight Results Stream -->
-            <div id="spotlight-results" class="max-h-[55vh] overflow-y-auto hide-scrollbar space-y-2 text-xs">
-                <div class="p-6 text-center text-gray-400 space-y-1">
-                    <p class="font-bold text-xs text-gray-300">Qidirish uchun so'z kiriting</p>
-                    <p class="text-[10px] text-gray-500">Xizmat ID, Instagram, Telegram, havola yoki buyurtma raqami</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- ==================== SUPPORT TICKETS DRAWER ==================== -->
     <div id="support-drawer" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
         <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-5 space-y-4 border-t border-white/20 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar">
@@ -934,48 +807,18 @@
         let userTickets = [];
         let isAdmin = false;
 
-        let currentCurrency = localStorage.getItem('smm_currency') || 'UZS';
-        let currentLanguage = localStorage.getItem('smm_lang') || 'uz';
-        let activeSpotlightFilter = 'all';
         let adminBalanceAction = 'add';
         let currentOpenedTicketId = null;
         let currentSupportPriority = "O'rta";
 
-        const CURRENCY_RATES = {
-            'UZS': { symbol: "so'm", rate: 1, flag: "🇺🇿", position: 'after' },
-            'USD': { symbol: "$", rate: 12800, flag: "🇺🇸", position: 'before' },
-            'RUB': { symbol: "₽", rate: 135, flag: "🇷🇺", position: 'after' }
-        };
-
-        function formatMoney(amountInUZS, showSymbol = true) {
-            amountInUZS = Number(amountInUZS) || 0;
-            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
-            const val = amountInUZS / c.rate;
-            let formatted = "";
-            if (currentCurrency === 'UZS') {
-                formatted = Math.round(val).toLocaleString();
-            } else if (currentCurrency === 'USD') {
-                formatted = val.toFixed(2);
-            } else {
-                formatted = Math.round(val).toLocaleString();
-            }
-            if (!showSymbol) return formatted;
-            if (c.position === 'before') {
-                return `${c.symbol}${formatted}`;
-            }
-            return `${formatted} ${c.symbol}`;
+        function formatMoney(amount) {
+            const val = Math.round(Number(amount) || 0);
+            return val.toLocaleString() + " so'm";
         }
 
         function formatUnitPrice(pricePer1k) {
-            pricePer1k = Number(pricePer1k) || 0;
-            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
-            const val = (pricePer1k / 1000) / c.rate;
-            if (currentCurrency === 'USD') {
-                return `$${val.toFixed(4)}`;
-            } else if (currentCurrency === 'RUB') {
-                return `${val.toFixed(2)} ₽`;
-            }
-            return `${val.toFixed(val >= 1 ? 1 : 2)} so'm`;
+            const val = (Number(pricePer1k) || 0) / 1000;
+            return (val >= 1 ? val.toFixed(1) : val.toFixed(2)) + " so'm";
         }
 
         let currentPlatform = "Telegram";
@@ -1009,254 +852,6 @@
             return PLATFORM_ICONS[k] || "✨";
         }
 
-
-        // ==================== CURRENCY & LANGUAGE CONTROLS ====================
-        function toggleCurrencyModal() {
-            const modal = document.getElementById('currency-modal');
-            modal.classList.toggle('active');
-            updateCurrencyButtonsUI();
-        }
-
-        function closeCurrencyModal() {
-            const modal = document.getElementById('currency-modal');
-            modal.classList.remove('active');
-        }
-
-        function setCurrency(curr) {
-            if (!CURRENCY_RATES[curr]) return;
-            currentCurrency = curr;
-            localStorage.setItem('smm_currency', curr);
-            updateCurrencyButtonsUI();
-            updateBalanceUI();
-            renderServices();
-            renderOrders();
-            renderTransactionsLedger();
-            if (drawerSelectedService) calculateDrawerTotal();
-            showToast(`Valyuta o'zgartirildi: ${curr}`, "🌐");
-        }
-
-        function updateCurrencyButtonsUI() {
-            ['UZS', 'USD', 'RUB'].forEach(c => {
-                const btn = document.getElementById('curr-btn-' + c);
-                if (btn) {
-                    if (c === currentCurrency) {
-                        btn.className = "p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs flex flex-col items-center gap-1 ios-btn";
-                    } else {
-                        btn.className = "p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn";
-                    }
-                }
-            });
-            ['uz', 'ru', 'en'].forEach(l => {
-                const btn = document.getElementById('lang-btn-' + l);
-                if (btn) {
-                    if (l === currentLanguage) {
-                        btn.className = "p-2 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs ios-btn";
-                    } else {
-                        btn.className = "p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn";
-                    }
-                }
-            });
-        }
-
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem('smm_lang', lang);
-            updateCurrencyButtonsUI();
-            applyLanguageTranslations();
-            showToast(`Til o'zgartirildi: ${lang.toUpperCase()}`, "🌐");
-        }
-
-        function applyLanguageTranslations() {
-            const t = (currentLanguage === 'ru') ? {
-                store: "Магазин", cabinet: "Кабинет", history: "История", account: "Счет", balance: "Баланс"
-            } : (currentLanguage === 'en') ? {
-                store: "Store", cabinet: "Dashboard", history: "Orders", account: "Finances", balance: "Balance"
-            } : {
-                store: "Do'kon", cabinet: "Kabinet", history: "Tarix", account: "Hisob", balance: "Balans"
-            };
-
-            const bTitle = document.getElementById('header-balance-title');
-            if (bTitle) bTitle.innerText = t.balance;
-            const btnStore = document.querySelector('#tab-btn-store span:last-child');
-            if (btnStore) btnStore.innerText = t.store;
-            const btnProf = document.querySelector('#tab-btn-profile span:last-child');
-            if (btnProf) btnProf.innerText = t.cabinet;
-            const btnOrd = document.querySelector('#tab-btn-orders span:nth-child(2)');
-            if (btnOrd) btnOrd.innerText = t.history;
-            const btnDep = document.querySelector('#tab-btn-deposit span:last-child');
-            if (btnDep) btnDep.innerText = t.account;
-        }
-
-        // ==================== UNIVERSAL SPOTLIGHT SEARCH ====================
-        let spotlightDebounce = null;
-        let lastSpotlightData = { services: [], orders: [], tickets: [] };
-
-        function openSpotlightModal() {
-            const modal = document.getElementById('spotlight-modal');
-            modal.classList.add('active');
-            const input = document.getElementById('spotlight-input');
-            input.value = '';
-            input.focus();
-            handleSpotlightInput();
-        }
-
-        function closeSpotlightModal() {
-            const modal = document.getElementById('spotlight-modal');
-            modal.classList.remove('active');
-        }
-
-        function setSpotlightFilter(filterType) {
-            activeSpotlightFilter = filterType;
-            ['all', 'services', 'orders', 'tickets'].forEach(f => {
-                const btn = document.getElementById('spot-flt-' + f);
-                if (btn) {
-                    if (f === filterType) {
-                        btn.className = "px-2.5 py-1 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold whitespace-nowrap";
-                    } else {
-                        btn.className = "px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap";
-                    }
-                }
-            });
-            renderSpotlightResults();
-        }
-
-        function handleSpotlightInput() {
-            clearTimeout(spotlightDebounce);
-            const query = (document.getElementById('spotlight-input').value || '').trim();
-            if (!query) {
-                const container = document.getElementById('spotlight-results');
-                container.innerHTML = `
-                    <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
-                        <span class="text-[10px] uppercase font-bold text-gray-400">Tezkor amallar & Yo'nalishlar:</span>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
-                            <button onclick="closeSpotlightModal(); switchTab('store');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">🛍 Do'kon Katalogi</button>
-                            <button onclick="closeSpotlightModal(); switchTab('orders');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">📦 Buyurtmalarim</button>
-                            <button onclick="closeSpotlightModal(); openSupportDrawer('new');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">✍️ Yangi Murojaat</button>
-                            <button onclick="closeSpotlightModal(); switchTab('deposit');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">💳 Hisob To'ldirish</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            spotlightDebounce = setTimeout(async () => {
-                try {
-                    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&user_id=${userId}`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && data.ok) {
-                            lastSpotlightData = data;
-                            renderSpotlightResults();
-                            return;
-                        }
-                    }
-                } catch(e) {}
-
-                const qLow = query.toLowerCase();
-                const localServices = getServicesForCurrentPlatform().filter(s => s.name.toLowerCase().includes(qLow) || String(s.id).includes(qLow)).slice(0, 6);
-                const localOrders = userOrders.filter(o => String(o.id).includes(qLow) || (o.service_name || o.service || '').toLowerCase().includes(qLow) || (o.link || '').toLowerCase().includes(qLow)).slice(0, 5);
-                const localTickets = userTickets.filter(t => String(t.id).includes(qLow) || (t.subject || '').toLowerCase().includes(qLow)).slice(0, 5);
-                lastSpotlightData = { services: localServices, orders: localOrders, tickets: localTickets };
-                renderSpotlightResults();
-            }, 200);
-        }
-
-        function renderSpotlightResults() {
-            const container = document.getElementById('spotlight-results');
-            const { services = [], orders = [], tickets = [] } = lastSpotlightData;
-
-            let html = '';
-
-            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'services') && services.length > 0) {
-                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-1">Xizmatlar (${services.length})</div>`;
-                html += services.map(s => `
-                    <div onclick="selectSpotlightService('${s.id}', '${s.network || currentPlatform}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
-                        <div class="max-w-[220px]">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[10px] font-mono font-bold text-blue-400">#${s.id}</span>
-                                <span class="text-[10px] text-gray-400">${s.network || s.category || ''}</span>
-                            </div>
-                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(s.name)}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-mono font-bold text-emerald-400 block">${formatMoney(s.rate || s.price || 10000)}</span>
-                            <span class="text-[10px] text-blue-400 font-semibold">Buyurtma ➔</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'orders') && orders.length > 0) {
-                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">Buyurtmalar (${orders.length})</div>`;
-                html += orders.map(o => `
-                    <div onclick="selectSpotlightOrder('${o.id}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
-                        <div class="max-w-[220px]">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[10px] font-mono font-bold text-indigo-400">#${o.id}</span>
-                                <span class="text-[10px] text-gray-300 font-semibold">${escapeHtml(o.status || 'In progress')}</span>
-                            </div>
-                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(o.service || o.service_name || '')}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs font-mono font-bold text-emerald-400 block">${formatMoney(o.amount || o.price || 0)}</span>
-                            <span class="text-[10px] text-gray-400">Ko'rish ➔</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'tickets') && tickets.length > 0) {
-                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">Murojaatlar (${tickets.length})</div>`;
-                html += tickets.map(t => `
-                    <div onclick="selectSpotlightTicket('${t.id}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
-                        <div class="max-w-[220px]">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-[10px] font-mono font-bold text-purple-400">#${t.id}</span>
-                                <span class="text-[10px] text-amber-300">${t.status || 'Ochiq'}</span>
-                            </div>
-                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(t.subject || '')}</span>
-                        </div>
-                        <span class="text-[10px] text-blue-400">Ochish ➔</span>
-                    </div>
-                `).join('');
-            }
-
-            if (!html) {
-                html = `
-                    <div class="p-8 text-center text-gray-400 space-y-1">
-                        <div class="text-2xl opacity-60">🔍</div>
-                        <p class="font-bold text-xs text-gray-300">Hech qanday natija topilmadi</p>
-                        <p class="text-[10px] text-gray-500">Boshqa so'z yoki ID raqamini sinab ko'ring</p>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function selectSpotlightService(serviceId, network) {
-            closeSpotlightModal();
-            if (network && DYNAMIC_DATA.services[network]) {
-                selectPlatform(network);
-            }
-            openOrderDrawer(serviceId);
-        }
-
-        function selectSpotlightOrder(orderId) {
-            closeSpotlightModal();
-            switchTab('orders');
-            const input = document.getElementById('order-search-input');
-            if (input) {
-                input.value = String(orderId);
-                renderOrders();
-            }
-        }
-
-        function selectSpotlightTicket(ticketId) {
-            closeSpotlightModal();
-            openSupportDrawer('thread');
-            openTicketThread(ticketId);
-        }
 
         // ==================== SUPPORT TICKETS SYSTEM ====================
         function openSupportDrawer(view = 'list') {
@@ -1563,16 +1158,10 @@
 
         // Keyboard Shortcuts Listeners
         document.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                openSpotlightModal();
-            }
             if (e.key === 'Escape') {
-                closeSpotlightModal();
                 closeDrawer();
                 closeSupportDrawer();
                 closeAdminBalanceModal();
-                closeCurrencyModal();
             }
         });
 
@@ -1627,21 +1216,13 @@
                 syncOrdersFromBackend(),
                 loadUserTickets()
             ]);
-            applyLanguageTranslations();
         }
 
         function updateBalanceUI() {
-            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
-            const formatted = formatMoney(userBalance, false);
+            const formatted = Math.round(userBalance).toLocaleString();
             document.getElementById('user-balance').innerText = formatted;
-            const balCurr = document.getElementById('user-balance-currency');
-            if (balCurr) balCurr.innerText = c.symbol;
             const drawerBal = document.getElementById('drawer-curr-balance');
-            if (drawerBal) drawerBal.innerText = formatMoney(userBalance);
-            const flagEl = document.getElementById('current-currency-flag');
-            if (flagEl) flagEl.innerText = c.flag;
-            const codeEl = document.getElementById('current-currency-code');
-            if (codeEl) codeEl.innerText = currentCurrency;
+            if (drawerBal) drawerBal.innerText = formatted + " so'm";
         }
 
         function updateProfileStats() {
@@ -1816,63 +1397,7 @@
             }).join('');
         }
 
-        // ==================== AI ASSISTANT CLIENT ====================
-        function askAiPrompt(prompt) {
-            document.getElementById('ai-user-query').value = prompt;
-            submitAiQuery();
-        }
 
-        async function submitAiQuery() {
-            const query = (document.getElementById('ai-user-query').value || '').trim();
-            if (!query) return;
-
-            const box = document.getElementById('ai-response-box');
-            const msgEl = document.getElementById('ai-msg-content');
-            const recsEl = document.getElementById('ai-recs-list');
-
-            box.classList.remove('hidden');
-            msgEl.innerHTML = `<span class="text-indigo-300 font-mono">🤖 Tahlil qilinmoqda, kuting...</span>`;
-            recsEl.innerHTML = ``;
-
-            try {
-                const res = await fetch('/api/ai/assistant', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: query, user_id: userId })
-                });
-                const data = await res.json();
-                if (data && data.ok) {
-                    msgEl.innerHTML = data.message;
-                    if (data.tips && data.tips.length > 0) {
-                        msgEl.innerHTML += `<div class="mt-1 text-[11px] text-indigo-300 font-mono">💡 ${data.tips[0]}</div>`;
-                    }
-                    if (data.recommendations && data.recommendations.length > 0) {
-                        recsEl.innerHTML = data.recommendations.map(r => `
-                            <div class="p-2.5 rounded-xl bg-black/40 border border-indigo-500/30 flex items-center justify-between">
-                                <div class="max-w-[210px]">
-                                    <span class="font-bold text-white text-[11px] block truncate">${escapeHtml(r.name)}</span>
-                                    <span class="text-[10px] text-emerald-400 font-mono">${r.rate.toLocaleString()} so'm/1k</span>
-                                </div>
-                                <button onclick="selectServiceFromAi('${r.id}', '${r.network}')" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-[10px] active:scale-95">
-                                    Tanlash ➔
-                                </button>
-                            </div>
-                        `).join('');
-                    }
-                } else {
-                    msgEl.innerHTML = `Kechirasiz, ma'lumot topilmadi.`;
-                }
-            } catch(e) {
-                msgEl.innerHTML = `AI xizmati vaqtincha offline rejimda.`;
-            }
-        }
-
-        function selectServiceFromAi(serviceId, network) {
-            if (network && DYNAMIC_DATA.services[network]) {
-                selectPlatform(network);
-            }
-            openOrderDrawer(serviceId);
-        }
 
         // ==================== STORE CATALOG LOGIC ====================
         function buildPlatformDock() {
@@ -2477,10 +2002,7 @@
             }
         }
 
-        function toggleAiDrawer(open) {
-            switchTab('profile');
-            document.getElementById('ai-user-query').focus();
-        }
+
 
         // Toast Popup
         function showToast(msg, icon = "✨") {
