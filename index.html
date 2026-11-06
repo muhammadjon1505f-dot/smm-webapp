@@ -254,14 +254,7 @@
                 <button id="search-clear" onclick="clearSearch()" class="hidden absolute right-3.5 top-3 w-5 h-5 rounded-full bg-white/10 text-gray-400 text-[10px] flex items-center justify-center">✕</button>
             </div>
 
-            <!-- Filter Tags -->
-            <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[11px]">
-                <button onclick="setFilterBadge('all')" id="flt-all" class="px-3 py-1.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold whitespace-nowrap ios-btn">Barchasi</button>
-                <button onclick="setFilterBadge('fav')" id="flt-fav" class="px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn">⭐ Sevimlilar</button>
-                <button onclick="setFilterBadge('fast')" id="flt-fast" class="px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn">⚡️ Tezkor</button>
-                <button onclick="setFilterBadge('guar')" id="flt-guar" class="px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn">🛡️ Kafolatli</button>
-                <button onclick="toggleSortPrice()" id="flt-sort" class="px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn">↕️ Narx bo'yicha</button>
-            </div>
+
         </div>
 
         <!-- 4. Services List Container -->
@@ -1894,6 +1887,11 @@
             const badge = document.getElementById('active-platform-badge');
             if (badge) badge.innerText = currentPlatform;
 
+            const cats = DYNAMIC_DATA.services[currentPlatform] || [];
+            if ((!currentCategory || !cats.includes(currentCategory)) && cats.length > 0) {
+                currentCategory = cats[0];
+            }
+
             dock.innerHTML = platforms.map(p => {
                 const isActive = p === currentPlatform;
                 const icon = getPlatformIcon(p);
@@ -1913,7 +1911,8 @@
         function selectPlatform(p) {
             currentPlatform = p;
             buildPlatformDock();
-            currentCategory = 'All';
+            const cats = DYNAMIC_DATA.services[currentPlatform] || [];
+            currentCategory = cats[0] || '';
             renderCategories();
             renderServices();
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
@@ -1926,78 +1925,29 @@
 
             badge.innerText = `${cats.length} ta bo'lim`;
 
-            const allCats = ['Barchasi', ...cats];
-            pills.innerHTML = allCats.map(c => {
-                const isActive = (c === 'Barchasi' && currentCategory === 'All') || c === currentCategory;
+            if ((!currentCategory || !cats.includes(currentCategory)) && cats.length > 0) {
+                currentCategory = cats[0];
+            }
+
+            pills.innerHTML = cats.map(c => {
+                const isActive = (c === currentCategory);
                 const activeClass = isActive 
-                    ? 'bg-white/20 text-white font-bold border-white/30 shadow-sm' 
+                    ? 'bg-blue-600/35 text-white font-bold border-blue-500/50 shadow-md shadow-blue-500/25' 
                     : 'bg-white/[0.04] text-gray-400 border-white/5 hover:text-gray-200';
                 
-                let countStr = '';
-                if (c !== 'Barchasi') {
-                    const k = `${currentPlatform}|${c}`;
-                    const count = (DYNAMIC_DATA.items[k] || []).length;
-                    if (count > 0) countStr = ` <span class="text-[10px] opacity-60">(${count})</span>`;
-                }
+                const k = `${currentPlatform}|${c}`;
+                const count = (DYNAMIC_DATA.items[k] || []).length;
+                const countStr = count > 0 ? ` <span class="text-[10px] opacity-60">(${count})</span>` : '';
 
-                return `<button onclick="filterCategory('${escapeHtml(c)}')" class="px-3.5 py-2 rounded-xl border ${activeClass} transition-all whitespace-nowrap ios-btn">${c}${countStr}</button>`;
+                return `<button onclick="filterCategory('${escapeHtml(c)}')" class="px-3.5 py-2 rounded-xl border ${activeClass} transition-all whitespace-nowrap ios-btn">${escapeHtml(c)}${countStr}</button>`;
             }).join('');
         }
 
         function filterCategory(cat) {
-            currentCategory = cat === 'Barchasi' ? 'All' : cat;
+            currentCategory = cat;
             renderCategories();
             renderServices();
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function toggleFavorite(id, event) {
-            if (event) event.stopPropagation();
-            id = String(id);
-            const idx = userFavorites.indexOf(id);
-            if (idx > -1) {
-                userFavorites.splice(idx, 1);
-                showToast("Sevimlilardan olib tashlandi", "☆");
-            } else {
-                userFavorites.push(id);
-                showToast("Sevimlilarga qo'shildi!", "⭐");
-            }
-            localStorage.setItem('smm_favs_' + userId, JSON.stringify(userFavorites));
-            renderServices();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function setFilterBadge(type) {
-            currentBadgeFilter = type;
-            ['all', 'fav', 'fast', 'guar'].forEach(b => {
-                const el = document.getElementById('flt-' + b);
-                if (el) {
-                    if (b === type) {
-                        el.className = "px-3 py-1.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold whitespace-nowrap ios-btn";
-                    } else {
-                        el.className = "px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn";
-                    }
-                }
-            });
-            renderServices();
-        }
-
-        function toggleSortPrice() {
-            const btn = document.getElementById('flt-sort');
-            if (sortPriceAsc === null) {
-                sortPriceAsc = true;
-                btn.innerText = "⬆️ Arzonlari oldin";
-                btn.className = "px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 font-bold whitespace-nowrap ios-btn";
-            } else if (sortPriceAsc === true) {
-                sortPriceAsc = false;
-                btn.innerText = "⬇️ Qimmatlari oldin";
-                btn.className = "px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-500/20 text-purple-300 font-bold whitespace-nowrap ios-btn";
-            } else {
-                sortPriceAsc = null;
-                btn.innerText = "↕️ Narx bo'yicha";
-                btn.className = "px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn";
-            }
-            renderServices();
         }
 
         function getServicesForCurrentPlatform() {
@@ -2015,17 +1965,16 @@
                         price: Math.round(it.rate || it.price || 10000),
                         min: it.min || 10,
                         max: it.max || 100000,
-                        api_url: it.api_url || "",
-                        badge: it.badge || (it.min <= 20 ? "TEZKOR" : "KAFOLATLI")
+                        api_url: it.api_url || ""
                     });
                 }
             }
 
             if (list.length === 0 && currentPlatform === "Telegram") {
                 list = [
-                    { id: 101, cat: "Obunachilar", name: "⚡️ Telegram Obunachi (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000, badge: "KAFOLATLI" },
-                    { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Tezkor start)", price: 800, min: 50, max: 100000, badge: "TEZKOR" },
-                    { id: 106, cat: "Reaksiyalar", name: "🔥 Telegram Reaksiyalar (Mix 👍❤️🔥)", price: 1500, min: 20, max: 10000, badge: "VIP" }
+                    { id: 101, cat: "Obunachilar", name: "⚡️ Telegram Obunachi (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000 },
+                    { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Tezkor start)", price: 800, min: 50, max: 100000 },
+                    { id: 106, cat: "Reaksiyalar", name: "🔥 Telegram Reaksiyalar (Mix 👍❤️🔥)", price: 1500, min: 20, max: 10000 }
                 ];
             }
             return list;
@@ -2039,53 +1988,32 @@
 
             let items = getServicesForCurrentPlatform();
 
-            if (currentCategory !== 'All') {
-                items = items.filter(it => it.cat === currentCategory);
-            }
             if (query) {
                 items = items.filter(it => it.name.toLowerCase().includes(query) || String(it.id).includes(query) || it.cat.toLowerCase().includes(query));
-            }
-            if (currentBadgeFilter === 'fav') {
-                items = items.filter(it => userFavorites.includes(String(it.id)));
-            } else if (currentBadgeFilter === 'fast') {
-                items = items.filter(it => (it.badge || '').includes('TEZKOR') || it.name.toLowerCase().includes('tezkor'));
-            } else if (currentBadgeFilter === 'guar') {
-                items = items.filter(it => (it.badge || '').includes('KAFOLAT') || it.name.toLowerCase().includes('kafolat'));
-            }
-
-            if (sortPriceAsc === true) {
-                items.sort((a, b) => a.price - b.price);
-            } else if (sortPriceAsc === false) {
-                items.sort((a, b) => b.price - a.price);
+            } else if (currentCategory) {
+                items = items.filter(it => it.cat === currentCategory);
             }
 
             if (items.length === 0) {
                 container.innerHTML = `
                     <div class="p-8 text-center liquid-glass space-y-2">
                         <div class="text-3xl opacity-60">📂</div>
-                        <p class="font-bold text-gray-300 text-xs">Ushbu parametr bo'yicha xizmatlar topilmadi</p>
-                        <p class="text-[10px] text-gray-500">Filtrni tozalang yoki qidiruv so'zini o'zgartiring</p>
+                        <p class="font-bold text-gray-300 text-xs">Ushbu bo'limda xizmatlar topilmadi</p>
+                        <p class="text-[10px] text-gray-500">Boshqa bo'limni tanlang yoki qidiruvdan foydalaning</p>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = items.map(s => {
-                const isFav = userFavorites.includes(String(s.id));
                 return `
                     <div class="liquid-glass p-4 space-y-3 transition-all ios-btn border-white/5 hover:border-white/15">
-                        <div class="flex justify-between items-start gap-2">
+                        <div class="flex justify-between items-center gap-2">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">#${s.id}</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20">${s.badge}</span>
-                                <span class="text-[10px] text-gray-400 truncate max-w-[140px] font-medium opacity-80">${s.cat}</span>
+                                <span class="text-[10px] text-gray-400 truncate max-w-[180px] font-medium opacity-80">${escapeHtml(s.cat)}</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="toggleFavorite('${s.id}', event)" class="text-sm ${isFav ? 'text-amber-400' : 'text-gray-500 hover:text-gray-300'} active:scale-125 transition-all">
-                                    ${isFav ? '⭐' : '☆'}
-                                </button>
-                                <span class="text-xs font-black text-emerald-400 font-mono whitespace-nowrap">${formatMoney(s.price)} <span class="text-[9px] text-gray-400 font-normal">/ 1k</span></span>
-                            </div>
+                            <span class="text-xs font-black text-emerald-400 font-mono whitespace-nowrap">${formatMoney(s.price)} <span class="text-[9px] text-gray-400 font-normal">/ 1k</span></span>
                         </div>
 
                         <h4 class="text-xs font-bold text-gray-100 leading-snug">${escapeHtml(s.name)}</h4>
