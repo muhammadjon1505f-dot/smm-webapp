@@ -198,12 +198,24 @@
                 </div>
             </div>
 
-            <!-- Right: Balance Pill -->
-            <div class="cursor-pointer text-right ios-btn" onclick="switchTab('deposit')">
-                <span class="text-[10px] text-gray-400 font-semibold tracking-wider uppercase block">Balans</span>
-                <div class="flex items-baseline justify-end gap-1 px-3 py-1 rounded-xl bg-white/[0.06] border border-white/10 mt-0.5 shadow-inner">
-                    <span id="user-balance" class="text-base font-black tracking-tight text-emerald-400 font-mono">100,100</span>
-                    <span class="text-[10px] text-emerald-300 font-semibold">so'm</span>
+            <!-- Right: Actions & Balance -->
+            <div class="flex items-center gap-1.5 md:gap-2">
+                <!-- Spotlight Search Trigger -->
+                <button onclick="openSpotlightModal()" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/[0.06] border border-white/10 text-gray-300 hover:text-white flex items-center justify-center text-xs md:text-sm ios-btn active:scale-95" title="Universal Qidiruv (Cmd+K)">
+                    🔍
+                </button>
+                <!-- Currency & Lang Toggle Pill -->
+                <button onclick="toggleCurrencyModal()" class="h-8 md:h-9 px-2 md:px-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-[11px] font-mono text-gray-300 hover:text-white flex items-center gap-1 ios-btn active:scale-95">
+                    <span id="current-currency-flag">🇺🇿</span>
+                    <span id="current-currency-code" class="font-bold">UZS</span>
+                </button>
+                <!-- Balance Pill -->
+                <div class="cursor-pointer text-right ios-btn active:scale-95 pl-0.5" onclick="switchTab('deposit')">
+                    <span class="text-[9px] text-gray-400 font-semibold tracking-wider uppercase block" id="header-balance-title">Balans</span>
+                    <div class="flex items-baseline justify-end gap-1 px-2.5 py-1 rounded-xl bg-white/[0.06] border border-white/10 mt-0.5 shadow-inner">
+                        <span id="user-balance" class="text-xs md:text-sm font-black tracking-tight text-emerald-400 font-mono">100,100</span>
+                        <span id="user-balance-currency" class="text-[9px] md:text-[10px] text-emerald-300 font-semibold">so'm</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -372,9 +384,14 @@
                 </div>
             </div>
 
-            <button onclick="triggerProviderSync()" id="btn-adm-sync" class="w-full py-2.5 rounded-xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/40 text-blue-200 font-bold text-xs flex items-center justify-center gap-1.5 ios-btn">
-                <span>⚡️ APIdan Barcha Xizmatlarni Sinxronlash</span>
-            </button>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="triggerProviderSync()" id="btn-adm-sync" class="py-2.5 px-2 rounded-xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/40 text-blue-200 font-bold text-xs flex items-center justify-center gap-1.5 ios-btn">
+                    <span>⚡️ API Sinxronlash</span>
+                </button>
+                <button onclick="openAdminBalanceModal()" class="py-2.5 px-2 rounded-xl bg-emerald-600/25 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-200 font-bold text-xs flex items-center justify-center gap-1.5 ios-btn">
+                    <span>💰 Balans Boshqaruvi</span>
+                </button>
+            </div>
         </div>
 
         <!-- REFERRAL & PARTNERSHIP -->
@@ -391,15 +408,27 @@
             </p>
         </div>
 
-        <!-- SUPPORT -->
-        <div class="liquid-glass p-4 flex justify-between items-center text-xs">
-            <div>
-                <h4 class="font-bold text-white text-xs">Qo'llab-quvvatlash xizmati</h4>
-                <p class="text-[10px] text-gray-400">Savollar yoki muammolar bo'yicha bog'laning</p>
+        <!-- SUPPORT & TICKETS CARD -->
+        <div class="liquid-glass p-5 space-y-3.5 text-xs">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">💬</span>
+                    <div>
+                        <h4 class="font-bold text-white text-sm" id="lbl-support-title">Qo'llab-quvvatlash Markazi</h4>
+                        <p class="text-[10px] text-gray-400" id="lbl-support-sub">Murojaat va savollar bo'yicha chiptalar tizimi</p>
+                    </div>
+                </div>
+                <span id="user-tickets-count-badge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold">0 ta</span>
             </div>
-            <button onclick="contactSupport()" class="px-4 py-2 rounded-xl bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold ios-btn">
-                Admin 💬
-            </button>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="openSupportDrawer('new')" class="py-3 px-2 rounded-2xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/40 text-blue-200 font-bold flex items-center justify-center gap-1.5 ios-btn">
+                    <span>✍️ Yangi Murojaat</span>
+                </button>
+                <button onclick="openSupportDrawer('list')" class="py-3 px-2 rounded-2xl bg-white/[0.05] hover:bg-white/10 border border-white/10 text-gray-200 font-bold flex items-center justify-center gap-1.5 ios-btn">
+                    <span>📋 Murojaatlarim</span>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -687,6 +716,206 @@
         </div>
     </div>
 
+    
+    <!-- ==================== CURRENCY & LANGUAGE SETTINGS MODAL ==================== -->
+    <div id="currency-modal" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end md:items-center justify-center opacity-0 pointer-events-none p-0 md:p-4">
+        <div class="sheet-content liquid-glass w-full max-w-sm rounded-t-[32px] md:rounded-[32px] p-5 space-y-4 border-t border-white/20 pb-8">
+            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-1"></div>
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span>🌐</span> Valyuta va Til Sozlamalari
+                </h3>
+                <button onclick="closeCurrencyModal()" class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white text-xs">✕</button>
+            </div>
+
+            <!-- Currency Picker -->
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Asosiy Valyuta</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setCurrency('UZS')" id="curr-btn-UZS" class="p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs flex flex-col items-center gap-1 ios-btn">
+                        <span class="text-base">🇺🇿</span>
+                        <span>UZS (so'm)</span>
+                    </button>
+                    <button onclick="setCurrency('USD')" id="curr-btn-USD" class="p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn">
+                        <span class="text-base">🇺🇸</span>
+                        <span>USD ($)</span>
+                    </button>
+                    <button onclick="setCurrency('RUB')" id="curr-btn-RUB" class="p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn">
+                        <span class="text-base">🇷🇺</span>
+                        <span>RUB (₽)</span>
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-400 font-mono text-center pt-1">1 USD ≈ 12,800 UZS • 1 RUB ≈ 135 UZS</p>
+            </div>
+
+            <!-- Language Picker -->
+            <div class="space-y-1.5 pt-2 border-t border-white/10">
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Interfeys Tili</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="setLanguage('uz')" id="lang-btn-uz" class="p-2 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs ios-btn">O'zbekcha</button>
+                    <button onclick="setLanguage('ru')" id="lang-btn-ru" class="p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn">Русский</button>
+                    <button onclick="setLanguage('en')" id="lang-btn-en" class="p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn">English</button>
+                </div>
+            </div>
+
+            <button onclick="closeCurrencyModal()" class="w-full py-3 rounded-2xl ios-primary-btn text-white font-bold text-xs ios-btn">
+                Saqlash va Yopish
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== UNIVERSAL SPOTLIGHT SEARCH MODAL ==================== -->
+    <div id="spotlight-modal" class="sheet-container fixed inset-0 z-50 bg-black/85 backdrop-blur-lg flex items-start justify-center opacity-0 pointer-events-none p-3 pt-8 md:pt-16">
+        <div class="liquid-glass w-full max-w-lg rounded-[28px] p-4 space-y-3.5 border border-white/20 shadow-2xl">
+            <!-- Spotlight Search Bar -->
+            <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-gray-400 text-base">🔍</span>
+                <input type="text" id="spotlight-input" oninput="handleSpotlightInput()" placeholder="Universal qidiruv: Xizmatlar, Buyurtmalar, ID..." class="w-full liquid-glass-sm py-3 pl-10 pr-20 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/60 font-medium">
+                <button onclick="closeSpotlightModal()" class="absolute right-2 px-2.5 py-1 rounded-lg bg-white/10 text-gray-300 text-[11px] font-mono hover:text-white">Esc ✕</button>
+            </div>
+
+            <!-- Quick Jump Categories -->
+            <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
+                <button onclick="setSpotlightFilter('all')" id="spot-flt-all" class="px-2.5 py-1 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold whitespace-nowrap">Barchasi</button>
+                <button onclick="setSpotlightFilter('services')" id="spot-flt-services" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">🛍 Xizmatlar</button>
+                <button onclick="setSpotlightFilter('orders')" id="spot-flt-orders" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">📦 Buyurtmalar</button>
+                <button onclick="setSpotlightFilter('tickets')" id="spot-flt-tickets" class="px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap">💬 Murojaatlar</button>
+            </div>
+
+            <!-- Spotlight Results Stream -->
+            <div id="spotlight-results" class="max-h-[55vh] overflow-y-auto hide-scrollbar space-y-2 text-xs">
+                <div class="p-6 text-center text-gray-400 space-y-1">
+                    <p class="font-bold text-xs text-gray-300">Qidirish uchun so'z kiriting</p>
+                    <p class="text-[10px] text-gray-500">Xizmat ID, Instagram, Telegram, havola yoki buyurtma raqami</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SUPPORT TICKETS DRAWER ==================== -->
+    <div id="support-drawer" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
+        <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-5 space-y-4 border-t border-white/20 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar">
+            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-1"></div>
+            
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">💬</span>
+                    <h3 class="text-base font-bold text-white" id="support-drawer-title">Qo'llab-quvvatlash Markazi</h3>
+                </div>
+                <button onclick="closeSupportDrawer()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white">✕</button>
+            </div>
+
+            <!-- Segmented Tab: List vs New -->
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold p-1 rounded-2xl bg-white/[0.04] border border-white/10">
+                <button onclick="switchSupportTab('list')" id="sup-tab-btn-list" class="py-2 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 ios-btn">Mening Chiptalarim</button>
+                <button onclick="switchSupportTab('new')" id="sup-tab-btn-new" class="py-2 rounded-xl text-gray-400 hover:text-white ios-btn">Yangi Murojaat</button>
+            </div>
+
+            <!-- VIEW 1: TICKETS LIST -->
+            <div id="sup-view-list" class="space-y-3">
+                <div id="support-tickets-container" class="space-y-2.5 text-xs">
+                    <!-- Dynamically loaded tickets -->
+                </div>
+            </div>
+
+            <!-- VIEW 2: NEW TICKET FORM -->
+            <div id="sup-view-new" class="space-y-3 text-xs hidden">
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Mavzu turi (Bo'lim):</label>
+                    <select id="sup-category" class="w-full liquid-glass-sm p-3 text-xs text-white focus:outline-none focus:border-blue-500/60 bg-gray-950">
+                        <option value="To'lov / Balans">💳 To'lov yoki Balans muammosi</option>
+                        <option value="Buyurtma holati">📦 Buyurtma bajarilishi bo'yicha</option>
+                        <option value="Texnik xatolik">⚙️ Texnik xatolik / Bag</option>
+                        <option value="Hamkorlik va taklif">🤝 Hamkorlik / Taklif</option>
+                    </select>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Muhimlik darajasi:</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="setSupportPriority('Past')" id="prio-past" class="p-2 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 font-medium">Oddiy</button>
+                        <button type="button" onclick="setSupportPriority('O\'rta')" id="prio-orta" class="p-2 rounded-xl bg-blue-500/20 border border-blue-500/40 text-blue-300 font-bold">O'rta</button>
+                        <button type="button" onclick="setSupportPriority('Yuqori')" id="prio-yuqori" class="p-2 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 font-medium">Shoshilinch</button>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Qisqacha mavzu:</label>
+                    <input type="text" id="sup-subject" placeholder="Masalan: Buyurtma #1089 to'xtab qoldi" class="w-full liquid-glass-sm p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Batafsil xabar:</label>
+                    <textarea id="sup-message" rows="4" placeholder="Muammoni batafsil tasvirlab bering..." class="w-full liquid-glass-sm p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium"></textarea>
+                </div>
+
+                <button onclick="submitSupportTicket()" id="btn-submit-ticket" class="w-full py-3.5 rounded-2xl ios-primary-btn text-white font-bold text-xs ios-btn">
+                    Murojaatni Yuborish ➔
+                </button>
+            </div>
+
+            <!-- VIEW 3: TICKET THREAD / CONVERSATION -->
+            <div id="sup-view-thread" class="space-y-3 hidden">
+                <button onclick="switchSupportTab('list')" class="text-xs text-blue-400 font-bold flex items-center gap-1 active:scale-95">
+                    ← Barcha murojaatlarga qaytish
+                </button>
+                <div id="ticket-thread-header" class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-1">
+                    <!-- Ticket Info -->
+                </div>
+                <div id="ticket-messages-box" class="space-y-2.5 max-h-[42vh] overflow-y-auto hide-scrollbar p-1">
+                    <!-- Messages -->
+                </div>
+                <div class="flex gap-2 pt-1">
+                    <input type="text" id="ticket-reply-text" placeholder="Javob yozing..." class="flex-1 liquid-glass-sm p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
+                    <button onclick="sendTicketReply()" class="px-4 rounded-xl ios-primary-btn text-white font-bold text-xs">Yuborish</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== ADMIN USER BALANCE ADJUSTMENT MODAL ==================== -->
+    <div id="admin-balance-modal" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end md:items-center justify-center opacity-0 pointer-events-none p-0 md:p-4">
+        <div class="sheet-content liquid-glass w-full max-w-md rounded-t-[32px] md:rounded-[32px] p-5 space-y-4 border-t border-white/20 pb-8">
+            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-1"></div>
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span>👑</span> Foydalanuvchi Balansini Boshqarish
+                </h3>
+                <button onclick="closeAdminBalanceModal()" class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white text-xs">✕</button>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Foydalanuvchi Telegram ID:</label>
+                    <input type="number" id="adm-target-uid" placeholder="Masalan: 8893717129" class="w-full liquid-glass-sm p-3 text-xs text-white font-mono placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Amal turi:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" onclick="setAdminBalanceAction('add')" id="adm-act-add" class="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold">+ Qo'shish (Kredit)</button>
+                        <button type="button" onclick="setAdminBalanceAction('sub')" id="adm-act-sub" class="p-2.5 rounded-xl bg-white/[0.04] border border-white/5 text-gray-400 font-medium">- Ayirish (Debet)</button>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Summa (so'm):</label>
+                    <input type="number" id="adm-amount" placeholder="Summani kiriting (masalan: 50000)" class="w-full liquid-glass-sm p-3 text-xs text-white font-mono placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-[11px] font-bold text-gray-300">Sabab (Audit Log uchun majburiy):</label>
+                    <input type="text" id="adm-reason" placeholder="Masalan: Click orqali to'lov tasdiqlandi" class="w-full liquid-glass-sm p-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
+                </div>
+
+                <button onclick="submitAdminBalanceAdjust()" id="btn-adm-save-balance" class="w-full py-3.5 rounded-2xl ios-emerald-btn text-white font-bold text-xs ios-btn shadow-lg shadow-emerald-500/20">
+                    Balansni O'zgartirish va Auditga Yozish ➔
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT ENGINE (Multi-Parallel Async Architecture) -->
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
@@ -709,7 +938,52 @@
         let userReferrals = 0;
         let userOrders = [];
         let userTransactions = [];
+        let userTickets = [];
         let isAdmin = false;
+
+        let currentCurrency = localStorage.getItem('smm_currency') || 'UZS';
+        let currentLanguage = localStorage.getItem('smm_lang') || 'uz';
+        let activeSpotlightFilter = 'all';
+        let adminBalanceAction = 'add';
+        let currentOpenedTicketId = null;
+        let currentSupportPriority = "O'rta";
+
+        const CURRENCY_RATES = {
+            'UZS': { symbol: "so'm", rate: 1, flag: "🇺🇿", position: 'after' },
+            'USD': { symbol: "$", rate: 12800, flag: "🇺🇸", position: 'before' },
+            'RUB': { symbol: "₽", rate: 135, flag: "🇷🇺", position: 'after' }
+        };
+
+        function formatMoney(amountInUZS, showSymbol = true) {
+            amountInUZS = Number(amountInUZS) || 0;
+            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
+            const val = amountInUZS / c.rate;
+            let formatted = "";
+            if (currentCurrency === 'UZS') {
+                formatted = Math.round(val).toLocaleString();
+            } else if (currentCurrency === 'USD') {
+                formatted = val.toFixed(2);
+            } else {
+                formatted = Math.round(val).toLocaleString();
+            }
+            if (!showSymbol) return formatted;
+            if (c.position === 'before') {
+                return `${c.symbol}${formatted}`;
+            }
+            return `${formatted} ${c.symbol}`;
+        }
+
+        function formatUnitPrice(pricePer1k) {
+            pricePer1k = Number(pricePer1k) || 0;
+            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
+            const val = (pricePer1k / 1000) / c.rate;
+            if (currentCurrency === 'USD') {
+                return `$${val.toFixed(4)}`;
+            } else if (currentCurrency === 'RUB') {
+                return `${val.toFixed(2)} ₽`;
+            }
+            return `${val.toFixed(val >= 1 ? 1 : 2)} so'm`;
+        }
 
         let currentPlatform = "Telegram";
         let currentCategory = "All";
@@ -741,6 +1015,573 @@
             const k = (plat || "").toLowerCase();
             return PLATFORM_ICONS[k] || "✨";
         }
+
+
+        // ==================== CURRENCY & LANGUAGE CONTROLS ====================
+        function toggleCurrencyModal() {
+            const modal = document.getElementById('currency-modal');
+            modal.classList.toggle('active');
+            updateCurrencyButtonsUI();
+        }
+
+        function closeCurrencyModal() {
+            const modal = document.getElementById('currency-modal');
+            modal.classList.remove('active');
+        }
+
+        function setCurrency(curr) {
+            if (!CURRENCY_RATES[curr]) return;
+            currentCurrency = curr;
+            localStorage.setItem('smm_currency', curr);
+            updateCurrencyButtonsUI();
+            updateBalanceUI();
+            renderServices();
+            renderOrders();
+            renderTransactionsLedger();
+            if (drawerSelectedService) calculateDrawerTotal();
+            showToast(`Valyuta o'zgartirildi: ${curr}`, "🌐");
+        }
+
+        function updateCurrencyButtonsUI() {
+            ['UZS', 'USD', 'RUB'].forEach(c => {
+                const btn = document.getElementById('curr-btn-' + c);
+                if (btn) {
+                    if (c === currentCurrency) {
+                        btn.className = "p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs flex flex-col items-center gap-1 ios-btn";
+                    } else {
+                        btn.className = "p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs flex flex-col items-center gap-1 ios-btn";
+                    }
+                }
+            });
+            ['uz', 'ru', 'en'].forEach(l => {
+                const btn = document.getElementById('lang-btn-' + l);
+                if (btn) {
+                    if (l === currentLanguage) {
+                        btn.className = "p-2 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold text-xs ios-btn";
+                    } else {
+                        btn.className = "p-2 rounded-xl border border-white/10 bg-white/[0.04] text-gray-300 font-medium text-xs ios-btn";
+                    }
+                }
+            });
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('smm_lang', lang);
+            updateCurrencyButtonsUI();
+            applyLanguageTranslations();
+            showToast(`Til o'zgartirildi: ${lang.toUpperCase()}`, "🌐");
+        }
+
+        function applyLanguageTranslations() {
+            const t = (currentLanguage === 'ru') ? {
+                store: "Магазин", cabinet: "Кабинет", history: "История", account: "Счет", balance: "Баланс"
+            } : (currentLanguage === 'en') ? {
+                store: "Store", cabinet: "Dashboard", history: "Orders", account: "Finances", balance: "Balance"
+            } : {
+                store: "Do'kon", cabinet: "Kabinet", history: "Tarix", account: "Hisob", balance: "Balans"
+            };
+
+            const bTitle = document.getElementById('header-balance-title');
+            if (bTitle) bTitle.innerText = t.balance;
+            const btnStore = document.querySelector('#tab-btn-store span:last-child');
+            if (btnStore) btnStore.innerText = t.store;
+            const btnProf = document.querySelector('#tab-btn-profile span:last-child');
+            if (btnProf) btnProf.innerText = t.cabinet;
+            const btnOrd = document.querySelector('#tab-btn-orders span:nth-child(2)');
+            if (btnOrd) btnOrd.innerText = t.history;
+            const btnDep = document.querySelector('#tab-btn-deposit span:last-child');
+            if (btnDep) btnDep.innerText = t.account;
+        }
+
+        // ==================== UNIVERSAL SPOTLIGHT SEARCH ====================
+        let spotlightDebounce = null;
+        let lastSpotlightData = { services: [], orders: [], tickets: [] };
+
+        function openSpotlightModal() {
+            const modal = document.getElementById('spotlight-modal');
+            modal.classList.add('active');
+            const input = document.getElementById('spotlight-input');
+            input.value = '';
+            input.focus();
+            handleSpotlightInput();
+        }
+
+        function closeSpotlightModal() {
+            const modal = document.getElementById('spotlight-modal');
+            modal.classList.remove('active');
+        }
+
+        function setSpotlightFilter(filterType) {
+            activeSpotlightFilter = filterType;
+            ['all', 'services', 'orders', 'tickets'].forEach(f => {
+                const btn = document.getElementById('spot-flt-' + f);
+                if (btn) {
+                    if (f === filterType) {
+                        btn.className = "px-2.5 py-1 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold whitespace-nowrap";
+                    } else {
+                        btn.className = "px-2.5 py-1 rounded-xl bg-white/[0.04] text-gray-400 border border-white/5 font-medium whitespace-nowrap";
+                    }
+                }
+            });
+            renderSpotlightResults();
+        }
+
+        function handleSpotlightInput() {
+            clearTimeout(spotlightDebounce);
+            const query = (document.getElementById('spotlight-input').value || '').trim();
+            if (!query) {
+                const container = document.getElementById('spotlight-results');
+                container.innerHTML = `
+                    <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                        <span class="text-[10px] uppercase font-bold text-gray-400">Tezkor amallar & Yo'nalishlar:</span>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <button onclick="closeSpotlightModal(); switchTab('store');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">🛍 Do'kon Katalogi</button>
+                            <button onclick="closeSpotlightModal(); switchTab('orders');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">📦 Buyurtmalarim</button>
+                            <button onclick="closeSpotlightModal(); openSupportDrawer('new');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">✍️ Yangi Murojaat</button>
+                            <button onclick="closeSpotlightModal(); switchTab('deposit');" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-white/10 text-left text-gray-200 font-medium">💳 Hisob To'ldirish</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            spotlightDebounce = setTimeout(async () => {
+                try {
+                    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&user_id=${userId}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.ok) {
+                            lastSpotlightData = data;
+                            renderSpotlightResults();
+                            return;
+                        }
+                    }
+                } catch(e) {}
+
+                const qLow = query.toLowerCase();
+                const localServices = getServicesForCurrentPlatform().filter(s => s.name.toLowerCase().includes(qLow) || String(s.id).includes(qLow)).slice(0, 6);
+                const localOrders = userOrders.filter(o => String(o.id).includes(qLow) || (o.service_name || o.service || '').toLowerCase().includes(qLow) || (o.link || '').toLowerCase().includes(qLow)).slice(0, 5);
+                const localTickets = userTickets.filter(t => String(t.id).includes(qLow) || (t.subject || '').toLowerCase().includes(qLow)).slice(0, 5);
+                lastSpotlightData = { services: localServices, orders: localOrders, tickets: localTickets };
+                renderSpotlightResults();
+            }, 200);
+        }
+
+        function renderSpotlightResults() {
+            const container = document.getElementById('spotlight-results');
+            const { services = [], orders = [], tickets = [] } = lastSpotlightData;
+
+            let html = '';
+
+            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'services') && services.length > 0) {
+                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-1">Xizmatlar (${services.length})</div>`;
+                html += services.map(s => `
+                    <div onclick="selectSpotlightService('${s.id}', '${s.network || currentPlatform}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
+                        <div class="max-w-[220px]">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-mono font-bold text-blue-400">#${s.id}</span>
+                                <span class="text-[10px] text-gray-400">${s.network || s.category || ''}</span>
+                            </div>
+                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(s.name)}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-mono font-bold text-emerald-400 block">${formatMoney(s.rate || s.price || 10000)}</span>
+                            <span class="text-[10px] text-blue-400 font-semibold">Buyurtma ➔</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'orders') && orders.length > 0) {
+                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">Buyurtmalar (${orders.length})</div>`;
+                html += orders.map(o => `
+                    <div onclick="selectSpotlightOrder('${o.id}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
+                        <div class="max-w-[220px]">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-mono font-bold text-indigo-400">#${o.id}</span>
+                                <span class="text-[10px] text-gray-300 font-semibold">${escapeHtml(o.status || 'In progress')}</span>
+                            </div>
+                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(o.service || o.service_name || '')}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-mono font-bold text-emerald-400 block">${formatMoney(o.amount || o.price || 0)}</span>
+                            <span class="text-[10px] text-gray-400">Ko'rish ➔</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if ((activeSpotlightFilter === 'all' || activeSpotlightFilter === 'tickets') && tickets.length > 0) {
+                html += `<div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1 pt-2">Murojaatlar (${tickets.length})</div>`;
+                html += tickets.map(t => `
+                    <div onclick="selectSpotlightTicket('${t.id}')" class="p-3 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 flex justify-between items-center cursor-pointer ios-btn">
+                        <div class="max-w-[220px]">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] font-mono font-bold text-purple-400">#${t.id}</span>
+                                <span class="text-[10px] text-amber-300">${t.status || 'Ochiq'}</span>
+                            </div>
+                            <span class="font-bold text-white text-xs block truncate">${escapeHtml(t.subject || '')}</span>
+                        </div>
+                        <span class="text-[10px] text-blue-400">Ochish ➔</span>
+                    </div>
+                `).join('');
+            }
+
+            if (!html) {
+                html = `
+                    <div class="p-8 text-center text-gray-400 space-y-1">
+                        <div class="text-2xl opacity-60">🔍</div>
+                        <p class="font-bold text-xs text-gray-300">Hech qanday natija topilmadi</p>
+                        <p class="text-[10px] text-gray-500">Boshqa so'z yoki ID raqamini sinab ko'ring</p>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function selectSpotlightService(serviceId, network) {
+            closeSpotlightModal();
+            if (network && DYNAMIC_DATA.services[network]) {
+                selectPlatform(network);
+            }
+            openOrderDrawer(serviceId);
+        }
+
+        function selectSpotlightOrder(orderId) {
+            closeSpotlightModal();
+            switchTab('orders');
+            const input = document.getElementById('order-search-input');
+            if (input) {
+                input.value = String(orderId);
+                renderOrders();
+            }
+        }
+
+        function selectSpotlightTicket(ticketId) {
+            closeSpotlightModal();
+            openSupportDrawer('thread');
+            openTicketThread(ticketId);
+        }
+
+        // ==================== SUPPORT TICKETS SYSTEM ====================
+        function openSupportDrawer(view = 'list') {
+            const drawer = document.getElementById('support-drawer');
+            drawer.classList.add('active');
+            loadUserTickets();
+            switchSupportTab(view);
+        }
+
+        function closeSupportDrawer() {
+            const drawer = document.getElementById('support-drawer');
+            drawer.classList.remove('active');
+        }
+
+        function switchSupportTab(tab) {
+            const vList = document.getElementById('sup-view-list');
+            const vNew = document.getElementById('sup-view-new');
+            const vThread = document.getElementById('sup-view-thread');
+            const btnList = document.getElementById('sup-tab-btn-list');
+            const btnNew = document.getElementById('sup-tab-btn-new');
+
+            vList.classList.add('hidden');
+            vNew.classList.add('hidden');
+            vThread.classList.add('hidden');
+
+            if (tab === 'list') {
+                vList.classList.remove('hidden');
+                btnList.className = "py-2 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 ios-btn";
+                btnNew.className = "py-2 rounded-xl text-gray-400 hover:text-white ios-btn";
+                renderSupportTickets();
+            } else if (tab === 'new') {
+                vNew.classList.remove('hidden');
+                btnNew.className = "py-2 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 ios-btn";
+                btnList.className = "py-2 rounded-xl text-gray-400 hover:text-white ios-btn";
+            } else if (tab === 'thread') {
+                vThread.classList.remove('hidden');
+            }
+        }
+
+        function setSupportPriority(prio) {
+            currentSupportPriority = prio;
+            ['past', 'orta', 'yuqori'].forEach(p => {
+                const btn = document.getElementById('prio-' + p);
+                if (btn) {
+                    btn.className = "p-2 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 font-medium";
+                }
+            });
+            const activeMap = { 'Past': 'prio-past', "O'rta": 'prio-orta', 'Yuqori': 'prio-yuqori' };
+            const target = document.getElementById(activeMap[prio]);
+            if (target) {
+                target.className = "p-2 rounded-xl bg-blue-500/20 border border-blue-500/40 text-blue-300 font-bold";
+            }
+        }
+
+        async function loadUserTickets() {
+            try {
+                const res = await fetch(`/api/tickets?user_id=${userId}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.ok && Array.isArray(data.tickets)) {
+                        userTickets = data.tickets;
+                        const badge = document.getElementById('user-tickets-count-badge');
+                        if (badge) badge.innerText = `${userTickets.length} ta`;
+                        renderSupportTickets();
+                    }
+                }
+            } catch(e) {}
+        }
+
+        function renderSupportTickets() {
+            const container = document.getElementById('support-tickets-container');
+            if (!container) return;
+
+            if (userTickets.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-gray-400 space-y-2">
+                        <div class="text-3xl opacity-60">📭</div>
+                        <p class="font-bold text-xs text-gray-300">Sizda hali murojaatlar yo'q</p>
+                        <p class="text-[10px] text-gray-500">Savol yoki taklifingiz bo'lsa yangi chipta yarating</p>
+                        <button onclick="switchSupportTab('new')" class="px-4 py-2 rounded-xl ios-primary-btn text-white font-bold text-xs">Yangi Murojaat ➔</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = userTickets.map(t => {
+                const isOpen = (t.status || '').toLowerCase() === 'ochiq';
+                const statusBadge = isOpen
+                    ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">Ochiq</span>`
+                    : `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/20">${escapeHtml(t.status || 'Yopilgan')}</span>`;
+
+                return `
+                    <div onclick="openTicketThread('${t.id}')" class="p-3.5 rounded-2xl bg-white/[0.04] hover:bg-white/10 border border-white/5 space-y-2 cursor-pointer ios-btn">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-mono text-[10px] font-bold text-blue-400 px-2 py-0.5 rounded-md bg-blue-500/10">#${t.id}</span>
+                                <span class="text-[10px] text-gray-400">${escapeHtml(t.category || 'Umumiy')}</span>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <h4 class="font-bold text-white text-xs leading-snug">${escapeHtml(t.subject || 'Mavzu')}</h4>
+                        <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-white/5 font-mono">
+                            <span>Xabarlar: ${(t.messages || []).length} ta</span>
+                            <span>${t.updated_at || t.created_at || ''}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function submitSupportTicket() {
+            const subject = (document.getElementById('sup-subject').value || '').trim();
+            const message = (document.getElementById('sup-message').value || '').trim();
+            const category = document.getElementById('sup-category').value;
+            const priority = currentSupportPriority;
+
+            if (!subject || !message) {
+                showToast("Iltimos, mavzu va xabarni kiriting!", "⚠️");
+                return;
+            }
+
+            const btn = document.getElementById('btn-submit-ticket');
+            btn.innerHTML = `<span>Yuborilmoqda...</span>`;
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/ticket/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        subject: subject,
+                        category: category,
+                        priority: priority,
+                        message: message
+                    })
+                });
+                const data = await res.json();
+                if (data && data.ok) {
+                    showToast("Murojaatingiz yuborildi!", "✅");
+                    document.getElementById('sup-subject').value = '';
+                    document.getElementById('sup-message').value = '';
+                    await loadUserTickets();
+                    switchSupportTab('list');
+                } else {
+                    showToast(data.error || "Xatolik yuz berdi", "❌");
+                }
+            } catch(e) {
+                showToast("Server bilan aloqa uzildi", "⚠️");
+            }
+            btn.innerHTML = `Murojaatni Yuborish ➔`;
+            btn.disabled = false;
+        }
+
+        function openTicketThread(ticketId) {
+            currentOpenedTicketId = ticketId;
+            const ticket = userTickets.find(t => String(t.id) === String(ticketId));
+            if (!ticket) return;
+
+            switchSupportTab('thread');
+
+            const header = document.getElementById('ticket-thread-header');
+            header.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="font-mono text-xs font-bold text-blue-400">Murojaat #${ticket.id}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold">${escapeHtml(ticket.status || 'Ochiq')}</span>
+                </div>
+                <h4 class="font-bold text-white text-sm">${escapeHtml(ticket.subject || '')}</h4>
+                <span class="text-[10px] text-gray-400 block">${ticket.category} • Muhimlik: ${ticket.priority}</span>
+            `;
+
+            renderThreadMessages(ticket.messages || []);
+        }
+
+        function renderThreadMessages(messages) {
+            const box = document.getElementById('ticket-messages-box');
+            box.innerHTML = messages.map(m => {
+                const isAdminMsg = (m.sender === 'admin');
+                const bg = isAdminMsg ? "bg-blue-600/20 border-blue-500/30 ml-4" : "bg-white/[0.04] border-white/5 mr-4";
+                const senderLabel = isAdminMsg ? "👑 Admin javobi" : "Siz";
+                const senderColor = isAdminMsg ? "text-blue-300" : "text-gray-400";
+
+                return `
+                    <div class="p-3 rounded-2xl border ${bg} space-y-1 text-xs">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="font-bold ${senderColor}">${senderLabel}</span>
+                            <span class="text-gray-500 font-mono">${m.time || ''}</span>
+                        </div>
+                        <p class="text-gray-100 leading-relaxed font-sans">${escapeHtml(m.text || '')}</p>
+                    </div>
+                `;
+            }).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function sendTicketReply() {
+            const text = (document.getElementById('ticket-reply-text').value || '').trim();
+            if (!text || !currentOpenedTicketId) return;
+
+            try {
+                const res = await fetch('/api/ticket/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ticket_id: currentOpenedTicketId,
+                        user_id: userId,
+                        message: text
+                    })
+                });
+                const data = await res.json();
+                if (data && data.ok && data.ticket) {
+                    document.getElementById('ticket-reply-text').value = '';
+                    const idx = userTickets.findIndex(t => String(t.id) === String(currentOpenedTicketId));
+                    if (idx > -1) userTickets[idx] = data.ticket;
+                    renderThreadMessages(data.ticket.messages || []);
+                    showToast("Javob yuborildi!", "✅");
+                } else {
+                    showToast(data.error || "Xatolik yuz berdi", "❌");
+                }
+            } catch(e) {
+                showToast("Aloqa xatosi", "⚠️");
+            }
+        }
+
+        // ==================== ADMIN BALANCE CONTROLS ====================
+        function openAdminBalanceModal() {
+            const modal = document.getElementById('admin-balance-modal');
+            modal.classList.add('active');
+            setAdminBalanceAction('add');
+        }
+
+        function closeAdminBalanceModal() {
+            const modal = document.getElementById('admin-balance-modal');
+            modal.classList.remove('active');
+        }
+
+        function setAdminBalanceAction(action) {
+            adminBalanceAction = action;
+            const btnAdd = document.getElementById('adm-act-add');
+            const btnSub = document.getElementById('adm-act-sub');
+            if (action === 'add') {
+                btnAdd.className = "p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-bold";
+                btnSub.className = "p-2.5 rounded-xl bg-white/[0.04] border border-white/5 text-gray-400 font-medium";
+            } else {
+                btnSub.className = "p-2.5 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 font-bold";
+                btnAdd.className = "p-2.5 rounded-xl bg-white/[0.04] border border-white/5 text-gray-400 font-medium";
+            }
+        }
+
+        async function submitAdminBalanceAdjust() {
+            const targetUid = (document.getElementById('adm-target-uid').value || '').trim();
+            let amount = parseFloat(document.getElementById('adm-amount').value) || 0;
+            const reason = (document.getElementById('adm-reason').value || '').trim();
+
+            if (!targetUid || amount <= 0) {
+                showToast("ID va summani to'g'ri kiriting!", "⚠️");
+                return;
+            }
+            if (!reason) {
+                showToast("Audit sababi majburiy!", "⚠️");
+                return;
+            }
+
+            if (adminBalanceAction === 'sub') amount = -amount;
+
+            const btn = document.getElementById('btn-adm-save-balance');
+            btn.innerHTML = `<span>Bajarilmoqda...</span>`;
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/admin/user_balance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        admin_id: userId,
+                        target_user_id: targetUid,
+                        amount: amount,
+                        reason: reason
+                    })
+                });
+                const data = await res.json();
+                if (data && data.ok) {
+                    showToast(data.message || "Balans muvaffaqiyatli yangilandi!", "✅");
+                    closeAdminBalanceModal();
+                    document.getElementById('adm-target-uid').value = '';
+                    document.getElementById('adm-amount').value = '';
+                    document.getElementById('adm-reason').value = '';
+
+                    if (String(targetUid) === String(userId)) {
+                        userBalance = data.new_balance;
+                        updateBalanceUI();
+                    }
+                    syncDashboardData();
+                    fetchAdminOverview();
+                } else {
+                    showToast(data.error || "Xatolik yuz berdi", "❌");
+                }
+            } catch(e) {
+                showToast("Server bilan aloqa uzildi", "⚠️");
+            }
+            btn.innerHTML = `Balansni O'zgartirish va Auditga Yozish ➔`;
+            btn.disabled = false;
+        }
+
+        // Keyboard Shortcuts Listeners
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                openSpotlightModal();
+            }
+            if (e.key === 'Escape') {
+                closeSpotlightModal();
+                closeDrawer();
+                closeSupportDrawer();
+                closeAdminBalanceModal();
+                closeCurrencyModal();
+            }
+        });
 
         // Initialize User Identity & Multi-Parallel Data Loading
         async function initApp() {
@@ -790,15 +1631,24 @@
             await Promise.allSettled([
                 syncDashboardData(),
                 syncServicesFromBackend(),
-                syncOrdersFromBackend()
+                syncOrdersFromBackend(),
+                loadUserTickets()
             ]);
+            applyLanguageTranslations();
         }
 
         function updateBalanceUI() {
-            const formatted = Math.round(userBalance).toLocaleString();
+            const c = CURRENCY_RATES[currentCurrency] || CURRENCY_RATES['UZS'];
+            const formatted = formatMoney(userBalance, false);
             document.getElementById('user-balance').innerText = formatted;
+            const balCurr = document.getElementById('user-balance-currency');
+            if (balCurr) balCurr.innerText = c.symbol;
             const drawerBal = document.getElementById('drawer-curr-balance');
-            if (drawerBal) drawerBal.innerText = formatted + " so'm";
+            if (drawerBal) drawerBal.innerText = formatMoney(userBalance);
+            const flagEl = document.getElementById('current-currency-flag');
+            if (flagEl) flagEl.innerText = c.flag;
+            const codeEl = document.getElementById('current-currency-code');
+            if (codeEl) codeEl.innerText = currentCurrency;
         }
 
         function updateProfileStats() {
@@ -835,7 +1685,7 @@
                         }
 
                         // Update Dashboard Cards
-                        document.getElementById('dash-total-spent').innerText = Math.round(data.total_spent || 0).toLocaleString() + " so'm";
+                        document.getElementById('dash-total-spent').innerText = formatMoney(data.total_spent || 0);
                         document.getElementById('dash-total-orders').innerText = (data.total_orders || 0) + " ta";
                         document.getElementById('dash-active-orders').innerText = (data.active_orders || 0) + " ta";
                         document.getElementById('dash-completed-orders').innerText = (data.completed_orders || 0) + " ta";
@@ -967,7 +1817,7 @@
                             <span class="font-bold text-white text-xs block font-sans">${escapeHtml(t.description || 'Amal')}</span>
                             <span class="text-[10px] text-gray-400">${t.date || ''}</span>
                         </div>
-                        <span class="font-bold text-xs ${color}">${sign}${t.amount.toLocaleString()} so'm</span>
+                        <span class="font-bold text-xs ${color}">${sign}${formatMoney(Math.abs(t.amount))}</span>
                     </div>
                 `;
             }).join('');
@@ -1222,8 +2072,6 @@
 
             container.innerHTML = items.map(s => {
                 const isFav = userFavorites.includes(String(s.id));
-                const unitPrice = (s.price / 1000).toFixed(s.price >= 1000 ? 1 : 2);
-                
                 return `
                     <div class="liquid-glass p-4 space-y-3 transition-all ios-btn border-white/5 hover:border-white/15">
                         <div class="flex justify-between items-start gap-2">
@@ -1236,7 +2084,7 @@
                                 <button onclick="toggleFavorite('${s.id}', event)" class="text-sm ${isFav ? 'text-amber-400' : 'text-gray-500 hover:text-gray-300'} active:scale-125 transition-all">
                                     ${isFav ? '⭐' : '☆'}
                                 </button>
-                                <span class="text-xs font-black text-emerald-400 font-mono whitespace-nowrap">${s.price.toLocaleString()} so'm <span class="text-[9px] text-gray-400 font-normal">/ 1k</span></span>
+                                <span class="text-xs font-black text-emerald-400 font-mono whitespace-nowrap">${formatMoney(s.price)} <span class="text-[9px] text-gray-400 font-normal">/ 1k</span></span>
                             </div>
                         </div>
 
@@ -1244,7 +2092,7 @@
 
                         <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-white/5 font-mono">
                             <span>Limit: <b class="text-gray-200">${s.min} — ${s.max.toLocaleString()}</b></span>
-                            <span class="text-blue-300 font-sans font-semibold">1 dona ≈ ${unitPrice} so'm</span>
+                            <span class="text-blue-300 font-sans font-semibold">1 dona ≈ ${formatUnitPrice(s.price)}</span>
                         </div>
 
                         <!-- 1-Tap Quick Order Trigger -->
@@ -1278,10 +2126,8 @@
             document.getElementById('drawer-service-id').innerText = '#' + drawerSelectedService.id;
             document.getElementById('drawer-service-network').innerText = currentPlatform;
             document.getElementById('drawer-service-title').innerText = drawerSelectedService.name;
-            document.getElementById('drawer-1k-price').innerText = drawerSelectedService.price.toLocaleString() + " so'm";
-            
-            const unitPrice = (drawerSelectedService.price / 1000).toFixed(drawerSelectedService.price >= 1000 ? 1 : 2);
-            document.getElementById('drawer-unit-price').innerText = unitPrice + " so'm";
+            document.getElementById('drawer-1k-price').innerText = formatMoney(drawerSelectedService.price);
+            document.getElementById('drawer-unit-price').innerText = formatUnitPrice(drawerSelectedService.price);
             document.getElementById('drawer-limits').innerText = `${drawerSelectedService.min} — ${drawerSelectedService.max >= 1000 ? (drawerSelectedService.max / 1000) + 'k' : drawerSelectedService.max}`;
             document.getElementById('drawer-qty-hint').innerText = `Limit: ${drawerSelectedService.min} — ${drawerSelectedService.max.toLocaleString()}`;
 
@@ -1413,21 +2259,21 @@
             const qty = parseInt(document.getElementById('drawer-qty').value) || 0;
             const total = Math.round((qty / 1000) * drawerSelectedService.price);
             
-            document.getElementById('drawer-total-price').innerText = total.toLocaleString() + " so'm";
+            document.getElementById('drawer-total-price').innerText = formatMoney(total);
             const btn = document.getElementById('btn-drawer-order');
             const btnText = document.getElementById('drawer-submit-btn-text');
             const statusTag = document.getElementById('drawer-balance-status-tag');
 
             if (total > userBalance) {
                 const diff = total - userBalance;
-                statusTag.innerHTML = `<span class="text-rose-400 font-bold">Yetarli emas (-${diff.toLocaleString()} so'm)</span>`;
+                statusTag.innerHTML = `<span class="text-rose-400 font-bold">Yetarli emas (-${formatMoney(diff)})</span>`;
                 btn.className = "w-full py-4 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-sm ios-btn flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10";
-                btnText.innerText = `💳 Balansni to'ldirish (Yetishmayapti: ${diff.toLocaleString()} so'm)`;
+                btnText.innerText = `💳 Balansni to'ldirish (Yetishmayapti: ${formatMoney(diff)})`;
                 btn.onclick = () => { closeDrawer(); switchTab('deposit'); };
             } else {
                 statusTag.innerHTML = `<span class="text-emerald-400 font-bold">Yetarli ✅</span>`;
                 btn.className = "w-full py-4 rounded-2xl ios-primary-btn text-white font-bold text-sm ios-btn flex items-center justify-center gap-2 shadow-xl shadow-blue-500/30";
-                btnText.innerText = `🚀 Buyurtma berish — ${total.toLocaleString()} so'm`;
+                btnText.innerText = `🚀 Buyurtma berish — ${formatMoney(total)}`;
                 btn.onclick = submitDrawerOrder;
             }
         }
@@ -1523,8 +2369,8 @@
             document.getElementById('drw-service-name').innerText = drawerSelectedService.name;
             document.getElementById('drw-link').innerText = link;
             document.getElementById('drw-qty').innerText = qty.toLocaleString() + ' ta';
-            document.getElementById('drw-total').innerText = total.toLocaleString() + " so'm";
-            document.getElementById('drw-rem-bal').innerText = Math.round(userBalance).toLocaleString() + " so'm";
+            document.getElementById('drw-total').innerText = formatMoney(total);
+            document.getElementById('drw-rem-bal').innerText = formatMoney(userBalance);
 
             document.getElementById('drawer-form-view').classList.add('hidden');
             document.getElementById('drawer-receipt-view').classList.remove('hidden');
@@ -1641,7 +2487,7 @@
 
                         <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5 font-mono">
                             <span>Miqdor: <b class="text-gray-100">${count.toLocaleString()} ta</b></span>
-                            <span>Jami: <b class="text-emerald-400">${(o.price || o.amount || 0).toLocaleString()} so'm</b></span>
+                            <span>Jami: <b class="text-emerald-400">${formatMoney(o.price || o.amount || 0)}</b></span>
                         </div>
 
                         <div class="flex justify-between items-center text-[10px] text-gray-500 pt-0.5">
