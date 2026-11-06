@@ -38,7 +38,7 @@
             -webkit-user-select: none;
             overflow-x: hidden;
             min-height: 100vh;
-            padding-bottom: 105px;
+            padding-bottom: 110px;
         }
 
         /* Ambient Glow Lights */
@@ -46,9 +46,9 @@
             position: fixed;
             top: -120px;
             right: -80px;
-            width: 340px;
-            height: 340px;
-            background: radial-gradient(circle, rgba(94, 92, 230, 0.24) 0%, rgba(10, 132, 255, 0.09) 50%, transparent 80%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(94, 92, 230, 0.25) 0%, rgba(10, 132, 255, 0.1) 50%, transparent 80%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
@@ -57,18 +57,18 @@
 
         .ambient-glow-2 {
             position: fixed;
-            bottom: 70px;
+            bottom: 80px;
             left: -100px;
             width: 360px;
             height: 360px;
-            background: radial-gradient(circle, rgba(48, 209, 88, 0.14) 0%, rgba(100, 210, 255, 0.07) 50%, transparent 80%);
+            background: radial-gradient(circle, rgba(48, 209, 88, 0.15) 0%, rgba(100, 210, 255, 0.08) 50%, transparent 80%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
             filter: blur(65px);
         }
 
-        /* Liquid Glass Cards */
+        /* Apple Liquid Glass Cards */
         .liquid-glass {
             background: var(--glass-bg);
             backdrop-filter: blur(40px) saturate(210%);
@@ -99,15 +99,15 @@
 
         /* Bottom Floating Dock */
         .bottom-dock {
-            background: rgba(16, 16, 22, 0.86);
+            background: rgba(16, 16, 22, 0.88);
             backdrop-filter: blur(45px) saturate(230%);
             -webkit-backdrop-filter: blur(45px) saturate(230%);
-            border: 1px solid rgba(255, 255, 255, 0.13);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.88), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.25);
             border-radius: 36px;
         }
 
-        /* Spring Physics Button Taps */
+        /* Spring Button Taps */
         .ios-btn {
             transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
@@ -126,6 +126,15 @@
             box-shadow: 0 10px 28px -4px rgba(48, 209, 88, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.4);
         }
 
+        .ios-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.1em;
+        }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -138,22 +147,6 @@
         .toast-pill.show {
             transform: translateY(0) scale(1);
             opacity: 1;
-        }
-
-        /* Modal Sheet Animation */
-        .sheet-container {
-            transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .sheet-content {
-            transform: translateY(100%);
-            transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .sheet-container.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .sheet-container.active .sheet-content {
-            transform: translateY(0);
         }
 
         /* Pulse Animations */
@@ -210,8 +203,198 @@
         </div>
     </header>
 
-    <!-- TAB 1: SMM STORE -->
-    <main id="tab-store" class="space-y-4 relative z-10">
+    <!-- ==================== TAB 1: DEDICATED FAST ORDER (OSON VA QULAY BUYURTMA BO'LIMI) ==================== -->
+    <section id="tab-order" class="space-y-4 relative z-10">
+        
+        <!-- CARD 1: FORM VIEW -->
+        <div id="fast-order-form" class="liquid-glass p-5 space-y-4.5">
+            
+            <div class="flex items-center justify-between pb-1 border-b border-white/10">
+                <div>
+                    <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
+                        <span>⚡️</span> Tezkor Buyurtma Berish
+                    </h3>
+                    <p class="text-[11px] text-gray-400">Kerakli xizmatni tanlang va 1 bosishda buyurtma bering</p>
+                </div>
+                <span class="text-[10px] font-mono px-2.5 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25 font-bold">Avtomatik</span>
+            </div>
+
+            <!-- STEP 1: CHOOSE PLATFORM (TARMOQNI TANLANG) -->
+            <div class="space-y-2">
+                <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px] font-black">1</span>
+                    Ijtimoiy Tarmoq:
+                </label>
+                <div id="order-platform-dock" class="grid grid-cols-4 gap-2">
+                    <!-- Populated dynamically: Telegram, Instagram, TikTok, YouTube -->
+                </div>
+            </div>
+
+            <!-- STEP 2: CHOOSE CATEGORY & SERVICE (BO'LIM VA XIZMAT) -->
+            <div class="space-y-2.5">
+                <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px] font-black">2</span>
+                    Xizmat Bo'limi va Xizmat turi:
+                </label>
+                
+                <!-- Category Select Dropdown -->
+                <div>
+                    <select id="order-cat-select" onchange="onCategorySelectChange()" class="w-full liquid-glass-sm p-3.5 pr-10 text-xs text-white focus:outline-none focus:border-blue-500/60 ios-select font-medium">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Service Select Dropdown -->
+                <div>
+                    <select id="order-service-select" onchange="onServiceSelectChange()" class="w-full liquid-glass-sm p-3.5 pr-10 text-xs text-white focus:outline-none focus:border-blue-500/60 ios-select font-semibold">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Selected Service Quick Badge / Specs -->
+                <div id="order-service-specs" class="p-3 rounded-2xl bg-white/[0.04] border border-white/5 flex items-center justify-between text-xs font-mono">
+                    <div>
+                        <span class="text-[10px] text-gray-400 block font-sans">Narxi (1,000 ta):</span>
+                        <span id="spec-1k-price" class="font-bold text-emerald-400 text-sm">15,000 so'm</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-[10px] text-gray-400 block font-sans">1 dona narxi:</span>
+                        <span id="spec-unit-price" class="font-bold text-blue-300 text-xs">15 so'm</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-gray-400 block font-sans">Oraliq (Min — Max):</span>
+                        <span id="spec-limits" class="text-gray-200 text-xs font-bold">20 — 50,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: TARGET LINK (HAVOLA) -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px] font-black">3</span>
+                        Nishon Havola:
+                    </label>
+                    <button onclick="pasteClipboardLinkToFastOrder()" class="text-[11px] text-blue-400 hover:text-blue-300 font-bold px-3 py-1 rounded-xl bg-blue-500/15 border border-blue-500/25 active:scale-95 transition-all flex items-center gap-1.5 ios-btn">
+                        <span>📋 Joylash</span>
+                    </button>
+                </div>
+                
+                <div class="relative">
+                    <input type="text" id="fast-order-link" oninput="validateFastOrderLink()" placeholder="https://t.me/kanal_nomi yoki @username" class="w-full liquid-glass-sm p-3.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono font-medium">
+                </div>
+                
+                <div id="fast-link-hint-box" class="flex items-center gap-1.5 text-[10px] text-gray-400 px-1">
+                    <span>💡</span> <span id="fast-link-hint-text">Masalan: @kanal_nomi yoki post linki</span>
+                </div>
+            </div>
+
+            <!-- STEP 4: QUANTITY (MIQDOR) -->
+            <div class="space-y-2.5">
+                <div class="flex justify-between items-center">
+                    <label class="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-4 h-4 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px] font-black">4</span>
+                        Buyurtma Miqdori:
+                    </label>
+                    <span id="fast-qty-limits-badge" class="text-[10px] text-gray-400 font-mono">Limit: 20 — 50,000</span>
+                </div>
+
+                <!-- Stepper + Input -->
+                <div class="flex items-center gap-2">
+                    <button onclick="stepFastQty(-1)" class="w-12 h-12 rounded-2xl liquid-glass-sm flex items-center justify-center text-xl font-black text-gray-200 active:scale-95 transition-all ios-btn border border-white/10">➖</button>
+                    <input type="number" id="fast-order-qty" oninput="calculateFastOrderTotal()" placeholder="Miqdor" class="flex-1 liquid-glass-sm p-3.5 text-center text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono font-black text-lg">
+                    <button onclick="stepFastQty(1)" class="w-12 h-12 rounded-2xl liquid-glass-sm flex items-center justify-center text-xl font-black text-gray-200 active:scale-95 transition-all ios-btn border border-white/10">➕</button>
+                </div>
+
+                <!-- 5 Simple Quick Chips -->
+                <div class="grid grid-cols-5 gap-1.5">
+                    <button onclick="setFastQty(100)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">100</button>
+                    <button onclick="setFastQty(500)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">500</button>
+                    <button onclick="setFastQty(1000)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">1,000</button>
+                    <button onclick="setFastQty(2500)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">2,500</button>
+                    <button onclick="setFastQty(5000)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">5,000</button>
+                </div>
+            </div>
+
+            <!-- TOTAL SUMMARY & SUBMIT BUTTON -->
+            <div class="pt-3 border-t border-white/10 space-y-3">
+                
+                <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Jami to'lov:</span>
+                        <span id="fast-total-price" class="text-2xl font-black text-emerald-400 font-mono">15,000 so'm</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Sizning balansingiz:</span>
+                        <span id="fast-curr-balance" class="text-sm font-black text-white font-mono">100,100 so'm</span>
+                        <span id="fast-balance-status-tag" class="text-[10px] font-bold text-emerald-400 block">Yetarli ✅</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button onclick="submitFastOrder()" id="btn-fast-order" class="w-full py-4 rounded-2xl ios-primary-btn text-white font-bold text-sm ios-btn flex items-center justify-center gap-2 shadow-xl shadow-blue-500/30">
+                    <span id="fast-submit-btn-text">🚀 Buyurtma berish — 15,000 so'm</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CARD 2: DIGITAL RECEIPT (Muvaffaqiyatli Chek — Order Confirmed) -->
+        <div id="fast-order-receipt" class="liquid-glass p-6 space-y-4 text-center hidden">
+            <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-3xl mx-auto pulse-subtle">
+                ✓
+            </div>
+
+            <div>
+                <h3 class="text-lg font-black text-white">Buyurtmangiz Qabul Qilindi!</h3>
+                <p class="text-xs text-gray-400 mt-1">Avtomatik tizim buyurtmani bajarishga yubordi</p>
+            </div>
+
+            <!-- Digital Receipt Ticket -->
+            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 text-left space-y-2.5 text-xs font-mono">
+                <div class="flex justify-between items-center pb-2 border-b border-white/10 font-sans">
+                    <span class="text-gray-400 text-[11px]">Buyurtma ID:</span>
+                    <span id="rcpt-order-id" class="font-mono font-bold text-blue-400 text-sm">#WA-1082</span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-400 font-sans">Tarmoq & Xizmat:</span>
+                    <span id="rcpt-service-name" class="font-bold text-white text-right max-w-[210px] truncate">Telegram Obunachi</span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-400 font-sans">Nishon havola:</span>
+                    <span id="rcpt-link" class="text-blue-300 text-right max-w-[210px] truncate">https://t.me/...</span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-400 font-sans">Miqdor:</span>
+                    <span id="rcpt-qty" class="text-gray-100 font-bold">1,000 ta</span>
+                </div>
+
+                <div class="flex justify-between">
+                    <span class="text-gray-400 font-sans">To'lov:</span>
+                    <span id="rcpt-total" class="text-emerald-400 font-bold">15,000 so'm</span>
+                </div>
+
+                <div class="flex justify-between pt-2 border-t border-white/10 font-sans">
+                    <span class="text-gray-400">Qolgan balans:</span>
+                    <span id="rcpt-rem-bal" class="text-gray-200 font-bold font-mono">85,100 so'm</span>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+                <button onclick="switchTab('orders')" class="flex-1 py-3 rounded-2xl bg-blue-600/25 border border-blue-500/40 text-blue-300 font-bold text-xs ios-btn">
+                    📦 Buyurtmalarimda ko'rish
+                </button>
+                <button onclick="resetFastOrderForm()" class="flex-1 py-3 rounded-2xl ios-emerald-btn text-white font-bold text-xs ios-btn">
+                    🔄 Yana buyurtma berish
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TAB 2: STORE / CATALOG (XIZMATLAR KATALOGI) ==================== -->
+    <main id="tab-store" class="space-y-4 relative z-10 hidden">
         
         <!-- PLATFORMS SEGMENTED SELECTOR -->
         <div id="platforms-dock" class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
@@ -232,7 +415,7 @@
         <!-- SEARCH & FILTER BAR -->
         <div class="space-y-2">
             <div class="relative">
-                <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomi, ID yoki bo'lim bo'yicha qidiruv..." class="w-full liquid-glass-sm py-3 pl-11 pr-10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 transition-all font-medium">
+                <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomi yoki ID bo'yicha qidiruv..." class="w-full liquid-glass-sm py-3 pl-11 pr-10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
                 <span class="absolute left-4 top-3 text-gray-400 text-sm">🔍</span>
                 <button id="search-clear" onclick="clearSearch()" class="hidden absolute right-3.5 top-3 w-5 h-5 rounded-full bg-white/10 text-gray-400 text-[10px] flex items-center justify-center">✕</button>
             </div>
@@ -253,7 +436,7 @@
         </div>
     </main>
 
-    <!-- TAB 2: MY ORDERS -->
+    <!-- ==================== TAB 3: MY ORDERS (BUYURTMALAR TARIXI) ==================== -->
     <section id="tab-orders" class="space-y-3.5 relative z-10 hidden">
         <div class="liquid-glass p-5 space-y-4">
             <div class="flex justify-between items-center">
@@ -283,7 +466,7 @@
         </div>
     </section>
 
-    <!-- TAB 3: DEPOSIT / TO'LDIRISH -->
+    <!-- ==================== TAB 4: DEPOSIT / TO'LDIRISH ==================== -->
     <section id="tab-deposit" class="space-y-4 relative z-10 hidden">
         <div class="liquid-glass p-5 space-y-4">
             <div class="flex items-center gap-3">
@@ -333,7 +516,7 @@
         </div>
     </section>
 
-    <!-- TAB 4: PROFILE & CABINET -->
+    <!-- ==================== TAB 5: PROFILE & CABINET ==================== -->
     <section id="tab-profile" class="space-y-4 relative z-10 hidden">
         <div class="liquid-glass p-5 space-y-4 text-xs">
             <h3 class="font-bold text-white text-base flex items-center gap-2">
@@ -372,209 +555,42 @@
         </div>
     </section>
 
-    <!-- FLOATING BOTTOM DOCK NAVIGATION (Apple Style 5-Action Dock) -->
+    <!-- FLOATING BOTTOM DOCK NAVIGATION (Apple Style 5-Tab Bar) -->
     <nav class="fixed bottom-3 left-3 right-3 z-40 max-w-lg mx-auto">
         <div class="bottom-dock p-2 flex items-center justify-between">
-            <button onclick="switchTab('store')" id="tab-btn-store" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-blue-400 font-bold transition-all ios-btn">
+            
+            <!-- Tab 1: Fast Order (Primary Prominent Centerpiece) -->
+            <button onclick="switchTab('order')" id="tab-btn-order" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-blue-400 font-bold transition-all ios-btn">
+                <span class="text-xl">⚡️</span>
+                <span class="text-[10px] tracking-tight font-extrabold">Buyurtma</span>
+            </button>
+
+            <!-- Tab 2: Store / Catalog -->
+            <button onclick="switchTab('store')" id="tab-btn-store" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">🛍</span>
                 <span class="text-[10px] tracking-tight">Do'kon</span>
             </button>
-            
-            <button onclick="triggerQuickOrderAction()" id="tab-btn-quick-order" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
-                <span class="text-lg">⚡️</span>
-                <span class="text-[10px] tracking-tight">Buyurtma</span>
-            </button>
 
+            <!-- Tab 3: History -->
             <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-gray-400 font-medium transition-all ios-btn relative">
                 <span class="text-lg">📦</span>
                 <span class="text-[10px] tracking-tight">Tarix</span>
                 <span id="dock-orders-badge" class="hidden absolute top-0.5 right-3 w-2 h-2 rounded-full bg-blue-400"></span>
             </button>
 
+            <!-- Tab 4: Deposit -->
             <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">💳</span>
                 <span class="text-[10px] tracking-tight">Hisob</span>
             </button>
 
+            <!-- Tab 5: Profile -->
             <button onclick="switchTab('profile')" id="tab-btn-profile" class="dock-btn flex-1 flex flex-col items-center gap-1 py-1 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">⚙️</span>
                 <span class="text-[10px] tracking-tight">Kabinet</span>
             </button>
         </div>
     </nav>
-
-    <!-- ADVANCED ORDER BOTTOM SHEET MODAL -->
-    <div id="order-modal-container" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
-        
-        <!-- SHEET CONTENT (ORDER FORM & DIGITAL RECEIPT) -->
-        <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-5 space-y-4 border-t border-white/20 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar">
-            
-            <!-- Sheet Handle Bar -->
-            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-1"></div>
-
-            <!-- VIEW 1: ORDER INPUT FORM -->
-            <div id="order-form-view" class="space-y-4">
-                <div class="flex justify-between items-start gap-2">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span id="modal-service-id" class="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">#101</span>
-                            <span id="modal-service-network" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Telegram</span>
-                        </div>
-                        <h3 id="modal-service-title" class="text-base font-bold text-white mt-1.5 leading-snug">Telegram Obunachilar</h3>
-                    </div>
-                    <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-300 hover:text-white active:scale-95 transition-all">✕</button>
-                </div>
-
-                <!-- Service Specifications 4-Metric Grid -->
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="p-3 rounded-2xl bg-white/[0.04] border border-white/5 space-y-0.5">
-                        <span class="text-[10px] text-gray-400">1,000 dona narxi</span>
-                        <div id="modal-service-price" class="font-bold text-emerald-400 font-mono text-sm">15,000 so'm</div>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-white/[0.04] border border-white/5 space-y-0.5">
-                        <span class="text-[10px] text-gray-400">1 dona narxi</span>
-                        <div id="modal-unit-price" class="font-bold text-blue-300 font-mono text-sm">15 so'm</div>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-white/[0.04] border border-white/5 space-y-0.5">
-                        <span class="text-[10px] text-gray-400">Limit oralig'i</span>
-                        <div id="modal-service-limits" class="font-mono text-gray-200 font-semibold text-xs">20 — 50,000</div>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-white/[0.04] border border-white/5 space-y-0.5">
-                        <span class="text-[10px] text-gray-400">Tezlik & Holat</span>
-                        <div class="font-semibold text-amber-300 text-xs flex items-center gap-1">⚡️ 0-15 daqiqa</div>
-                    </div>
-                </div>
-
-                <!-- LINK INPUT WITH SMART PASTE -->
-                <div class="space-y-1.5">
-                    <div class="flex justify-between items-center">
-                        <label class="text-[11px] font-semibold text-gray-300">Nishon havola (Link yoki @username):</label>
-                        <button onclick="pasteClipboardLink()" class="text-[10px] text-blue-400 hover:text-blue-300 font-bold px-2 py-0.5 rounded-lg bg-blue-500/10 border border-blue-500/20 active:scale-95 transition-all flex items-center gap-1">
-                            <span>📋 Joylash</span>
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <input type="text" id="order-link" oninput="validateLinkField()" placeholder="https://t.me/kanal_nomi yoki @username" class="w-full liquid-glass-sm p-3.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono">
-                    </div>
-                    <div id="link-hint-box" class="flex items-center gap-1.5 text-[10px] text-gray-400 px-1">
-                        <span>💡</span> <span id="link-hint-text">Masalan: @kanal_nomi yoki to'liq havola</span>
-                    </div>
-                </div>
-
-                <!-- QUANTITY INPUT WITH STEPPERS & BUDGET CHIPS -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center">
-                        <label class="text-[11px] font-semibold text-gray-300">Buyurtma miqdori:</label>
-                        <span id="qty-limit-hint" class="text-[10px] text-gray-400 font-mono"></span>
-                    </div>
-
-                    <!-- Input Stepper Row -->
-                    <div class="flex items-center gap-2">
-                        <button onclick="stepQty(-1)" class="w-11 h-11 rounded-2xl liquid-glass-sm flex items-center justify-center text-lg font-black text-gray-200 active:scale-95 transition-all ios-btn border border-white/10">➖</button>
-                        <input type="number" id="order-qty" oninput="calculateTotal()" placeholder="Miqdor" class="flex-1 liquid-glass-sm p-3 text-center text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-mono font-black text-base">
-                        <button onclick="stepQty(1)" class="w-11 h-11 rounded-2xl liquid-glass-sm flex items-center justify-center text-lg font-black text-gray-200 active:scale-95 transition-all ios-btn border border-white/10">➕</button>
-                    </div>
-                    
-                    <!-- Quick Preset Chips -->
-                    <div class="flex gap-1.5">
-                        <button onclick="setQty('min')" class="flex-1 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-bold text-gray-300 hover:bg-white/10 ios-btn">MIN</button>
-                        <button onclick="adjustQty(500)" class="flex-1 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-bold text-gray-300 hover:bg-white/10 ios-btn">+500</button>
-                        <button onclick="adjustQty(1000)" class="flex-1 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-bold text-gray-300 hover:bg-white/10 ios-btn">+1k</button>
-                        <button onclick="adjustQty(5000)" class="flex-1 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-bold text-gray-300 hover:bg-white/10 ios-btn">+5k</button>
-                        <button onclick="setQty('max')" class="flex-1 py-1.5 rounded-xl bg-white/[0.04] border border-white/5 text-[10px] font-bold text-gray-300 hover:bg-white/10 ios-btn">MAX</button>
-                    </div>
-
-                    <!-- Budget Percentage Chips -->
-                    <div class="flex items-center gap-1.5 pt-1">
-                        <span class="text-[10px] text-gray-500 font-semibold uppercase">Balansdan:</span>
-                        <button onclick="setBudgetPct(0.25)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">25%</button>
-                        <button onclick="setBudgetPct(0.50)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">50%</button>
-                        <button onclick="setBudgetPct(0.75)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">75%</button>
-                        <button onclick="setBudgetPct(1.00)" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-black ios-btn">100% (To'liq)</button>
-                    </div>
-                </div>
-
-                <!-- TOTAL PRICE, BALANCE SUMMARY & CONFIRM BUTTON -->
-                <div class="pt-3 border-t border-white/10 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Jami to'lov:</span>
-                            <span id="modal-total-price" class="text-2xl font-black text-emerald-400 font-mono">0 so'm</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Mavjud Balans:</span>
-                            <span id="modal-curr-bal" class="text-sm font-black text-white font-mono">100,100 so'm</span>
-                        </div>
-                    </div>
-
-                    <!-- Balance Status Alert Bar -->
-                    <div id="modal-balance-alert" class="p-2.5 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-medium flex items-center justify-between">
-                        <span id="modal-balance-hint-text" class="text-gray-300">Qoladigan balans: <b class="text-emerald-400 font-mono">100,100 so'm</b></span>
-                        <button id="modal-topup-btn" onclick="switchTab('deposit'); closeModal();" class="hidden text-[10px] px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 active:scale-95">To'ldirish 💳</button>
-                    </div>
-
-                    <button onclick="submitOrder()" id="btn-submit-order" class="w-full py-3.5 rounded-2xl ios-primary-btn text-white font-bold text-xs ios-btn flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30">
-                        <span id="submit-btn-text">Buyurtma berish</span> <span>🚀</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- VIEW 2: DIGITAL ORDER RECEIPT (Muvaffaqiyatli Chek) -->
-            <div id="order-receipt-view" class="space-y-4 hidden text-center py-2">
-                <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-3xl mx-auto pulse-subtle">
-                    ✓
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-black text-white">Buyurtma Qabul Qilindi!</h3>
-                    <p class="text-xs text-gray-400 mt-1">Xizmat bajarish navbatiga muvaffaqiyatli qo'shildi</p>
-                </div>
-
-                <!-- Digital Ticket Card -->
-                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 text-left space-y-2.5 text-xs font-mono">
-                    <div class="flex justify-between items-center pb-2 border-b border-white/10 font-sans">
-                        <span class="text-gray-400 text-[11px]">Buyurtma ID:</span>
-                        <span id="receipt-order-id" class="font-mono font-bold text-blue-400 text-sm">#WA-1051</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-400">Xizmat:</span>
-                        <span id="receipt-service-name" class="font-bold text-white text-right max-w-[200px] truncate">Obunachi</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-400">Havola:</span>
-                        <span id="receipt-link" class="text-blue-300 text-right max-w-[200px] truncate">https://t.me/...</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-400">Miqdor:</span>
-                        <span id="receipt-qty" class="text-gray-100 font-bold">1,000 ta</span>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <span class="text-gray-400">To'lov:</span>
-                        <span id="receipt-total" class="text-emerald-400 font-bold">15,000 so'm</span>
-                    </div>
-
-                    <div class="flex justify-between pt-2 border-t border-white/10">
-                        <span class="text-gray-400">Qolgan balans:</span>
-                        <span id="receipt-rem-bal" class="text-gray-200 font-bold">85,100 so'm</span>
-                    </div>
-                </div>
-
-                <div class="flex gap-2 pt-2">
-                    <button onclick="viewOrdersFromReceipt()" class="flex-1 py-3 rounded-2xl bg-blue-600/25 border border-blue-500/40 text-blue-300 font-bold text-xs ios-btn">
-                        📦 Buyurtmalarim
-                    </button>
-                    <button onclick="resetOrderModal()" class="flex-1 py-3 rounded-2xl ios-emerald-btn text-white font-bold text-xs ios-btn">
-                        🔄 Yangi buyurtma
-                    </button>
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     <!-- JAVASCRIPT ENGINE (Multi-Parallel Async Architecture) -->
     <script>
@@ -600,9 +616,9 @@
 
         let currentPlatform = "Telegram";
         let currentCategory = "All";
-        let selectedService = null;
+        let fastOrderSelectedService = null;
         let currentBadgeFilter = "all";
-        let sortPriceAsc = null; // null: default, true: asc, false: desc
+        let sortPriceAsc = null;
         let currentOrderStatusFilter = "all";
         let userFavorites = [];
 
@@ -612,10 +628,8 @@
             items: {}
         };
 
-        // Fallback Platforms
         const FALLBACK_PLATFORMS = ["Telegram", "Instagram", "TikTok", "YouTube"];
 
-        // Platform Icons Mapping
         const PLATFORM_ICONS = {
             "telegram": "✈️",
             "instagram": "📸",
@@ -634,13 +648,11 @@
 
         // Initialize User Identity & Multi-Parallel Data Loading
         async function initApp() {
-            // Read URL Params (Provided by Bot WebAppInfo URL generator)
             const params = new URLSearchParams(window.location.search);
             if (params.get('uid')) userId = params.get('uid');
             if (params.get('bal')) userBalance = parseFloat(params.get('bal')) || userBalance;
             if (params.get('ref')) userReferrals = parseInt(params.get('ref')) || userReferrals;
 
-            // Telegram Native InitData
             if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const u = tg.initDataUnsafe.user;
                 userId = String(u.id);
@@ -652,18 +664,15 @@
             document.getElementById('user-avatar').innerText = userName.charAt(0).toUpperCase();
             document.getElementById('ref-link').innerText = `https://t.me/Muxa_aibot?start=${userId}`;
 
-            // Load Saved Favorites
             try {
                 const favs = localStorage.getItem('smm_favs_' + userId);
                 if (favs) userFavorites = JSON.parse(favs);
             } catch(e) {}
 
-            // Load Cached Balance
             const savedBal = localStorage.getItem('smm_bal_' + userId);
             if (savedBal !== null && !params.get('bal')) userBalance = parseFloat(savedBal) || 0;
             updateBalanceUI();
 
-            // Load Cached Orders
             const savedOrders = localStorage.getItem('smm_orders_' + userId);
             if (savedOrders) {
                 try { userOrders = JSON.parse(savedOrders); } catch(e) {}
@@ -671,12 +680,12 @@
             updateProfileStats();
             renderOrders();
 
-            // Load Cached Services
             const cachedServices = localStorage.getItem('smm_dynamic_data');
             if (cachedServices) {
                 try {
                     DYNAMIC_DATA = JSON.parse(cachedServices);
-                    buildPlatformDock();
+                    buildPlatformDocks();
+                    populateFastOrderDropdowns();
                     renderCategories();
                     renderServices();
                 } catch(e) {}
@@ -690,10 +699,10 @@
         }
 
         function updateBalanceUI() {
-            const formatted = Math.round(userBalance).toLocaleString();
-            document.getElementById('user-balance').innerText = formatted;
-            const hint = document.getElementById('modal-curr-bal');
-            if (hint) hint.innerText = formatted + " so'm";
+            const formatted = Math.round(userBalance).toLocaleString() + " so'm";
+            document.getElementById('user-balance').innerText = Math.round(userBalance).toLocaleString();
+            const fastBal = document.getElementById('fast-curr-balance');
+            if (fastBal) fastBal.innerText = formatted;
         }
 
         function updateProfileStats() {
@@ -740,13 +749,11 @@
         async function syncServicesFromBackend() {
             try {
                 let data = null;
-                // Step 1: Static JSON Mirror (Ultra-fast cached delivery)
                 try {
                     const res = await fetch('services.json?v=' + Date.now(), { cache: 'no-store' });
                     if (res.ok) data = await res.json();
                 } catch (_) {}
                 
-                // Step 2: Dynamic Live Server API Fallback
                 if (!data || !data.services) {
                     try {
                         const res2 = await fetch('/api/services', { cache: 'no-store' });
@@ -760,7 +767,8 @@
                         items: data.items || {}
                     };
                     localStorage.setItem('smm_dynamic_data', JSON.stringify(DYNAMIC_DATA));
-                    buildPlatformDock();
+                    buildPlatformDocks();
+                    populateFastOrderDropdowns();
                     renderCategories();
                     renderServices();
                 }
@@ -769,9 +777,8 @@
             }
         }
 
-        // Build Platform Dock Dynamically
-        function buildPlatformDock() {
-            const dock = document.getElementById('platforms-dock');
+        // Build Platform Docks (Both for Fast Order Tab and Store Tab)
+        function buildPlatformDocks() {
             let platforms = Object.keys(DYNAMIC_DATA.services);
             if (platforms.length === 0) platforms = FALLBACK_PLATFORMS;
 
@@ -779,33 +786,401 @@
                 currentPlatform = platforms[0] || "Telegram";
             }
 
-            dock.innerHTML = platforms.map(p => {
-                const isActive = p === currentPlatform;
-                const icon = getPlatformIcon(p);
-                const activeStyle = isActive 
-                    ? 'bg-blue-600/25 border-blue-500/50 text-blue-300 font-bold shadow-md shadow-blue-500/20' 
-                    : 'liquid-glass-sm text-gray-400 hover:text-white font-medium border-white/5';
+            // 1. Fast Order Grid (Clean 4/5 column cards)
+            const fastGrid = document.getElementById('order-platform-dock');
+            if (fastGrid) {
+                fastGrid.innerHTML = platforms.map(p => {
+                    const isActive = p === currentPlatform;
+                    const icon = getPlatformIcon(p);
+                    const activeClass = isActive 
+                        ? 'bg-blue-600/30 border-blue-500/60 text-white font-black shadow-md shadow-blue-500/20' 
+                        : 'bg-white/[0.04] text-gray-400 border-white/5 hover:text-white font-medium';
 
-                return `
-                    <button onclick="selectPlatform('${p}')" id="plat-btn-${p}" class="px-4 py-2.5 rounded-2xl text-xs flex items-center gap-2 whitespace-nowrap transition-all border ios-btn ${activeStyle}">
-                        <span class="text-sm">${icon}</span>
-                        <span>${p}</span>
-                    </button>
-                `;
-            }).join('');
+                    return `
+                        <button onclick="selectFastOrderPlatform('${p}')" class="py-2.5 px-2 rounded-2xl flex flex-col items-center justify-center gap-1 border text-xs transition-all ios-btn ${activeClass}">
+                            <span class="text-base">${icon}</span>
+                            <span class="text-[11px] truncate w-full text-center">${p}</span>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            // 2. Store Horizontal Dock
+            const storeDock = document.getElementById('platforms-dock');
+            if (storeDock) {
+                storeDock.innerHTML = platforms.map(p => {
+                    const isActive = p === currentPlatform;
+                    const icon = getPlatformIcon(p);
+                    const activeStyle = isActive 
+                        ? 'bg-blue-600/25 border-blue-500/50 text-blue-300 font-bold shadow-md shadow-blue-500/20' 
+                        : 'liquid-glass-sm text-gray-400 hover:text-white font-medium border-white/5';
+
+                    return `
+                        <button onclick="selectStorePlatform('${p}')" class="px-4 py-2.5 rounded-2xl text-xs flex items-center gap-2 whitespace-nowrap transition-all border ios-btn ${activeStyle}">
+                            <span class="text-sm">${icon}</span>
+                            <span>${p}</span>
+                        </button>
+                    `;
+                }).join('');
+            }
         }
 
-        // Select Platform
-        function selectPlatform(p) {
+        // Switch Platform in Fast Order
+        function selectFastOrderPlatform(p) {
             currentPlatform = p;
-            buildPlatformDock();
-            currentCategory = 'All';
-            renderCategories();
-            renderServices();
+            buildPlatformDocks();
+            populateFastOrderDropdowns();
+            updateFastOrderLinkPlaceholder();
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
         }
 
-        // Render Categories for Selected Platform (Exact 1:1 API categories)
+        // Switch Platform in Store
+        function selectStorePlatform(p) {
+            currentPlatform = p;
+            buildPlatformDocks();
+            currentCategory = 'All';
+            renderCategories();
+            renderServices();
+            populateFastOrderDropdowns();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
+        }
+
+        // Populate Fast Order Dropdowns (Category & Service)
+        function populateFastOrderDropdowns(targetServiceId = null) {
+            const catSelect = document.getElementById('order-cat-select');
+            const srvSelect = document.getElementById('order-service-select');
+            if (!catSelect || !srvSelect) return;
+
+            const cats = DYNAMIC_DATA.services[currentPlatform] || [];
+            if (cats.length === 0) {
+                catSelect.innerHTML = `<option value="">Bo'limlar yuklanmoqda...</option>`;
+                srvSelect.innerHTML = `<option value="">Xizmatlar mavjud emas</option>`;
+                return;
+            }
+
+            // Populate Categories
+            catSelect.innerHTML = cats.map(c => {
+                const k = `${currentPlatform}|${c}`;
+                const cnt = (DYNAMIC_DATA.items[k] || []).length;
+                return `<option value="${escapeHtml(c)}">${escapeHtml(c)} (${cnt} ta xizmat)</option>`;
+            }).join('');
+
+            // If targetServiceId is passed, find its category
+            let activeCat = cats[0];
+            if (targetServiceId) {
+                for (const c of cats) {
+                    const k = `${currentPlatform}|${c}`;
+                    const items = DYNAMIC_DATA.items[k] || [];
+                    if (items.some(it => String(it.sid || it.id) === String(targetServiceId))) {
+                        activeCat = c;
+                        break;
+                    }
+                }
+                catSelect.value = activeCat;
+            }
+
+            populateServicesForCategory(catSelect.value, targetServiceId);
+        }
+
+        function onCategorySelectChange() {
+            const cat = document.getElementById('order-cat-select').value;
+            populateServicesForCategory(cat);
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function populateServicesForCategory(cat, targetServiceId = null) {
+            const srvSelect = document.getElementById('order-service-select');
+            const k = `${currentPlatform}|${cat}`;
+            const items = DYNAMIC_DATA.items[k] || [];
+
+            if (items.length === 0) {
+                srvSelect.innerHTML = `<option value="">Ushbu bo'limda xizmatlar yo'q</option>`;
+                fastOrderSelectedService = null;
+                calculateFastOrderTotal();
+                return;
+            }
+
+            srvSelect.innerHTML = items.map(it => {
+                const id = it.sid || it.id || 101;
+                const price = Math.round(it.rate || it.price || 10000);
+                const name = it.name || "Xizmat";
+                return `<option value="${id}">#${id} — ${escapeHtml(name)} (${price.toLocaleString()} so'm/1k)</option>`;
+            }).join('');
+
+            if (targetServiceId && items.some(it => String(it.sid || it.id) === String(targetServiceId))) {
+                srvSelect.value = targetServiceId;
+            }
+
+            onServiceSelectChange();
+        }
+
+        function onServiceSelectChange() {
+            const srvId = document.getElementById('order-service-select').value;
+            const cat = document.getElementById('order-cat-select').value;
+            const k = `${currentPlatform}|${cat}`;
+            const items = DYNAMIC_DATA.items[k] || [];
+
+            const found = items.find(it => String(it.sid || it.id) === String(srvId)) || items[0];
+            if (found) {
+                fastOrderSelectedService = {
+                    id: found.sid || found.id || 101,
+                    name: found.name || "Xizmat",
+                    cat: cat,
+                    price: Math.round(found.rate || found.price || 10000),
+                    min: found.min || 10,
+                    max: found.max || 100000,
+                    api_url: found.api_url || ""
+                };
+
+                // Update Specs Card
+                document.getElementById('spec-1k-price').innerText = fastOrderSelectedService.price.toLocaleString() + " so'm";
+                const unitPrice = (fastOrderSelectedService.price / 1000).toFixed(fastOrderSelectedService.price >= 1000 ? 1 : 2);
+                document.getElementById('spec-unit-price').innerText = unitPrice + " so'm";
+                document.getElementById('spec-limits').innerText = `${fastOrderSelectedService.min} — ${fastOrderSelectedService.max.toLocaleString()}`;
+                document.getElementById('fast-qty-limits-badge').innerText = `Limit: ${fastOrderSelectedService.min} — ${fastOrderSelectedService.max.toLocaleString()}`;
+
+                // Set default qty if empty or smaller than min
+                const qtyInput = document.getElementById('fast-order-qty');
+                if (!qtyInput.value || parseInt(qtyInput.value) < fastOrderSelectedService.min) {
+                    qtyInput.value = fastOrderSelectedService.min;
+                }
+            }
+            calculateFastOrderTotal();
+        }
+
+        function updateFastOrderLinkPlaceholder() {
+            const linkInput = document.getElementById('fast-order-link');
+            const hint = document.getElementById('fast-link-hint-text');
+            if (currentPlatform === 'Telegram') {
+                linkInput.placeholder = "https://t.me/kanal_nomi yoki @username";
+                hint.innerText = "Masalan: @kanal_nomi yoki post havolasi";
+            } else if (currentPlatform === 'Instagram') {
+                linkInput.placeholder = "https://instagram.com/profil yoki post linki";
+                hint.innerText = "Masalan: https://instagram.com/p/...";
+            } else if (currentPlatform === 'TikTok') {
+                linkInput.placeholder = "https://www.tiktok.com/@profil/video/...";
+                hint.innerText = "Masalan: TikTok video yoki profil havolasi";
+            } else if (currentPlatform === 'YouTube') {
+                linkInput.placeholder = "https://youtube.com/watch?v=...";
+                hint.innerText = "Masalan: YouTube video yoki kanal havolasi";
+            } else {
+                linkInput.placeholder = "Havolani kiriting";
+                hint.innerText = "Kerakli profil, havola yoki post";
+            }
+            validateFastOrderLink();
+        }
+
+        // Smart Paste to Fast Order Link
+        async function pasteClipboardLinkToFastOrder() {
+            try {
+                if (navigator.clipboard && navigator.clipboard.readText) {
+                    const text = await navigator.clipboard.readText();
+                    if (text) {
+                        document.getElementById('fast-order-link').value = text.trim();
+                        validateFastOrderLink();
+                        showToast("Havola joylandi! 📋", "✅");
+                        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                        return;
+                    }
+                }
+            } catch(e) {}
+            document.getElementById('fast-order-link').focus();
+            showToast("Havolani kiriting", "✍️");
+        }
+
+        function validateFastOrderLink() {
+            const val = (document.getElementById('fast-order-link').value || '').trim();
+            const hintBox = document.getElementById('fast-link-hint-box');
+            if (!val) {
+                hintBox.innerHTML = `<span>💡</span> <span id="fast-link-hint-text">Masalan: @kanal_nomi yoki to'liq havola</span>`;
+                hintBox.className = "flex items-center gap-1.5 text-[10px] text-gray-400 px-1";
+            } else if (val.length >= 4) {
+                hintBox.innerHTML = `<span>🟢</span> <span class="text-emerald-400 font-semibold">Havola to'g'ri kiritildi</span>`;
+                hintBox.className = "flex items-center gap-1.5 text-[10px] text-emerald-400 px-1";
+            }
+        }
+
+        // Stepper & Presets in Fast Order
+        function stepFastQty(direction) {
+            if (!fastOrderSelectedService) return;
+            const input = document.getElementById('fast-order-qty');
+            let current = parseInt(input.value) || fastOrderSelectedService.min;
+            let step = 100;
+            if (fastOrderSelectedService.min >= 1000) step = 500;
+            if (fastOrderSelectedService.min <= 20) step = 10;
+
+            current += (direction * step);
+            if (current < fastOrderSelectedService.min) current = fastOrderSelectedService.min;
+            if (current > fastOrderSelectedService.max) current = fastOrderSelectedService.max;
+
+            input.value = current;
+            calculateFastOrderTotal();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function setFastQty(val) {
+            if (!fastOrderSelectedService) return;
+            const input = document.getElementById('fast-order-qty');
+            input.value = Math.max(fastOrderSelectedService.min, Math.min(val, fastOrderSelectedService.max));
+            calculateFastOrderTotal();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        function calculateFastOrderTotal() {
+            if (!fastOrderSelectedService) return;
+            const qty = parseInt(document.getElementById('fast-order-qty').value) || 0;
+            const total = Math.round((qty / 1000) * fastOrderSelectedService.price);
+            
+            document.getElementById('fast-total-price').innerText = total.toLocaleString() + " so'm";
+            const btn = document.getElementById('btn-fast-order');
+            const btnText = document.getElementById('fast-submit-btn-text');
+            const statusTag = document.getElementById('fast-balance-status-tag');
+
+            if (total > userBalance) {
+                const diff = total - userBalance;
+                statusTag.innerHTML = `<span class="text-rose-400 font-bold">Yetarli emas (-${diff.toLocaleString()} so'm)</span>`;
+                btn.className = "w-full py-4 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-sm ios-btn flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10";
+                btnText.innerText = `💳 Balansni to'ldirish (Yetishmayapti: ${diff.toLocaleString()} so'm)`;
+                btn.onclick = () => switchTab('deposit');
+            } else {
+                statusTag.innerHTML = `<span class="text-emerald-400 font-bold">Yetarli ✅</span>`;
+                btn.className = "w-full py-4 rounded-2xl ios-primary-btn text-white font-bold text-sm ios-btn flex items-center justify-center gap-2 shadow-xl shadow-blue-500/30";
+                btnText.innerText = `🚀 Buyurtma berish — ${total.toLocaleString()} so'm`;
+                btn.onclick = submitFastOrder;
+            }
+        }
+
+        // Submit Fast Order (Instant Optimistic + Multi-Channel Dispatch)
+        function submitFastOrder() {
+            if (!fastOrderSelectedService) {
+                showToast("Xizmat tanlanmagan!", "⚠️");
+                return;
+            }
+
+            const link = document.getElementById('fast-order-link').value.trim();
+            const qty = parseInt(document.getElementById('fast-order-qty').value) || 0;
+
+            if (!link) {
+                showToast("Iltimos, havolani kiriting!", "⚠️");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+                document.getElementById('fast-order-link').focus();
+                return;
+            }
+
+            if (qty < fastOrderSelectedService.min || qty > fastOrderSelectedService.max) {
+                showToast(`Miqdor ${fastOrderSelectedService.min} va ${fastOrderSelectedService.max.toLocaleString()} oralig'ida bo'lsin!`, "⚠️");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+                return;
+            }
+
+            const total = Math.round((qty / 1000) * fastOrderSelectedService.price);
+
+            if (userBalance < total) {
+                showToast(`Balansingiz yetarli emas! Zarur: ${total.toLocaleString()} so'm`, "❌");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                switchTab('deposit');
+                return;
+            }
+
+            // Deduct Balance
+            userBalance -= total;
+            localStorage.setItem('smm_bal_' + userId, userBalance);
+            updateBalanceUI();
+
+            const orderId = Math.floor(1000 + Math.random() * 9000);
+            const now = new Date();
+            const dateStr = now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' });
+
+            const orderObj = {
+                id: orderId,
+                service_id: fastOrderSelectedService.id,
+                service_name: fastOrderSelectedService.name,
+                platform: currentPlatform,
+                link: link,
+                quantity: qty,
+                price: total,
+                status: 'In progress',
+                date: dateStr
+            };
+
+            userOrders.unshift(orderObj);
+            localStorage.setItem('smm_orders_' + userId, JSON.stringify(userOrders));
+            updateProfileStats();
+
+            // Multi-Channel Commit
+            const orderPayload = {
+                action: "new_order",
+                service_id: fastOrderSelectedService.id,
+                service_name: fastOrderSelectedService.name,
+                network: currentPlatform,
+                link: link,
+                quantity: qty,
+                price: total,
+                user_id: userId,
+                api_url: fastOrderSelectedService.api_url || ""
+            };
+
+            if (tg && tg.sendData) {
+                try { tg.sendData(JSON.stringify(orderPayload)); } catch (e) {}
+            }
+
+            fetch('/api/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderPayload)
+            }).catch(e => console.log('Order sync static mode'));
+
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+            // Render Digital Receipt Screen
+            document.getElementById('rcpt-order-id').innerText = '#' + orderId;
+            document.getElementById('rcpt-service-name').innerText = fastOrderSelectedService.name;
+            document.getElementById('rcpt-link').innerText = link;
+            document.getElementById('rcpt-qty').innerText = qty.toLocaleString() + ' ta';
+            document.getElementById('rcpt-total').innerText = total.toLocaleString() + " so'm";
+            document.getElementById('rcpt-rem-bal').innerText = Math.round(userBalance).toLocaleString() + " so'm";
+
+            document.getElementById('fast-order-form').classList.add('hidden');
+            document.getElementById('fast-order-receipt').classList.remove('hidden');
+
+            renderOrders();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFastOrderForm() {
+            document.getElementById('fast-order-receipt').classList.add('hidden');
+            document.getElementById('fast-order-form').classList.remove('hidden');
+            calculateFastOrderTotal();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 1-Tap Select from Catalog and Transition to Fast Order
+        function selectServiceForOrder(serviceId) {
+            switchTab('order');
+            populateFastOrderDropdowns(serviceId);
+            showToast("Xizmat tanlandi! ⚡️", "✨");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 1-Tap Re-Order from History
+        function reOrder(orderId) {
+            const ord = userOrders.find(o => String(o.id) === String(orderId));
+            if (!ord) return;
+            if (ord.platform && DYNAMIC_DATA.services[ord.platform]) {
+                currentPlatform = ord.platform;
+                buildPlatformDocks();
+            }
+            switchTab('order');
+            populateFastOrderDropdowns(ord.service_id);
+            document.getElementById('fast-order-link').value = ord.link || '';
+            document.getElementById('fast-order-qty').value = ord.quantity || 1000;
+            validateFastOrderLink();
+            calculateFastOrderTotal();
+            showToast("Buyurtma ma'lumotlari yuklandi! 🔁", "✨");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Store Catalog Logic
         function renderCategories() {
             const pills = document.getElementById('category-pills');
             const badge = document.getElementById('cat-count-badge');
@@ -838,7 +1213,6 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Toggle Favorites for a Service
         function toggleFavorite(id, event) {
             if (event) event.stopPropagation();
             id = String(id);
@@ -855,7 +1229,6 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Filter Badges
         function setFilterBadge(type) {
             currentBadgeFilter = type;
             ['all', 'fav', 'fast', 'guar'].forEach(b => {
@@ -871,7 +1244,6 @@
             renderServices();
         }
 
-        // Toggle Sort by Price
         function toggleSortPrice() {
             const btn = document.getElementById('flt-sort');
             if (sortPriceAsc === null) {
@@ -890,7 +1262,6 @@
             renderServices();
         }
 
-        // Get All Services for Current Platform
         function getServicesForCurrentPlatform() {
             const cats = DYNAMIC_DATA.services[currentPlatform] || [];
             let list = [];
@@ -922,7 +1293,6 @@
             return list;
         }
 
-        // Render Services List (Multi-Parallel Async Filtering)
         function renderServices() {
             const container = document.getElementById('services-container');
             const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
@@ -989,8 +1359,8 @@
                             <span class="text-blue-300 font-sans font-semibold">1 dona ≈ ${unitPrice} so'm</span>
                         </div>
 
-                        <button onclick="openModal('${s.id}')" class="w-full py-2.5 rounded-2xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/35 text-blue-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 ios-btn">
-                            <span>Buyurtma Berish</span> <span>➔</span>
+                        <button onclick="selectServiceForOrder('${s.id}')" class="w-full py-2.5 rounded-2xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/35 text-blue-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 ios-btn">
+                            <span>Tanlash va Buyurtma berish</span> <span>➔</span>
                         </button>
                     </div>
                 `;
@@ -1006,321 +1376,7 @@
             renderServices();
         }
 
-        // Trigger Quick Order Action from Bottom Dock
-        function triggerQuickOrderAction() {
-            const all = getServicesForCurrentPlatform();
-            if (all.length > 0) {
-                openModal(all[0].id);
-            } else {
-                switchTab('store');
-                showToast("Avval xizmatni tanlang!", "🛍");
-            }
-        }
-
-        // Modal Controls & Form State
-        function openModal(serviceId, prefillLink = null, prefillQty = null) {
-            const all = getServicesForCurrentPlatform();
-            selectedService = all.find(it => String(it.id) === String(serviceId));
-            if (!selectedService && all.length > 0) selectedService = all[0];
-            if (!selectedService) return;
-
-            // Reset View to Form
-            document.getElementById('order-form-view').classList.remove('hidden');
-            document.getElementById('order-receipt-view').classList.add('hidden');
-
-            document.getElementById('modal-service-id').innerText = '#' + selectedService.id;
-            document.getElementById('modal-service-network').innerText = currentPlatform;
-            document.getElementById('modal-service-title').innerText = selectedService.name;
-            document.getElementById('modal-service-price').innerText = selectedService.price.toLocaleString() + " so'm";
-            
-            const unitPrice = (selectedService.price / 1000).toFixed(selectedService.price >= 1000 ? 1 : 2);
-            document.getElementById('modal-unit-price').innerText = unitPrice + " so'm";
-
-            document.getElementById('modal-service-limits').innerText = `${selectedService.min} — ${selectedService.max.toLocaleString()}`;
-            document.getElementById('qty-limit-hint').innerText = `(${selectedService.min} - ${selectedService.max.toLocaleString()})`;
-
-            // Configure dynamic placeholder and hints
-            const linkInput = document.getElementById('order-link');
-            const hintText = document.getElementById('link-hint-text');
-            if (currentPlatform === 'Telegram') {
-                linkInput.placeholder = "https://t.me/kanal_nomi yoki @username";
-                hintText.innerText = "Masalan: @kanal_nomi yoki post havolasi";
-            } else if (currentPlatform === 'Instagram') {
-                linkInput.placeholder = "https://instagram.com/profil yoki post linki";
-                hintText.innerText = "Masalan: https://instagram.com/p/...";
-            } else if (currentPlatform === 'TikTok') {
-                linkInput.placeholder = "https://www.tiktok.com/@profil/video/...";
-                hintText.innerText = "Masalan: TikTok video yoki profil havolasi";
-            } else if (currentPlatform === 'YouTube') {
-                linkInput.placeholder = "https://youtube.com/watch?v=... yoki kanal linki";
-                hintText.innerText = "Masalan: YouTube video yoki kanal havolasi";
-            } else {
-                linkInput.placeholder = "Havolani kiriting";
-                hintText.innerText = "Kerakli kanal, profil yoki post havolasi";
-            }
-
-            linkInput.value = prefillLink || '';
-            document.getElementById('order-qty').value = prefillQty || selectedService.min;
-            
-            validateLinkField();
-            updateBalanceUI();
-            calculateTotal();
-
-            const modal = document.getElementById('order-modal-container');
-            modal.classList.add('active');
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-
-            if (tg && tg.BackButton) {
-                tg.BackButton.show();
-                tg.BackButton.onClick(closeModal);
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('order-modal-container');
-            modal.classList.remove('active');
-            if (tg && tg.BackButton) {
-                if (document.getElementById('tab-store').classList.contains('hidden')) {
-                    tg.BackButton.show();
-                    tg.BackButton.onClick(() => switchTab('store'));
-                } else {
-                    tg.BackButton.hide();
-                }
-            }
-        }
-
-        function resetOrderModal() {
-            if (selectedService) {
-                openModal(selectedService.id);
-            } else {
-                closeModal();
-            }
-        }
-
-        function viewOrdersFromReceipt() {
-            closeModal();
-            switchTab('orders');
-        }
-
-        // Smart Clipboard Paste
-        async function pasteClipboardLink() {
-            try {
-                if (navigator.clipboard && navigator.clipboard.readText) {
-                    const text = await navigator.clipboard.readText();
-                    if (text) {
-                        document.getElementById('order-link').value = text.trim();
-                        validateLinkField();
-                        showToast("Havola joylandi! 📋", "✅");
-                        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-                        return;
-                    }
-                }
-            } catch(e) {}
-            // Fallback focus
-            document.getElementById('order-link').focus();
-            showToast("Havolani kiriting", "✍️");
-        }
-
-        function validateLinkField() {
-            const val = (document.getElementById('order-link').value || '').trim();
-            const hintBox = document.getElementById('link-hint-box');
-            if (!val) {
-                hintBox.innerHTML = `<span>💡</span> <span id="link-hint-text">Masalan: @kanal_nomi yoki to'liq havola</span>`;
-                hintBox.className = "flex items-center gap-1.5 text-[10px] text-gray-400 px-1";
-            } else if (val.length >= 4) {
-                hintBox.innerHTML = `<span>🟢</span> <span class="text-emerald-400 font-semibold">Havola to'g'ri kiritildi</span>`;
-                hintBox.className = "flex items-center gap-1.5 text-[10px] text-emerald-400 px-1";
-            }
-        }
-
-        // Stepper Controls
-        function stepQty(direction) {
-            if (!selectedService) return;
-            const input = document.getElementById('order-qty');
-            let current = parseInt(input.value) || selectedService.min;
-            let step = 100;
-            if (selectedService.min >= 1000) step = 500;
-            if (selectedService.min <= 20) step = 10;
-
-            current += (direction * step);
-            if (current < selectedService.min) current = selectedService.min;
-            if (current > selectedService.max) current = selectedService.max;
-
-            input.value = current;
-            calculateTotal();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function adjustQty(amount) {
-            if (!selectedService) return;
-            const input = document.getElementById('order-qty');
-            let current = parseInt(input.value) || selectedService.min;
-            current += amount;
-            if (current > selectedService.max) current = selectedService.max;
-            input.value = current;
-            calculateTotal();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        function setQty(val) {
-            if (!selectedService) return;
-            const input = document.getElementById('order-qty');
-            if (val === 'min') input.value = selectedService.min;
-            else if (val === 'max') input.value = selectedService.max;
-            else input.value = val;
-            calculateTotal();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
-
-        // Budget Percentage Allocation (25%, 50%, 75%, 100% of balance)
-        function setBudgetPct(pct) {
-            if (!selectedService) return;
-            const targetBudget = userBalance * pct;
-            if (targetBudget <= 0) {
-                showToast("Balansingizda mablag' mavjud emas!", "⚠️");
-                return;
-            }
-            // qty = (budget / price) * 1000
-            let calculatedQty = Math.floor((targetBudget / selectedService.price) * 1000);
-            calculatedQty = Math.max(selectedService.min, Math.min(calculatedQty, selectedService.max));
-            document.getElementById('order-qty').value = calculatedQty;
-            calculateTotal();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        }
-
-        function calculateTotal() {
-            if (!selectedService) return;
-            const qty = parseInt(document.getElementById('order-qty').value) || 0;
-            const total = Math.round((qty / 1000) * selectedService.price);
-            document.getElementById('modal-total-price').innerText = total.toLocaleString() + " so'm";
-
-            const alertBox = document.getElementById('modal-balance-alert');
-            const alertText = document.getElementById('modal-balance-hint-text');
-            const topupBtn = document.getElementById('modal-topup-btn');
-            const submitBtn = document.getElementById('btn-submit-order');
-            const submitBtnText = document.getElementById('submit-btn-text');
-
-            if (total > userBalance) {
-                const diff = total - userBalance;
-                alertBox.className = "p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-[11px] font-medium flex items-center justify-between";
-                alertText.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Yetishmayotgan summa: ${diff.toLocaleString()} so'm</span>`;
-                topupBtn.classList.remove('hidden');
-                submitBtn.classList.add('opacity-70');
-                submitBtnText.innerText = `Yetarli emas (${total.toLocaleString()} so'm)`;
-            } else {
-                const rem = userBalance - total;
-                alertBox.className = "p-2.5 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-medium flex items-center justify-between";
-                alertText.innerHTML = `Qoladigan balans: <b class="text-emerald-400 font-mono">${rem.toLocaleString()} so'm</b>`;
-                topupBtn.classList.add('hidden');
-                submitBtn.classList.remove('opacity-70');
-                submitBtnText.innerText = `Buyurtma berish — ${total.toLocaleString()} so'm`;
-            }
-        }
-
-        // Submit Order (Instant Optimistic UI + Parallel Multi-Channel Commit)
-        function submitOrder() {
-            const link = document.getElementById('order-link').value.trim();
-            const qty = parseInt(document.getElementById('order-qty').value) || 0;
-
-            if (!link) {
-                showToast("Iltimos, havolani kiriting!", "⚠️");
-                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
-                document.getElementById('order-link').focus();
-                return;
-            }
-            if (qty < selectedService.min || qty > selectedService.max) {
-                showToast(`Miqdor ${selectedService.min} va ${selectedService.max.toLocaleString()} oralig'ida bo'lsin!`, "⚠️");
-                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
-                return;
-            }
-
-            const total = Math.round((qty / 1000) * selectedService.price);
-
-            if (userBalance < total) {
-                showToast(`Balansingiz yetarli emas! Zarur: ${total.toLocaleString()} so'm`, "❌");
-                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-                closeModal();
-                switchTab('deposit');
-                return;
-            }
-
-            // Deduct Balance Immediately
-            userBalance -= total;
-            localStorage.setItem('smm_bal_' + userId, userBalance);
-            updateBalanceUI();
-
-            const orderId = Math.floor(1000 + Math.random() * 9000);
-            const now = new Date();
-            const dateStr = now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + now.toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' });
-
-            const orderObj = {
-                id: orderId,
-                service_id: selectedService.id,
-                service_name: selectedService.name,
-                platform: currentPlatform,
-                link: link,
-                quantity: qty,
-                price: total,
-                status: 'In progress',
-                date: dateStr
-            };
-
-            userOrders.unshift(orderObj);
-            localStorage.setItem('smm_orders_' + userId, JSON.stringify(userOrders));
-            updateProfileStats();
-
-            // Prepare Payload for Bot & Multi-Parallel Server
-            const orderPayload = {
-                action: "new_order",
-                service_id: selectedService.id,
-                service_name: selectedService.name,
-                network: currentPlatform,
-                link: link,
-                quantity: qty,
-                price: total,
-                user_id: userId,
-                api_url: selectedService.api_url || ""
-            };
-
-            // Multi-Channel Parallel Background Commit
-            if (tg && tg.sendData) {
-                try { tg.sendData(JSON.stringify(orderPayload)); } catch (e) {}
-            }
-
-            fetch('/api/order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderPayload)
-            }).catch(e => console.log('Order sync offline / static mode'));
-
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-
-            // Switch to Digital Order Receipt View
-            document.getElementById('receipt-order-id').innerText = '#' + orderId;
-            document.getElementById('receipt-service-name').innerText = selectedService.name;
-            document.getElementById('receipt-link').innerText = link;
-            document.getElementById('receipt-qty').innerText = qty.toLocaleString() + ' ta';
-            document.getElementById('receipt-total').innerText = total.toLocaleString() + " so'm";
-            document.getElementById('receipt-rem-bal').innerText = Math.round(userBalance).toLocaleString() + " so'm";
-
-            document.getElementById('order-form-view').classList.add('hidden');
-            document.getElementById('order-receipt-view').classList.remove('hidden');
-
-            renderOrders();
-        }
-
-        // Re-Order Helper (1-Tap Fast Pre-fill from Orders Tab)
-        function reOrder(orderId) {
-            const ord = userOrders.find(o => String(o.id) === String(orderId));
-            if (!ord) return;
-            if (ord.platform && DYNAMIC_DATA.services[ord.platform]) {
-                selectPlatform(ord.platform);
-            }
-            openModal(ord.service_id, ord.link, ord.quantity);
-            showToast("Buyurtma parametrlari kiritildi! 🔁", "✨");
-        }
-
-        // Status Filter for Orders
+        // Orders Tab Logic
         function setOrderStatusFilter(status) {
             currentOrderStatusFilter = status;
             ['all', 'progress', 'completed'].forEach(s => {
@@ -1336,7 +1392,6 @@
             renderOrders();
         }
 
-        // Render Orders List with Re-Order & Copy
         function renderOrders() {
             const container = document.getElementById('my-orders-list');
             if (!container) return;
@@ -1359,8 +1414,8 @@
                     <div class="text-center py-10 text-gray-400 space-y-2">
                         <div class="text-3xl opacity-60">📭</div>
                         <p class="font-bold text-xs text-gray-300">Buyurtmalar topilmadi</p>
-                        <p class="text-[10px] text-gray-500">Xizmatlar bo'limidan buyurtma berishingiz mumkin!</p>
-                        <button onclick="switchTab('store')" class="mt-2 px-4 py-2 rounded-xl ios-primary-btn text-white font-bold text-xs ios-btn">Do'konga o'tish ➔</button>
+                        <p class="text-[10px] text-gray-500">Buyurtma bo'limidan tezkor xarid qilishingiz mumkin!</p>
+                        <button onclick="switchTab('order')" class="mt-2 px-4 py-2 rounded-xl ios-primary-btn text-white font-bold text-xs ios-btn">Buyurtma berish ➔</button>
                     </div>
                 `;
                 return;
@@ -1400,7 +1455,7 @@
 
         // Tab Navigation
         function switchTab(tab) {
-            ['store', 'orders', 'deposit', 'profile'].forEach(t => {
+            ['order', 'store', 'orders', 'deposit', 'profile'].forEach(t => {
                 const el = document.getElementById(`tab-${t}`);
                 if (el) el.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
@@ -1419,13 +1474,24 @@
                 activeBtn.classList.add('text-blue-400', 'font-bold');
             }
 
-            if (tab === 'orders') renderOrders();
+            if (tab === 'order') {
+                if (document.getElementById('fast-order-form').classList.contains('hidden')) {
+                    resetFastOrderForm();
+                }
+                calculateFastOrderTotal();
+            } else if (tab === 'orders') {
+                renderOrders();
+            } else if (tab === 'store') {
+                renderCategories();
+                renderServices();
+            }
+
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
 
             if (tg && tg.BackButton) {
-                if (tab !== 'store') {
+                if (tab !== 'order') {
                     tg.BackButton.show();
-                    tg.BackButton.onClick(() => switchTab('store'));
+                    tg.BackButton.onClick(() => switchTab('order'));
                 } else {
                     tg.BackButton.hide();
                 }
