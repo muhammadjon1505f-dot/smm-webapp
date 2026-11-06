@@ -559,22 +559,31 @@
         // Sync Services from API (Exact mirror of categories and services)
         async function syncServicesFromBackend() {
             try {
-                const res = await fetch('/api/services', { cache: 'no-store' });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && data.ok && data.services) {
-                        DYNAMIC_DATA = {
-                            services: data.services,
-                            items: data.items || {}
-                        };
-                        localStorage.setItem('smm_dynamic_data', JSON.stringify(DYNAMIC_DATA));
-                        buildPlatformDock();
-                        renderCategories();
-                        renderServices();
-                    }
+                let data = null;
+                try {
+                    const res = await fetch('services.json?v=' + Date.now(), { cache: 'no-store' });
+                    if (res.ok) data = await res.json();
+                } catch (_) {}
+                
+                if (!data || !data.services) {
+                    try {
+                        const res2 = await fetch('/api/services', { cache: 'no-store' });
+                        if (res2.ok) data = await res2.json();
+                    } catch (_) {}
+                }
+
+                if (data && (data.services || data.ok)) {
+                    DYNAMIC_DATA = {
+                        services: data.services || {},
+                        items: data.items || {}
+                    };
+                    localStorage.setItem('smm_dynamic_data', JSON.stringify(DYNAMIC_DATA));
+                    buildPlatformDock();
+                    renderCategories();
+                    renderServices();
                 }
             } catch (e) {
-                console.log("Services API offline, running on cache/defaults");
+                console.log("Services API offline, running on cache/defaults", e);
             }
         }
 
