@@ -10,7 +10,11 @@
         :root {
             --ios-blur: blur(28px) saturate(190%);
             --card-bg: rgba(17, 24, 39, 0.72);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+        * {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             background-color: #030712;
@@ -19,6 +23,7 @@
             -webkit-font-smoothing: antialiased;
             user-select: none;
             -webkit-user-select: none;
+            overflow-x: hidden;
         }
         .glass-card {
             background: var(--card-bg);
@@ -26,17 +31,32 @@
             -webkit-backdrop-filter: var(--ios-blur);
             border: 1px solid var(--border-color);
         }
-        .apple-gradient {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-        }
         .glow-btn {
             box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.45);
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .toast {
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="p-3 md:p-6 min-h-screen pb-24">
+
+    <!-- FLOATING TOAST NOTIFICATION -->
+    <div id="toast" class="toast fixed top-4 left-4 right-4 z-50 flex items-center justify-between p-3.5 rounded-2xl glass-card border border-white/20 shadow-2xl text-xs font-semibold pointer-events-none">
+        <div class="flex items-center gap-2">
+            <span id="toast-icon">✅</span>
+            <span id="toast-msg">Muvaffaqiyatli!</span>
+        </div>
+    </div>
 
     <!-- USER HEADER (iOS Glassmorphism) -->
     <header class="glass-card p-4 rounded-3xl mb-4 relative overflow-hidden">
@@ -47,14 +67,14 @@
                     👤
                 </div>
                 <div>
-                    <h2 id="user-name" class="font-bold text-white text-base leading-tight">Mehmon</h2>
+                    <h2 id="user-name" class="font-bold text-white text-base leading-tight">Foydalanuvchi</h2>
                     <span id="user-id" class="text-xs text-gray-400 font-mono">ID: 8191930658</span>
                 </div>
             </div>
-            <div class="text-right">
+            <div class="text-right cursor-pointer" onclick="switchTab('deposit')">
                 <span class="text-[11px] text-gray-400 font-medium uppercase tracking-wider block">Balans</span>
                 <div class="flex items-baseline justify-end gap-1">
-                    <span id="user-balance" class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">0</span>
+                    <span id="user-balance" class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">100,100</span>
                     <span class="text-xs text-emerald-400 font-semibold">so'm</span>
                 </div>
             </div>
@@ -63,16 +83,16 @@
 
     <!-- NAVIGATION TABS -->
     <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 py-1">
-        <button onclick="switchTab('store')" id="tab-btn-store" class="px-4 py-2 rounded-2xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5 whitespace-nowrap">
+        <button onclick="switchTab('store')" id="tab-btn-store" class="px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/30 flex items-center gap-1.5 whitespace-nowrap active:scale-95">
             <span>🛍</span> Xizmatlar
         </button>
-        <button onclick="switchTab('orders')" id="tab-btn-orders" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+        <button onclick="switchTab('orders')" id="tab-btn-orders" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
             <span>📦</span> Buyurtmalarim
         </button>
-        <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+        <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
             <span>💳</span> To'ldirish
         </button>
-        <button onclick="switchTab('profile')" id="tab-btn-profile" class="px-4 py-2 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap">
+        <button onclick="switchTab('profile')" id="tab-btn-profile" class="px-4 py-2.5 rounded-2xl text-xs font-semibold transition-all glass-card text-gray-300 hover:text-white flex items-center gap-1.5 whitespace-nowrap active:scale-95">
             <span>⚙️</span> Kabinet
         </button>
     </div>
@@ -81,19 +101,19 @@
     <main id="tab-store" class="space-y-4">
         <!-- PLATFORM SELECTOR -->
         <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
-            <button onclick="selectPlatform('telegram')" id="plat-telegram" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap">
+            <button onclick="selectPlatform('telegram')" id="plat-telegram" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap active:scale-95">
                 <span>✈️</span> Telegram
             </button>
-            <button onclick="selectPlatform('instagram')" id="plat-instagram" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+            <button onclick="selectPlatform('instagram')" id="plat-instagram" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
                 <span>📸</span> Instagram
             </button>
-            <button onclick="selectPlatform('tiktok')" id="plat-tiktok" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+            <button onclick="selectPlatform('tiktok')" id="plat-tiktok" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
                 <span>🎵</span> TikTok
             </button>
-            <button onclick="selectPlatform('youtube')" id="plat-youtube" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+            <button onclick="selectPlatform('youtube')" id="plat-youtube" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
                 <span>▶️</span> YouTube
             </button>
-            <button onclick="selectPlatform('facebook')" id="plat-facebook" class="plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap">
+            <button onclick="selectPlatform('facebook')" id="plat-facebook" class="plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95">
                 <span>📘</span> Facebook
             </button>
         </div>
@@ -118,15 +138,14 @@
     <!-- TAB 2: MY ORDERS -->
     <section id="tab-orders" class="space-y-3 hidden">
         <div class="glass-card p-5 rounded-3xl">
-            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                <span>📋</span> Mening Buyurtmalarim
-            </h3>
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span>📋</span> Mening Buyurtmalarim
+                </h3>
+                <span id="orders-badge-count" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">0 ta</span>
+            </div>
             <div id="my-orders-list" class="space-y-2.5 text-xs">
-                <!-- Dynamically populated or fallback -->
-                <div class="text-center py-8 text-gray-500">
-                    <div class="text-3xl mb-2">📭</div>
-                    Hozircha faol buyurtmalaringiz yo'q.
-                </div>
+                <!-- Dynamically populated -->
             </div>
         </div>
     </section>
@@ -145,35 +164,38 @@
             </div>
 
             <!-- PAYMENT OPTIONS -->
-            <div class="space-y-2.5 text-xs">
+            <div class="space-y-3 text-xs">
                 <!-- Card 1: Click / Payme -->
-                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2.5">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-emerald-400 flex items-center gap-1.5">
                             <span>🟢</span> Click & Payme (Karta)
                         </span>
                         <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">0% Komissiya</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-black/40 font-mono text-gray-300 flex justify-between items-center">
-                        <span id="card-num">8600 5304 1234 5678</span>
-                        <button onclick="copyCard()" class="text-indigo-400 hover:text-indigo-300 font-sans font-bold">Nusxa olish 📋</button>
+                    <div class="p-3 rounded-xl bg-black/40 font-mono text-gray-200 flex justify-between items-center border border-white/5">
+                        <span id="card-num" class="tracking-wider">8600 5304 1234 5678</span>
+                        <button onclick="copyCard()" class="text-indigo-400 hover:text-indigo-300 font-sans font-bold active:scale-95 transition-all">Nusxa olish 📋</button>
                     </div>
-                    <p class="text-[10px] text-gray-400 leading-relaxed">
-                        To'lov qilgach, chekni botdagi <b>«Hisob to'ldirish»</b> bo'limiga yuboring. Balansingiz 1 daqiqa ichida to'ldiriladi.
+                    <p class="text-[11px] text-gray-400 leading-relaxed">
+                        To'lov qilgach, chekni botdagi <b>«💰 Pul kiritish»</b> bo'limiga yuboring. Balansingiz 1 daqiqa ichida to'ldiriladi.
                     </p>
                 </div>
 
                 <!-- Card 2: Telegram Stars -->
-                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+                <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2.5">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-amber-400 flex items-center gap-1.5">
-                            <span>⭐</span> Telegram Stars
+                            <span>⭐</span> Telegram Stars (Avtomatik)
                         </span>
                         <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold">Tezkor</span>
                     </div>
                     <p class="text-[11px] text-gray-300">
-                        1 Telegram Yulduz = <b>120 so'm</b> hisobida qabul qilinadi. Bot chatida <code>/stars</code> yozib to'g'ridan-to'g'ri to'lashingiz mumkin.
+                        1 Telegram Yulduz = <b class="text-amber-300 font-mono" id="stars-rate-label">200 so'm</b> hisobida qabul qilinadi. To'lov amalga oshishi bilan balansingiz avtomatik yangilanadi.
                     </p>
+                    <button onclick="payWithStars()" class="w-full py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
+                        <span>⭐ Botda Yulduz bilan to'lash</span> ➔
+                    </button>
                 </div>
             </div>
         </div>
@@ -187,45 +209,56 @@
             </h3>
             
             <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                    <span class="text-gray-400 text-[10px]">Jami Buyurtmalar</span>
-                    <div id="prof-total-orders" class="text-base font-bold text-indigo-400 mt-1">0 ta</div>
+                <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <span class="text-gray-400 text-[10px] uppercase tracking-wider">Jami Buyurtmalar</span>
+                    <div id="prof-total-orders" class="text-lg font-black text-indigo-400 mt-1 font-mono">0 ta</div>
                 </div>
-                <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5">
-                    <span class="text-gray-400 text-[10px]">Taklif etilganlar</span>
-                    <div id="prof-referrals" class="text-base font-bold text-purple-400 mt-1">0 ta</div>
+                <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5">
+                    <span class="text-gray-400 text-[10px] uppercase tracking-wider">Taklif etilganlar</span>
+                    <div id="prof-referrals" class="text-lg font-black text-purple-400 mt-1 font-mono">0 ta</div>
                 </div>
             </div>
 
             <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
                 <span class="font-bold text-indigo-300">🔗 Sizning Referal Havolangiz:</span>
-                <div class="p-2 rounded-xl bg-black/40 font-mono text-[11px] text-gray-300 break-all select-all" id="ref-link">
-                    https://t.me/Muxa_aibot?start=8191930658
+                <div class="p-2.5 rounded-xl bg-black/40 font-mono text-[11px] text-gray-300 break-all select-all flex justify-between items-center border border-white/5" id="ref-link-box">
+                    <span id="ref-link" class="truncate pr-2">https://t.me/Muxa_aibot?start=8191930658</span>
+                    <button onclick="copyRefLink()" class="text-indigo-400 font-sans font-bold shrink-0 active:scale-95">Nusxa 📋</button>
                 </div>
-                <p class="text-[10px] text-gray-400">Har bir do'stingiz to'ldirgan hisobidan 10% doimiy bonus balansingizga tushadi.</p>
+                <p class="text-[10px] text-gray-400">Har bir taklif etilgan do'stingiz to'ldirgan hisobidan 10% doimiy bonus balansingizga tushadi.</p>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold text-white">Yordam va Qo'llab-quvvatlash</h4>
+                    <p class="text-[10px] text-gray-400">Savol yoki takliflaringiz bo'lsa adminga murojaat qiling</p>
+                </div>
+                <button onclick="contactSupport()" class="px-3 py-1.5 rounded-xl bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 font-bold active:scale-95">
+                    Admin 💬
+                </button>
             </div>
         </div>
     </section>
 
     <!-- ORDER MODAL (POPUP) -->
-    <div id="order-modal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-end md:items-center justify-center p-0 md:p-4 hidden transition-all duration-300">
+    <div id="order-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-end md:items-center justify-center p-0 md:p-4 hidden transition-all duration-200">
         <div class="glass-card w-full max-w-lg rounded-t-[32px] md:rounded-[32px] p-6 space-y-4 border-t border-white/20">
             <div class="flex justify-between items-start">
                 <div>
                     <span id="modal-service-id" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#101</span>
                     <h3 id="modal-service-title" class="text-sm font-bold text-white mt-1.5 leading-snug">Telegram Obunachilar</h3>
                 </div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white">✕</button>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:text-white active:scale-95">✕</button>
             </div>
 
             <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5 text-xs">
                 <div class="flex justify-between text-gray-400">
                     <span>Narxi (1,000 ta):</span>
-                    <span id="modal-service-price" class="font-bold text-emerald-400">12,000 so'm</span>
+                    <span id="modal-service-price" class="font-bold text-emerald-400 font-mono">15,000 so'm</span>
                 </div>
                 <div class="flex justify-between text-gray-400">
                     <span>Buyurtma oralig'i:</span>
-                    <span id="modal-service-limits" class="font-mono text-gray-300">10 — 50,000</span>
+                    <span id="modal-service-limits" class="font-mono text-gray-300">20 — 50,000</span>
                 </div>
             </div>
 
@@ -237,15 +270,18 @@
 
             <!-- QUANTITY INPUT -->
             <div class="space-y-1.5">
-                <label class="text-[11px] font-semibold text-gray-300">Miqdor:</label>
+                <div class="flex justify-between items-center">
+                    <label class="text-[11px] font-semibold text-gray-300">Miqdor:</label>
+                    <span id="qty-limit-hint" class="text-[10px] text-gray-400 font-mono"></span>
+                </div>
                 <input type="number" id="order-qty" oninput="calculateTotal()" placeholder="Masalan: 1000" class="w-full glass-card p-3 rounded-2xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 font-mono">
                 
                 <!-- QUICK CHIPS -->
                 <div class="flex gap-2">
-                    <button onclick="setQty(100)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+100</button>
-                    <button onclick="setQty(500)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+500</button>
-                    <button onclick="setQty(1000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+1,000</button>
-                    <button onclick="setQty(5000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10">+5,000</button>
+                    <button onclick="setQty(100)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+100</button>
+                    <button onclick="setQty(500)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+500</button>
+                    <button onclick="setQty(1000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+1,000</button>
+                    <button onclick="setQty(5000)" class="flex-1 py-1.5 rounded-xl bg-white/5 text-[11px] font-semibold text-gray-300 hover:bg-white/10 active:scale-95">+5,000</button>
                 </div>
             </div>
 
@@ -253,9 +289,10 @@
             <div class="pt-2 border-t border-white/10 flex items-center justify-between">
                 <div>
                     <span class="text-[10px] text-gray-400 uppercase tracking-wider block">Jami to'lov:</span>
-                    <span id="modal-total-price" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">0 so'm</span>
+                    <span id="modal-total-price" class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-mono">0 so'm</span>
+                    <span id="modal-balance-hint" class="text-[10px] block font-mono text-gray-400">Balans: <span id="modal-curr-bal">100,100</span> so'm</span>
                 </div>
-                <button onclick="submitOrder()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs glow-btn active:scale-95 transition-all">
+                <button onclick="submitOrder()" id="btn-submit-order" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs glow-btn active:scale-95 transition-all">
                     Tasdiqlash 🚀
                 </button>
             </div>
@@ -266,20 +303,25 @@
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
-            tg.ready();
-            tg.expand();
-            tg.headerColor = '#030712';
-            tg.backgroundColor = '#030712';
+            try {
+                tg.ready();
+                tg.expand();
+                tg.headerColor = '#030712';
+                tg.backgroundColor = '#030712';
+                if (tg.enableClosingConfirmation) tg.enableClosingConfirmation();
+            } catch (e) {
+                console.warn("Telegram WebApp init warning:", e);
+            }
         }
 
-        // Services Data Base (Integrated with Telegram Bot)
+        // Services Data Base (Full Match with Bot Data)
         const SERVICES = {
             telegram: {
                 categories: ["Obunachilar", "Ko'rishlar", "Reaksiyalar", "Avto-Ko'rish"],
                 items: [
                     { id: 101, cat: "Obunachilar", name: "⚡️ Telegram O'zbek Obunachilar (Tezkor & Kafolatli)", price: 15000, min: 20, max: 50000, speed: "10k/kun", badge: "KAFOLAT" },
                     { id: 102, cat: "Obunachilar", name: "💎 Telegram Jonli O'zbek Obunachilar (Sifatli)", price: 28000, min: 50, max: 20000, speed: "5k/kun", badge: "PREMIUM" },
-                    { id: 103, cat: "Obunachilar", name: "🌐 Telegram Arzon Obunachilar (Dunyoviy)", price: 9000, min: 100, max: 100000, speed: "20k/kun", badge: "ARZON" },
+                    { id: 103, cat: "Obunachilar", name: "🌐 Telegram Arzon Obunachilar (Global)", price: 9000, min: 100, max: 100000, speed: "20k/kun", badge: "ARZON" },
                     { id: 104, cat: "Ko'rishlar", name: "👁 Post Ko'rishlari (Oxirgi 1 ta postga)", price: 800, min: 50, max: 100000, speed: "Instant", badge: "TEZKOR" },
                     { id: 105, cat: "Ko'rishlar", name: "👁 Oxirgi 5 ta postga ko'rish ulashish", price: 3500, min: 100, max: 50000, speed: "Avto", badge: "TOP" },
                     { id: 106, cat: "Reaksiyalar", name: "👍 Telegram Ijobiy Reaksiyalar (👍❤️🔥🎉🥰)", price: 1500, min: 20, max: 10000, speed: "Instant", badge: "MIX" },
@@ -306,12 +348,12 @@
             youtube: {
                 categories: ["Obunachilar", "Ko'rishlar", "Layklar"],
                 items: [
-                    { id: 401, cat: "Obunachilar", name: "▶️ YouTube Kafolatli Obunachilar (Monetizatsiya uchun)", price: 85000, min: 50, max: 5000, speed: "300/kun", badge: "ORGANIC" },
+                    { id: 401, cat: "Obunachilar", name: "▶️ YouTube Kafolatli Obunachilar (Monetizatsiya)", price: 85000, min: 50, max: 5000, speed: "300/kun", badge: "ORGANIC" },
                     { id: 402, cat: "Ko'rishlar", name: "👁 YouTube Video Ko'rishlar (Retention 1-3 min)", price: 18000, min: 500, max: 100000, speed: "5k/kun", badge: "SAFE" }
                 ]
             },
             facebook: {
-                categories: ["Obunachilar", "Layklar"],
+                categories: ["Obunachilar"],
                 items: [
                     { id: 501, cat: "Obunachilar", name: "📘 Facebook Sahifa Obunachilari", price: 32000, min: 100, max: 20000, speed: "2k/kun", badge: "PAGE" }
                 ]
@@ -321,18 +363,139 @@
         let currentPlatform = 'telegram';
         let currentCategory = 'All';
         let selectedService = null;
-        let userBalance = 50000; // Standart demo balans
+        let userId = 8191930658;
+        let userName = "Foydalanuvchi";
+        let userBalance = 100100;
+        let userOrders = [];
+        let userReferrals = 0;
 
-        // Init User Info from Telegram
-        function initTelegramUser() {
-            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const u = tg.initDataUnsafe.user;
-                document.getElementById('user-name').innerText = u.first_name + (u.last_name ? ' ' + u.last_name : '');
-                document.getElementById('user-id').innerText = 'ID: ' + u.id;
-                document.getElementById('user-avatar').innerText = u.first_name.charAt(0);
-                document.getElementById('ref-link').innerText = `https://t.me/Muxa_aibot?start=${u.id}`;
+        // Toast Helper
+        function showToast(msg, icon = '✅') {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').innerText = icon;
+            t.classList.add('show');
+            setTimeout(() => {
+                t.classList.remove('show');
+            }, 3000);
+        }
+
+        // Init User Info from Telegram & URL Parameters (Exact Balance Match)
+        function initUserData() {
+            const params = new URLSearchParams(window.location.search);
+            const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+            
+            // 1. Resolve User ID
+            if (params.get('uid')) {
+                userId = parseInt(params.get('uid')) || 8191930658;
+            } else if (tgUser && tgUser.id) {
+                userId = tgUser.id;
+            } else {
+                userId = 8191930658;
             }
-            document.getElementById('user-balance').innerText = userBalance.toLocaleString();
+
+            // 2. Resolve User Name
+            if (tgUser && tgUser.first_name) {
+                userName = tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '');
+            } else if (params.get('name')) {
+                userName = params.get('name');
+            } else if (String(userId) === "8191930658") {
+                userName = "Muhammadjon (Admin)";
+            }
+
+            // 3. Resolve Exact User Balance
+            if (params.get('bal') !== null) {
+                userBalance = parseInt(params.get('bal')) || 0;
+                localStorage.setItem('smm_bal_' + userId, userBalance);
+            } else if (params.get('balance') !== null) {
+                userBalance = parseInt(params.get('balance')) || 0;
+                localStorage.setItem('smm_bal_' + userId, userBalance);
+            } else {
+                const cachedBal = localStorage.getItem('smm_bal_' + userId);
+                if (cachedBal !== null) {
+                    userBalance = parseInt(cachedBal) || 0;
+                } else if (String(userId) === "8191930658") {
+                    // Bot data.json da egasi 8191930658 balansi 100100 so'm
+                    userBalance = 100100;
+                } else {
+                    userBalance = 0;
+                }
+            }
+
+            // 4. Resolve Referrals Count
+            if (params.get('ref') !== null) {
+                userReferrals = parseInt(params.get('ref')) || 0;
+                localStorage.setItem('smm_ref_' + userId, userReferrals);
+            } else {
+                const cachedRef = localStorage.getItem('smm_ref_' + userId);
+                userReferrals = cachedRef ? parseInt(cachedRef) : 0;
+            }
+
+            // 5. Load Cached Orders
+            try {
+                const savedOrders = localStorage.getItem('smm_orders_' + userId);
+                if (savedOrders) {
+                    userOrders = JSON.parse(savedOrders);
+                }
+            } catch (e) {
+                userOrders = [];
+            }
+
+            // Update UI elements immediately (0-latency instant render)
+            document.getElementById('user-name').innerText = userName;
+            document.getElementById('user-id').innerText = 'ID: ' + userId;
+            document.getElementById('user-avatar').innerText = userName.charAt(0).toUpperCase();
+            document.getElementById('ref-link').innerText = `https://t.me/Muxa_aibot?start=${userId}`;
+            updateBalanceUI();
+            updateProfileStats();
+            renderOrders();
+
+            // Background Silent Live API Sync (if backend API is reachable)
+            syncWithBackend();
+        }
+
+        function updateBalanceUI() {
+            const formatted = userBalance.toLocaleString();
+            document.getElementById('user-balance').innerText = formatted;
+            const hint = document.getElementById('modal-curr-bal');
+            if (hint) hint.innerText = formatted;
+        }
+
+        function updateProfileStats() {
+            document.getElementById('prof-total-orders').innerText = userOrders.length + ' ta';
+            document.getElementById('prof-referrals').innerText = userReferrals + ' ta';
+            const badge = document.getElementById('orders-badge-count');
+            if (badge) badge.innerText = userOrders.length + ' ta';
+        }
+
+        // Silent Background Sync with Bot Server
+        async function syncWithBackend() {
+            try {
+                const res = await fetch(`/api/user_info?user_id=${userId}`, { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.ok) {
+                        if (typeof data.balance === 'number') {
+                            userBalance = data.balance;
+                            localStorage.setItem('smm_bal_' + userId, userBalance);
+                            updateBalanceUI();
+                        }
+                        if (typeof data.referrals === 'number') {
+                            userReferrals = data.referrals;
+                            localStorage.setItem('smm_ref_' + userId, userReferrals);
+                            updateProfileStats();
+                        }
+                        if (data.card) {
+                            document.getElementById('card-num').innerText = data.card;
+                        }
+                        if (data.stars_rate) {
+                            document.getElementById('stars-rate-label').innerText = data.stars_rate + " so'm";
+                        }
+                    }
+                }
+            } catch (e) {
+                // Offline or standalone mode — localStorage keeps it running at 0 ping
+            }
         }
 
         // Tab Switcher
@@ -347,17 +510,28 @@
             activeBtn.classList.remove('glass-card', 'text-gray-300');
             activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-indigo-600/30');
             
+            if (tab === 'orders') renderOrders();
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+            // Telegram BackButton support
+            if (tg && tg.BackButton) {
+                if (tab !== 'store') {
+                    tg.BackButton.show();
+                    tg.BackButton.onClick(() => switchTab('store'));
+                } else {
+                    tg.BackButton.hide();
+                }
+            }
         }
 
         // Platform Switcher
         function selectPlatform(plat) {
             currentPlatform = plat;
             document.querySelectorAll('.plat-btn').forEach(btn => {
-                btn.className = 'plat-btn px-3.5 py-2 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap';
+                btn.className = 'plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-semibold glass-card text-gray-400 hover:text-white flex items-center gap-2 whitespace-nowrap active:scale-95';
             });
             const sel = document.getElementById(`plat-${plat}`);
-            sel.className = 'plat-btn px-3.5 py-2 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap';
+            sel.className = 'plat-btn px-3.5 py-2.5 rounded-2xl text-xs font-bold glass-card border-indigo-500/50 bg-indigo-500/20 text-indigo-300 flex items-center gap-2 whitespace-nowrap active:scale-95';
             
             currentCategory = 'All';
             renderCategories();
@@ -368,11 +542,11 @@
         // Render Categories
         function renderCategories() {
             const pills = document.getElementById('category-pills');
-            const cats = ['Barchasi', ...SERVICES[currentPlatform].categories];
+            const cats = ['Barchasi', ...(SERVICES[currentPlatform] ? SERVICES[currentPlatform].categories : [])];
             pills.innerHTML = cats.map(c => {
                 const isActive = (c === 'Barchasi' && currentCategory === 'All') || c === currentCategory;
                 const activeClass = isActive ? 'bg-white/20 text-white font-bold border-white/30' : 'bg-white/[0.04] text-gray-400 border-white/5';
-                return `<button onclick="filterCategory('${c}')" class="px-3 py-1.5 rounded-xl border ${activeClass} transition-all whitespace-nowrap">${c}</button>`;
+                return `<button onclick="filterCategory('${c}')" class="px-3.5 py-2 rounded-xl border ${activeClass} transition-all whitespace-nowrap active:scale-95">${c}</button>`;
             }).join('');
         }
 
@@ -380,44 +554,45 @@
             currentCategory = cat === 'Barchasi' ? 'All' : cat;
             renderCategories();
             renderServices();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
         // Render Services List
         function renderServices() {
             const container = document.getElementById('services-container');
-            const query = document.getElementById('search-input').value.toLowerCase();
-            let items = SERVICES[currentPlatform].items;
+            const query = (document.getElementById('search-input').value || '').toLowerCase().trim();
+            let items = (SERVICES[currentPlatform] ? SERVICES[currentPlatform].items : []);
 
             if (currentCategory !== 'All') {
                 items = items.filter(it => it.cat === currentCategory);
             }
             if (query) {
-                items = items.filter(it => it.name.toLowerCase().includes(query));
+                items = items.filter(it => it.name.toLowerCase().includes(query) || String(it.id).includes(query));
             }
 
             if (items.length === 0) {
-                container.innerHTML = '<div class="text-center py-8 text-gray-500 text-xs">Hech qanday xizmat topilmadi.</div>';
+                container.innerHTML = '<div class="text-center py-12 text-gray-500 text-xs">Hech qanday xizmat topilmadi.</div>';
                 return;
             }
 
             container.innerHTML = items.map(s => `
-                <div class="glass-card p-4 rounded-2xl space-y-2.5 transition-all active:scale-[0.99]">
+                <div class="glass-card p-4 rounded-2xl space-y-2.5 transition-all active:scale-[0.99] border border-white/5 hover:border-white/15">
                     <div class="flex justify-between items-start">
                         <div class="flex items-center gap-2">
                             <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">#${s.id}</span>
                             <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20">${s.badge}</span>
                         </div>
-                        <span class="text-xs font-black text-emerald-400">${s.price.toLocaleString()} so'm <span class="text-[10px] text-gray-400 font-normal">/ 1k</span></span>
+                        <span class="text-xs font-black text-emerald-400 font-mono">${s.price.toLocaleString()} so'm <span class="text-[10px] text-gray-400 font-normal">/ 1k</span></span>
                     </div>
 
                     <h4 class="text-xs font-bold text-gray-100 leading-snug">${s.name}</h4>
 
                     <div class="flex justify-between items-center text-[10px] text-gray-400 pt-1 border-t border-white/5">
-                        <span>Limit: ${s.min} — ${s.max.toLocaleString()}</span>
-                        <span>Tezlik: ${s.speed}</span>
+                        <span>Limit: <b class="text-gray-300 font-mono">${s.min} — ${s.max.toLocaleString()}</b></span>
+                        <span>Tezlik: <b class="text-gray-300">${s.speed}</b></span>
                     </div>
 
-                    <button onclick="openModal(${s.id})" class="w-full py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+                    <button onclick="openModal(${s.id})" class="w-full py-2.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 font-bold text-xs transition-all flex items-center justify-center gap-1.5 active:scale-95">
                         <span>Buyurtma Berish</span> <span>➔</span>
                     </button>
                 </div>
@@ -438,21 +613,32 @@
             document.getElementById('modal-service-title').innerText = selectedService.name;
             document.getElementById('modal-service-price').innerText = selectedService.price.toLocaleString() + " so'm";
             document.getElementById('modal-service-limits').innerText = `${selectedService.min} — ${selectedService.max.toLocaleString()}`;
+            document.getElementById('qty-limit-hint').innerText = `(${selectedService.min} - ${selectedService.max.toLocaleString()})`;
             document.getElementById('order-link').value = '';
             document.getElementById('order-qty').value = selectedService.min;
+            updateBalanceUI();
             calculateTotal();
 
             document.getElementById('order-modal').classList.remove('hidden');
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+            if (tg && tg.BackButton) {
+                tg.BackButton.show();
+                tg.BackButton.onClick(closeModal);
+            }
         }
 
         function closeModal() {
             document.getElementById('order-modal').classList.add('hidden');
+            if (tg && tg.BackButton) {
+                tg.BackButton.hide();
+            }
         }
 
         function setQty(val) {
             document.getElementById('order-qty').value = val;
             calculateTotal();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
         function calculateTotal() {
@@ -460,51 +646,180 @@
             const qty = parseInt(document.getElementById('order-qty').value) || 0;
             const total = Math.round((qty / 1000) * selectedService.price);
             document.getElementById('modal-total-price').innerText = total.toLocaleString() + " so'm";
+
+            // Live Balance Warning
+            const hint = document.getElementById('modal-balance-hint');
+            const submitBtn = document.getElementById('btn-submit-order');
+            if (total > userBalance) {
+                hint.innerHTML = `<span class="text-rose-400 font-bold">⚠️ Balans yetarli emas (${userBalance.toLocaleString()} so'm)</span>`;
+                submitBtn.classList.add('opacity-75');
+            } else {
+                hint.innerHTML = `Balans: <span id="modal-curr-bal" class="text-emerald-400 font-bold">${userBalance.toLocaleString()}</span> so'm`;
+                submitBtn.classList.remove('opacity-75');
+            }
         }
 
-        // Submit Order to Bot via Telegram WebApp
+        // Submit Order (Instant Local Update + Bot Sync)
         function submitOrder() {
             const link = document.getElementById('order-link').value.trim();
             const qty = parseInt(document.getElementById('order-qty').value) || 0;
 
             if (!link) {
-                alert("Iltimos, nishon havolani kiriting!");
+                showToast("Iltimos, nishon havolani kiriting!", "⚠️");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
                 return;
             }
             if (qty < selectedService.min || qty > selectedService.max) {
-                alert(`Miqdor ${selectedService.min} va ${selectedService.max} oralig'ida bo'lishi kerak!`);
+                showToast(`Miqdor ${selectedService.min} va ${selectedService.max.toLocaleString()} oralig'ida bo'lsin!`, "⚠️");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
                 return;
             }
 
             const total = Math.round((qty / 1000) * selectedService.price);
+
+            // Check Balance
+            if (userBalance < total) {
+                showToast(`Balansingiz yetarli emas! Zarur: ${total.toLocaleString()} so'm`, "❌");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                closeModal();
+                switchTab('deposit');
+                return;
+            }
+
+            // Deduct Balance Immediately (0.00000000000001 ping / instant feel)
+            userBalance -= total;
+            localStorage.setItem('smm_bal_' + userId, userBalance);
+            updateBalanceUI();
+
+            // Create Order Object
+            const orderId = Math.floor(1000 + Math.random() * 9000);
+            const orderObj = {
+                id: orderId,
+                service_id: selectedService.id,
+                service_name: selectedService.name,
+                platform: currentPlatform,
+                link: link,
+                quantity: qty,
+                price: total,
+                status: 'Pending',
+                date: new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }) + ', ' + new Date().toLocaleDateString('uz-UZ', { month: 'short', day: 'numeric' })
+            };
+
+            userOrders.unshift(orderObj);
+            localStorage.setItem('smm_orders_' + userId, JSON.stringify(userOrders));
+            updateProfileStats();
+
+            // Prepare Payload for Bot
             const orderPayload = {
                 action: "new_order",
                 service_id: selectedService.id,
                 service_name: selectedService.name,
+                network: currentPlatform.charAt(0).toUpperCase() + currentPlatform.slice(1),
                 link: link,
                 quantity: qty,
-                price: total
+                price: total,
+                user_id: userId
             };
 
-            if (tg && tg.sendData) {
-                tg.HapticFeedback.notificationOccurred('success');
-                tg.sendData(JSON.stringify(orderPayload));
-            } else {
-                alert(`✅ Buyurtma muvaffaqiyatli berildi!\n\nXizmat: ${selectedService.name}\nMiqdor: ${qty}\nJami: ${total} so'm\n\n(Telegram bot orqali tasdiqlandi)`);
-                closeModal();
+            // Send via Telegram WebApp Data if launched from keyboard button
+            let sentViaTg = false;
+            try {
+                if (tg && tg.sendData) {
+                    tg.sendData(JSON.stringify(orderPayload));
+                    sentViaTg = true;
+                }
+            } catch (err) {
+                console.warn("tg.sendData not available in this launch mode, falling back to API:", err);
             }
+
+            // Sync with Server API in background
+            fetch('/api/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderPayload)
+            }).catch(e => console.log('API sync offline/skipped'));
+
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            showToast(`✅ Buyurtma qabul qilindi! (#${orderId})`, "🚀");
+            closeModal();
+            renderOrders();
         }
 
+        // Render Orders List
+        function renderOrders() {
+            const container = document.getElementById('my-orders-list');
+            if (!container) return;
+
+            if (userOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-gray-400">
+                        <div class="text-3xl mb-2">📭</div>
+                        <p class="font-semibold text-xs text-gray-300">Hozircha buyurtmalaringiz yo'q</p>
+                        <p class="text-[10px] text-gray-500 mt-1">Xizmatlar bo'limidan birinchi buyurtmani bering!</p>
+                        <button onclick="switchTab('store')" class="mt-3 px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs active:scale-95">Xizmatlarga o'tish ➔</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = userOrders.map(o => `
+                <div class="p-3.5 rounded-2xl glass-card border border-white/5 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-mono text-[10px] font-bold text-indigo-400 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20">#${o.id}</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/20">⏳ Kutilmoqda</span>
+                    </div>
+                    <h4 class="font-bold text-xs text-white leading-tight">${o.service_name}</h4>
+                    <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
+                        <span>Miqdor: <b class="text-gray-200 font-mono">${o.quantity.toLocaleString()} ta</b></span>
+                        <span>Jami: <b class="text-emerald-400 font-mono">${o.price.toLocaleString()} so'm</b></span>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] text-gray-500">
+                        <span class="truncate max-w-[180px] font-mono">${o.link}</span>
+                        <span>${o.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Copy Functions
         function copyCard() {
             const num = document.getElementById('card-num').innerText.replace(/\s+/g, '');
             navigator.clipboard.writeText(num).then(() => {
-                alert("Karta raqami nusxalandi! 📋");
+                showToast("Karta raqami nusxalandi! 📋", "✅");
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(() => {
+                showToast(num, "📋");
             });
         }
 
-        // Init
-        initTelegramUser();
+        function copyRefLink() {
+            const link = document.getElementById('ref-link').innerText.trim();
+            navigator.clipboard.writeText(link).then(() => {
+                showToast("Referal havolasi nusxalandi! 🔗", "✅");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(() => {
+                showToast(link, "🔗");
+            });
+        }
+
+        function payWithStars() {
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me/Muxa_aibot?start=stars");
+            } else {
+                window.location.href = "https://t.me/Muxa_aibot?start=stars";
+            }
+        }
+
+        function contactSupport() {
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink("https://t.me/Muxa_aibot");
+            } else {
+                window.location.href = "https://t.me/Muxa_aibot";
+            }
+        }
+
+        // Initialize App
+        initUserData();
         renderCategories();
         renderServices();
     </script>
