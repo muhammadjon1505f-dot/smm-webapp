@@ -9,8 +9,8 @@
     <style>
         :root {
             --app-bg: #000000;
-            --glass-bg: rgba(20, 20, 28, 0.76);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(18, 18, 26, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.09);
             --glass-highlight: rgba(255, 255, 255, 0.18);
             --accent-blue: #0A84FF;
             --accent-indigo: #5E5CE6;
@@ -38,7 +38,7 @@
             -webkit-user-select: none;
             overflow-x: hidden;
             min-height: 100vh;
-            padding-bottom: 105px;
+            padding-bottom: 110px;
         }
 
         /* Ambient Glow Spheres */
@@ -52,7 +52,7 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            filter: blur(60px);
+            filter: blur(65px);
         }
 
         .ambient-glow-2 {
@@ -65,7 +65,7 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            filter: blur(70px);
+            filter: blur(75px);
         }
 
         /* Frosted Liquid Glass */
@@ -209,21 +209,21 @@
         </div>
     </header>
 
-    <!-- ==================== TAB 1: STORE / DO'KON (FUTURISTIC VISUAL CATALOG) ==================== -->
+    <!-- ==================== TAB 1: DO'KON / CATALOG (FUTURISTIC SMM STORE) ==================== -->
     <main id="tab-store" class="space-y-4 relative z-10">
         
-        <!-- 1. PLATFORM SELECTOR (Curved Segments) -->
+        <!-- 1. Platform Segmented Slider -->
         <div class="space-y-1.5">
             <div class="flex items-center justify-between px-1">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Ijtimoiy Tarmoq</span>
                 <span id="active-platform-badge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25">Telegram</span>
             </div>
             <div id="platforms-dock" class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
-                <!-- Dynamically populated platforms -->
+                <!-- Dynamically populated: Telegram, Instagram, TikTok, YouTube, etc. -->
             </div>
         </div>
 
-        <!-- 2. CATEGORIES SELECTOR (Visual Cards) -->
+        <!-- 2. Categories Visual Selector -->
         <div class="space-y-1.5">
             <div class="flex items-center justify-between px-1">
                 <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Bo'limlar</span>
@@ -234,7 +234,7 @@
             </div>
         </div>
 
-        <!-- 3. SEARCH & SMART FILTERS -->
+        <!-- 3. Search & Filter Bar -->
         <div class="space-y-2">
             <div class="relative">
                 <input type="text" id="search-input" oninput="filterServices()" placeholder="Xizmat nomi, ID yoki bo'lim..." class="w-full liquid-glass-sm py-3 pl-11 pr-10 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
@@ -242,7 +242,7 @@
                 <button id="search-clear" onclick="clearSearch()" class="hidden absolute right-3.5 top-3 w-5 h-5 rounded-full bg-white/10 text-gray-400 text-[10px] flex items-center justify-center">✕</button>
             </div>
 
-            <!-- Smart Filter Chips -->
+            <!-- Filter Tags -->
             <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[11px]">
                 <button onclick="setFilterBadge('all')" id="flt-all" class="px-3 py-1.5 rounded-xl border border-blue-500/40 bg-blue-500/20 text-blue-300 font-bold whitespace-nowrap ios-btn">Barchasi</button>
                 <button onclick="setFilterBadge('fav')" id="flt-fav" class="px-3 py-1.5 rounded-xl border border-white/5 bg-white/[0.04] text-gray-400 font-medium whitespace-nowrap ios-btn">⭐ Sevimlilar</button>
@@ -252,26 +252,171 @@
             </div>
         </div>
 
-        <!-- 4. SERVICES LIST (Fluid Modern Squircle Cards) -->
+        <!-- 4. Services List Container -->
         <div id="services-container" class="space-y-3">
             <!-- Dynamically populated services -->
         </div>
     </main>
 
-    <!-- ==================== TAB 2: MY ORDERS (BUYURTMALAR TARIXI) ==================== -->
+    <!-- ==================== TAB 2: KABINET & DASHBOARD (ANALYTICS & AI & ADMIN) ==================== -->
+    <section id="tab-profile" class="space-y-4 relative z-10 hidden">
+        
+        <!-- USER OVERVIEW DASHBOARD METRICS -->
+        <div class="liquid-glass p-5 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <div>
+                    <h3 class="font-bold text-white text-base flex items-center gap-2">
+                        <span>📊</span> Foydalanuvchi Ko'rsatkichlari
+                    </h3>
+                    <p class="text-[11px] text-gray-400">Shaxsiy hisob va buyurtmalar statistikasi</p>
+                </div>
+                <button onclick="syncDashboardData()" class="text-xs px-2.5 py-1 rounded-xl bg-white/[0.05] border border-white/10 text-gray-300 hover:text-white flex items-center gap-1 ios-btn">
+                    <span>🔄 Yangilash</span>
+                </button>
+            </div>
+
+            <!-- 4-Metric Grid -->
+            <div class="grid grid-cols-2 gap-2.5 text-xs font-mono">
+                <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1">
+                    <span class="text-[10px] text-gray-400 font-sans uppercase">Jami Xarajat</span>
+                    <div id="dash-total-spent" class="text-lg font-black text-rose-400">0 so'm</div>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1">
+                    <span class="text-[10px] text-gray-400 font-sans uppercase">Jami Buyurtmalar</span>
+                    <div id="dash-total-orders" class="text-lg font-black text-blue-400">0 ta</div>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1">
+                    <span class="text-[10px] text-gray-400 font-sans uppercase">Bajarilmoqda</span>
+                    <div id="dash-active-orders" class="text-lg font-black text-amber-300">0 ta</div>
+                </div>
+                <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/5 space-y-1">
+                    <span class="text-[10px] text-gray-400 font-sans uppercase">Muvaffaqiyatli</span>
+                    <div id="dash-completed-orders" class="text-lg font-black text-emerald-400">0 ta</div>
+                </div>
+            </div>
+
+            <!-- Quick Action Shortcuts -->
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center text-xs">
+                <button onclick="switchTab('deposit')" class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-bold flex flex-col items-center gap-1 ios-btn">
+                    <span class="text-lg">💳</span>
+                    <span class="text-[10px]">To'ldirish</span>
+                </button>
+                <button onclick="toggleAiDrawer(true)" class="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-bold flex flex-col items-center gap-1 ios-btn">
+                    <span class="text-lg">🤖</span>
+                    <span class="text-[10px]">AI Maslahat</span>
+                </button>
+                <button onclick="switchTab('orders')" class="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-300 font-bold flex flex-col items-center gap-1 ios-btn">
+                    <span class="text-lg">📦</span>
+                    <span class="text-[10px]">Tarix</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- SMART AI SMM ASSISTANT CARD -->
+        <div class="liquid-glass p-5 space-y-3.5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-600/25 border border-indigo-500/40 text-indigo-300 flex items-center justify-center text-lg">
+                        🤖
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Aqlli SMM AI Maslahatchi</h4>
+                        <p class="text-[10px] text-gray-400">Maqsadingizga mos xizmatni tezkor topib beradi</p>
+                    </div>
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">AI Active</span>
+            </div>
+
+            <!-- AI Prompt Suggestions -->
+            <div class="flex gap-1.5 overflow-x-auto hide-scrollbar text-[10px]">
+                <button onclick="askAiPrompt('Telegram sifatli obunachi')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">✈️ TG Obunachi</button>
+                <button onclick="askAiPrompt('Instagram reels ko\'rish arzon va tezkor')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">📸 Reels Ko'rish</button>
+                <button onclick="askAiPrompt('TikTok layk va kuzatuvchi')" class="px-2.5 py-1 rounded-xl bg-white/[0.04] border border-white/5 text-gray-300 whitespace-nowrap ios-btn">🎵 TikTok</button>
+            </div>
+
+            <div class="relative">
+                <input type="text" id="ai-user-query" placeholder="Savolingizni yozing (Masalan: 50k byudjetga nima bor?)..." class="w-full liquid-glass-sm p-3 pr-20 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/60 font-medium">
+                <button onclick="submitAiQuery()" class="absolute right-1.5 top-1.5 bottom-1.5 px-3 rounded-xl bg-indigo-600/40 text-indigo-200 font-bold text-xs border border-indigo-500/40 flex items-center gap-1 active:scale-95 transition-all">
+                    <span>So'rash</span> <span>➔</span>
+                </button>
+            </div>
+
+            <!-- AI Response Box -->
+            <div id="ai-response-box" class="hidden p-3.5 rounded-2xl bg-indigo-950/20 border border-indigo-500/20 space-y-2 text-xs">
+                <div id="ai-msg-content" class="text-gray-200 text-xs leading-relaxed"></div>
+                <div id="ai-recs-list" class="space-y-1.5 pt-1"></div>
+            </div>
+        </div>
+
+        <!-- ADMIN PORTAL (FAKAT ADMINISTRATORLAR UCHUN) -->
+        <div id="admin-hub-card" class="liquid-glass p-5 space-y-3.5 hidden border-blue-500/30">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">👑</span>
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Boshqaruv Markazi (Admin Hub)</h4>
+                        <p class="text-[10px] text-gray-400">Provayder holati va tizim umumiy monitoringi</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold">Admin</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div class="p-3 rounded-xl bg-white/[0.04] border border-white/5">
+                    <span class="text-[10px] text-gray-400 block font-sans">Provayder Balansi:</span>
+                    <span id="adm-provider-bal" class="text-sm font-bold text-emerald-400">1,070.86 UZS</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white/[0.04] border border-white/5">
+                    <span class="text-[10px] text-gray-400 block font-sans">Jami Foydalanuvchilar:</span>
+                    <span id="adm-users-cnt" class="text-sm font-bold text-blue-300">2 ta</span>
+                </div>
+            </div>
+
+            <button onclick="triggerProviderSync()" id="btn-adm-sync" class="w-full py-2.5 rounded-xl bg-blue-600/25 hover:bg-blue-600/40 border border-blue-500/40 text-blue-200 font-bold text-xs flex items-center justify-center gap-1.5 ios-btn">
+                <span>⚡️ APIdan Barcha Xizmatlarni Sinxronlash</span>
+            </button>
+        </div>
+
+        <!-- REFERRAL & PARTNERSHIP -->
+        <div class="liquid-glass p-5 space-y-3 text-xs">
+            <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <span>🔗</span> Referal Dasturi va Do'stlarni Taklif Qilish
+            </h4>
+            <div class="p-3 rounded-xl bg-black/60 font-mono text-[11px] text-gray-200 break-all select-all flex justify-between items-center border border-white/10">
+                <span id="ref-link" class="truncate pr-2">https://t.me/Muxa_aibot?start=8191930658</span>
+                <button onclick="copyRefLink()" class="text-blue-400 font-sans font-bold shrink-0 active:scale-95">Nusxa 📋</button>
+            </div>
+            <p class="text-[10px] text-gray-400 leading-relaxed">
+                Do'stingiz har safar botda hisobini to'ldirganda, to'lovning 10% qismi sizning hisobingizga avtomatik o'tkaziladi.
+            </p>
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="liquid-glass p-4 flex justify-between items-center text-xs">
+            <div>
+                <h4 class="font-bold text-white text-xs">Qo'llab-quvvatlash xizmati</h4>
+                <p class="text-[10px] text-gray-400">Savollar yoki muammolar bo'yicha bog'laning</p>
+            </div>
+            <button onclick="contactSupport()" class="px-4 py-2 rounded-xl bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold ios-btn">
+                Admin 💬
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== TAB 3: TARIX / ORDERS (LIVE DATABASE SYNC) ==================== -->
     <section id="tab-orders" class="space-y-3.5 relative z-10 hidden">
         <div class="liquid-glass p-5 space-y-4">
             <div class="flex justify-between items-center">
                 <div>
                     <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
-                        <span>📋</span> Buyurtmalar tarixi
+                        <span>📋</span> Buyurtmalar Tarixi
                     </h3>
-                    <p class="text-[11px] text-gray-400">Barcha berilgan buyurtmalaringiz ro'yxati</p>
+                    <p class="text-[11px] text-gray-400">Barcha berilgan buyurtmalaringizning jonli holati</p>
                 </div>
                 <span id="orders-badge-count" class="text-xs font-mono px-3 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25 font-bold">0 ta</span>
             </div>
 
-            <!-- Order Search & Status Filter -->
+            <!-- Search & Status Filter -->
             <div class="space-y-2">
                 <input type="text" id="order-search-input" oninput="renderOrders()" placeholder="Buyurtma ID yoki havola bo'yicha qidirish..." class="w-full liquid-glass-sm py-2.5 px-3.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/60 font-medium">
                 
@@ -283,12 +428,12 @@
             </div>
 
             <div id="my-orders-list" class="space-y-3 text-xs">
-                <!-- Dynamically populated -->
+                <!-- Dynamically populated from backend -->
             </div>
         </div>
     </section>
 
-    <!-- ==================== TAB 3: DEPOSIT / TO'LDIRISH ==================== -->
+    <!-- ==================== TAB 4: HISOB / DEPOSIT (FINANCIAL SYSTEM) ==================== -->
     <section id="tab-deposit" class="space-y-4 relative z-10 hidden">
         <div class="liquid-glass p-5 space-y-4">
             <div class="flex items-center gap-3">
@@ -296,11 +441,12 @@
                     💳
                 </div>
                 <div>
-                    <h3 class="font-bold text-white text-base leading-snug">Hisobni to'ldirish</h3>
-                    <p class="text-[11px] text-gray-400">Click, Payme yoki Telegram Stars orqali tezkor to'lov</p>
+                    <h3 class="font-bold text-white text-base leading-snug">Moliya va Hisobni To'ldirish</h3>
+                    <p class="text-[11px] text-gray-400">Click, Payme yoki Telegram Stars orqali 0% komissiya</p>
                 </div>
             </div>
 
+            <!-- Payment Options -->
             <div class="space-y-3 text-xs">
                 <!-- Option 1: Card / Click / Payme -->
                 <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3">
@@ -328,87 +474,58 @@
                         <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded-full font-bold">Instant</span>
                     </div>
                     <p class="text-[11px] text-gray-300 leading-relaxed">
-                        1 Telegram Yulduz = <b class="text-amber-300 font-mono" id="stars-rate-label">200 so'm</b> hisobida qabul qilinadi. To'lov qilingan soniyaning o'zidayoq hisobingizga tushadi.
+                        1 Telegram Yulduz = <b class="text-amber-300 font-mono" id="stars-rate-label">200 so'm</b> hisobida qabul qilinadi. To'lov qilingan zahoti hisobingizga tushadi.
                     </p>
                     <button onclick="payWithStars()" class="w-full py-3 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 font-bold text-xs flex items-center justify-center gap-2 ios-btn">
                         <span>⭐ Bot orqali Yulduz bilan to'lash</span> ➔
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ==================== TAB 4: PROFILE & CABINET ==================== -->
-    <section id="tab-profile" class="space-y-4 relative z-10 hidden">
-        <div class="liquid-glass p-5 space-y-4 text-xs">
-            <h3 class="font-bold text-white text-base flex items-center gap-2">
-                <span>⚙️</span> Shaxsiy Kabinet
-            </h3>
-
-            <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                    <span class="text-gray-400 text-[10px] uppercase font-semibold tracking-wider">Jami Buyurtmalar</span>
-                    <div id="prof-total-orders" class="text-xl font-black text-blue-400 mt-1 font-mono">0 ta</div>
+            <!-- Real Transaction History Ledger -->
+            <div class="pt-2 space-y-2">
+                <h4 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>🧾</span> So'nggi Moliyaviy Amallar
+                </h4>
+                <div id="transactions-ledger" class="space-y-2 text-xs">
+                    <!-- Populated dynamically -->
                 </div>
-                <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                    <span class="text-gray-400 text-[10px] uppercase font-semibold tracking-wider">Taklif etilganlar</span>
-                    <div id="prof-referrals" class="text-xl font-black text-purple-400 mt-1 font-mono">0 ta</div>
-                </div>
-            </div>
-
-            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5">
-                <span class="font-bold text-blue-300 text-[12px]">🔗 Do'stlarni taklif qilish va daromad:</span>
-                <div class="p-3 rounded-xl bg-black/60 font-mono text-[11px] text-gray-200 break-all select-all flex justify-between items-center border border-white/10">
-                    <span id="ref-link" class="truncate pr-2">https://t.me/Muxa_aibot?start=8191930658</span>
-                    <button onclick="copyRefLink()" class="text-blue-400 font-sans font-bold shrink-0 active:scale-95">Nusxa 📋</button>
-                </div>
-                <p class="text-[10px] text-gray-400 leading-relaxed">Har bir taklif etilgan do'stingiz hisob to'ldirganda, uning to'lovidan 10% bonus sizning balansingizga doimiy o'tkazib beriladi.</p>
-            </div>
-
-            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex justify-between items-center">
-                <div>
-                    <h4 class="font-bold text-white text-[13px]">Qo'llab-quvvatlash xizmati</h4>
-                    <p class="text-[10px] text-gray-400">Savollar yoki yordam uchun administratorga yozing</p>
-                </div>
-                <button onclick="contactSupport()" class="px-4 py-2 rounded-xl bg-blue-600/30 border border-blue-500/40 text-blue-300 font-bold ios-btn">
-                    Admin 💬
-                </button>
             </div>
         </div>
     </section>
 
-    <!-- ==================== FLOATING BOTTOM DOCK (EXACTLY 4 STANDARD TABS) ==================== -->
+    <!-- ==================== FLOATING BOTTOM DOCK (CLEAN 4 STANDARD TABS) ==================== -->
     <nav class="fixed bottom-3 left-4 right-4 z-40 max-w-md mx-auto">
         <div class="bottom-dock p-2 flex items-center justify-around">
             
-            <!-- Tab 1: Store / Do'kon -->
+            <!-- Tab 1: Do'kon / Store -->
             <button onclick="switchTab('store')" id="tab-btn-store" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-blue-400 font-bold transition-all ios-btn">
                 <span class="text-lg">🛍</span>
                 <span class="text-[10px] tracking-tight">Do'kon</span>
             </button>
 
-            <!-- Tab 2: Orders / Tarix -->
+            <!-- Tab 2: Kabinet & Dashboard -->
+            <button onclick="switchTab('profile')" id="tab-btn-profile" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
+                <span class="text-lg">📊</span>
+                <span class="text-[10px] tracking-tight">Kabinet</span>
+            </button>
+
+            <!-- Tab 3: Tarix / Orders -->
             <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn relative">
                 <span class="text-lg">📦</span>
-                <span class="text-[10px] tracking-tight">Buyurtmalar</span>
+                <span class="text-[10px] tracking-tight">Tarix</span>
                 <span id="dock-orders-badge" class="hidden absolute top-0.5 right-3 w-2 h-2 rounded-full bg-blue-400"></span>
             </button>
 
-            <!-- Tab 3: Deposit / Hisob -->
+            <!-- Tab 4: Hisob / Deposit -->
             <button onclick="switchTab('deposit')" id="tab-btn-deposit" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">💳</span>
                 <span class="text-[10px] tracking-tight">Hisob</span>
             </button>
-
-            <!-- Tab 4: Profile / Kabinet -->
-            <button onclick="switchTab('profile')" id="tab-btn-profile" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
-                <span class="text-lg">⚙️</span>
-                <span class="text-[10px] tracking-tight">Kabinet</span>
-            </button>
         </div>
     </nav>
 
-    <!-- ==================== FLUID APPLE ORDER DRAWER (OSON VA QULAY BUYURTMA OYNASI) ==================== -->
+    <!-- ==================== FLUID APPLE ORDER DRAWER (ULTRA STREAMLINED) ==================== -->
     <div id="order-drawer-container" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
         
         <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-5 space-y-4 border-t border-white/20 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar">
@@ -481,6 +598,15 @@
                         <button onclick="setDrawerQty(500)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">500</button>
                         <button onclick="setDrawerQty(1000)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">1,000</button>
                         <button onclick="setDrawerQty(5000)" class="py-2 rounded-xl bg-white/[0.04] border border-white/5 text-[11px] font-bold text-gray-300 hover:bg-white/10 ios-btn">5,000</button>
+                    </div>
+
+                    <!-- Budget Allocation Chips -->
+                    <div class="flex items-center gap-1.5 pt-0.5">
+                        <span class="text-[10px] text-gray-500 font-semibold uppercase">Balansdan:</span>
+                        <button onclick="setBudgetPct(0.25)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">25%</button>
+                        <button onclick="setBudgetPct(0.50)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">50%</button>
+                        <button onclick="setBudgetPct(0.75)" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-mono text-[10px] font-bold ios-btn">75%</button>
+                        <button onclick="setBudgetPct(1.00)" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-mono text-[10px] font-black ios-btn">100%</button>
                     </div>
                 </div>
 
@@ -582,6 +708,8 @@
         let userBalance = 100100;
         let userReferrals = 0;
         let userOrders = [];
+        let userTransactions = [];
+        let isAdmin = false;
 
         let currentPlatform = "Telegram";
         let currentCategory = "All";
@@ -660,8 +788,9 @@
 
             // Multi-Parallel Live Data Sync from Backend
             await Promise.allSettled([
-                syncUserInfo(),
-                syncServicesFromBackend()
+                syncDashboardData(),
+                syncServicesFromBackend(),
+                syncOrdersFromBackend()
             ]);
         }
 
@@ -673,8 +802,6 @@
         }
 
         function updateProfileStats() {
-            document.getElementById('prof-total-orders').innerText = userOrders.length + ' ta';
-            document.getElementById('prof-referrals').innerText = userReferrals + ' ta';
             const badge = document.getElementById('orders-badge-count');
             if (badge) badge.innerText = userOrders.length + ' ta';
             const dockBadge = document.getElementById('dock-orders-badge');
@@ -684,10 +811,10 @@
             }
         }
 
-        // Multi-Parallel Backend Sync
-        async function syncUserInfo() {
+        // 1. Multi-Parallel Dashboard & Metrics Sync
+        async function syncDashboardData() {
             try {
-                const res = await fetch(`/api/user_info?user_id=${userId}`, { cache: 'no-store' });
+                const res = await fetch(`/api/dashboard?user_id=${userId}`, { cache: 'no-store' });
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.ok) {
@@ -699,7 +826,6 @@
                         if (typeof data.referrals === 'number') {
                             userReferrals = data.referrals;
                             localStorage.setItem('smm_ref_' + userId, userReferrals);
-                            updateProfileStats();
                         }
                         if (data.card) {
                             document.getElementById('card-num').innerText = data.card;
@@ -707,12 +833,49 @@
                         if (data.stars_rate) {
                             document.getElementById('stars-rate-label').innerText = data.stars_rate + " so'm";
                         }
+
+                        // Update Dashboard Cards
+                        document.getElementById('dash-total-spent').innerText = Math.round(data.total_spent || 0).toLocaleString() + " so'm";
+                        document.getElementById('dash-total-orders').innerText = (data.total_orders || 0) + " ta";
+                        document.getElementById('dash-active-orders').innerText = (data.active_orders || 0) + " ta";
+                        document.getElementById('dash-completed-orders').innerText = (data.completed_orders || 0) + " ta";
+
+                        // Update Transactions Ledger
+                        if (data.recent_transactions) {
+                            userTransactions = data.recent_transactions;
+                            renderTransactionsLedger();
+                        }
+
+                        // Admin check
+                        if (data.is_admin) {
+                            isAdmin = true;
+                            document.getElementById('admin-hub-card').classList.remove('hidden');
+                            fetchAdminOverview();
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log("Dashboard sync fallback", e);
+            }
+        }
+
+        // 2. Fetch Live Orders from Backend
+        async function syncOrdersFromBackend() {
+            try {
+                const res = await fetch(`/api/orders?user_id=${userId}`, { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.ok && Array.isArray(data.orders)) {
+                        userOrders = data.orders;
+                        localStorage.setItem('smm_orders_' + userId, JSON.stringify(userOrders));
+                        updateProfileStats();
+                        renderOrders();
                     }
                 }
             } catch (e) {}
         }
 
-        // Sync Services from API (1:1 Exact mirror of categories and services)
+        // 3. Sync Services from API (Exact 1:1 mirror of categories and services)
         async function syncServicesFromBackend() {
             try {
                 let data = null;
@@ -743,7 +906,132 @@
             }
         }
 
-        // Build Platform Dock in Store
+        // 4. Admin Overview Sync
+        async function fetchAdminOverview() {
+            try {
+                const res = await fetch(`/api/admin/overview?user_id=${userId}`);
+                if (res.ok) {
+                    const d = await res.json();
+                    if (d && d.ok) {
+                        document.getElementById('adm-provider-bal').innerText = `${d.provider_balance} ${d.provider_currency}`;
+                        document.getElementById('adm-users-cnt').innerText = `${d.total_users} ta`;
+                    }
+                }
+            } catch(e) {}
+        }
+
+        async function triggerProviderSync() {
+            const btn = document.getElementById('btn-adm-sync');
+            btn.innerHTML = `<span>⏳ Sinxronlanmoqda...</span>`;
+            try {
+                const res = await fetch('/api/admin/sync_services', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ user_id: userId })
+                });
+                const d = await res.json();
+                if (d && d.ok) {
+                    showToast(d.message || "Xizmatlar yangilandi!", "⚡️");
+                    syncServicesFromBackend();
+                } else {
+                    showToast(d.error || "Xatolik yuz berdi", "❌");
+                }
+            } catch(e) {
+                showToast("Server bilan aloqa uzildi", "⚠️");
+            }
+            btn.innerHTML = `<span>⚡️ APIdan Barcha Xizmatlarni Sinxronlash</span>`;
+        }
+
+        // Render Transactions Ledger
+        function renderTransactionsLedger() {
+            const container = document.getElementById('transactions-ledger');
+            if (!container) return;
+
+            if (userTransactions.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-gray-500 font-mono text-[11px]">
+                        Hozircha moliyaviy amallar mavjud emas
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = userTransactions.map(t => {
+                const isDeposit = (t.amount > 0);
+                const color = isDeposit ? "text-emerald-400" : "text-gray-200";
+                const sign = isDeposit ? "+" : "";
+                
+                return `
+                    <div class="p-3 rounded-xl bg-white/[0.04] border border-white/5 flex justify-between items-center font-mono">
+                        <div>
+                            <span class="font-bold text-white text-xs block font-sans">${escapeHtml(t.description || 'Amal')}</span>
+                            <span class="text-[10px] text-gray-400">${t.date || ''}</span>
+                        </div>
+                        <span class="font-bold text-xs ${color}">${sign}${t.amount.toLocaleString()} so'm</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== AI ASSISTANT CLIENT ====================
+        function askAiPrompt(prompt) {
+            document.getElementById('ai-user-query').value = prompt;
+            submitAiQuery();
+        }
+
+        async function submitAiQuery() {
+            const query = (document.getElementById('ai-user-query').value || '').trim();
+            if (!query) return;
+
+            const box = document.getElementById('ai-response-box');
+            const msgEl = document.getElementById('ai-msg-content');
+            const recsEl = document.getElementById('ai-recs-list');
+
+            box.classList.remove('hidden');
+            msgEl.innerHTML = `<span class="text-indigo-300 font-mono">🤖 Tahlil qilinmoqda, kuting...</span>`;
+            recsEl.innerHTML = ``;
+
+            try {
+                const res = await fetch('/api/ai/assistant', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query, user_id: userId })
+                });
+                const data = await res.json();
+                if (data && data.ok) {
+                    msgEl.innerHTML = data.message;
+                    if (data.tips && data.tips.length > 0) {
+                        msgEl.innerHTML += `<div class="mt-1 text-[11px] text-indigo-300 font-mono">💡 ${data.tips[0]}</div>`;
+                    }
+                    if (data.recommendations && data.recommendations.length > 0) {
+                        recsEl.innerHTML = data.recommendations.map(r => `
+                            <div class="p-2.5 rounded-xl bg-black/40 border border-indigo-500/30 flex items-center justify-between">
+                                <div class="max-w-[210px]">
+                                    <span class="font-bold text-white text-[11px] block truncate">${escapeHtml(r.name)}</span>
+                                    <span class="text-[10px] text-emerald-400 font-mono">${r.rate.toLocaleString()} so'm/1k</span>
+                                </div>
+                                <button onclick="selectServiceFromAi('${r.id}', '${r.network}')" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white font-bold text-[10px] active:scale-95">
+                                    Tanlash ➔
+                                </button>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    msgEl.innerHTML = `Kechirasiz, ma'lumot topilmadi.`;
+                }
+            } catch(e) {
+                msgEl.innerHTML = `AI xizmati vaqtincha offline rejimda.`;
+            }
+        }
+
+        function selectServiceFromAi(serviceId, network) {
+            if (network && DYNAMIC_DATA.services[network]) {
+                selectPlatform(network);
+            }
+            openOrderDrawer(serviceId);
+        }
+
+        // ==================== STORE CATALOG LOGIC ====================
         function buildPlatformDock() {
             const dock = document.getElementById('platforms-dock');
             let platforms = Object.keys(DYNAMIC_DATA.services);
@@ -781,7 +1069,6 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('selectionChanged');
         }
 
-        // Render Categories for Selected Platform (Exact 1:1 API categories)
         function renderCategories() {
             const pills = document.getElementById('category-pills');
             const badge = document.getElementById('cat-count-badge');
@@ -985,7 +1272,6 @@
             if (!drawerSelectedService && all.length > 0) drawerSelectedService = all[0];
             if (!drawerSelectedService) return;
 
-            // Reset Drawer Views
             document.getElementById('drawer-form-view').classList.remove('hidden');
             document.getElementById('drawer-receipt-view').classList.add('hidden');
 
@@ -999,7 +1285,6 @@
             document.getElementById('drawer-limits').innerText = `${drawerSelectedService.min} — ${drawerSelectedService.max >= 1000 ? (drawerSelectedService.max / 1000) + 'k' : drawerSelectedService.max}`;
             document.getElementById('drawer-qty-hint').innerText = `Limit: ${drawerSelectedService.min} — ${drawerSelectedService.max.toLocaleString()}`;
 
-            // Link placeholder & hint based on platform
             const linkInput = document.getElementById('drawer-link');
             const hint = document.getElementById('drawer-link-hint');
             if (currentPlatform === 'Telegram') {
@@ -1109,6 +1394,20 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
+        function setBudgetPct(pct) {
+            if (!drawerSelectedService) return;
+            const targetBudget = userBalance * pct;
+            if (targetBudget <= 0) {
+                showToast("Balansingizda mablag' mavjud emas!", "⚠️");
+                return;
+            }
+            let calculatedQty = Math.floor((targetBudget / drawerSelectedService.price) * 1000);
+            calculatedQty = Math.max(drawerSelectedService.min, Math.min(calculatedQty, drawerSelectedService.max));
+            document.getElementById('drawer-qty').value = calculatedQty;
+            calculateDrawerTotal();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        }
+
         function calculateDrawerTotal() {
             if (!drawerSelectedService) return;
             const qty = parseInt(document.getElementById('drawer-qty').value) || 0;
@@ -1209,6 +1508,12 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderPayload)
+            }).then(r => r.json()).then(d => {
+                if (d && d.ok && d.order_id) {
+                    orderObj.id = d.order_id;
+                    orderObj.provider_order_id = d.provider_order_id;
+                    renderOrders();
+                }
             }).catch(e => console.log('Order sync static mode'));
 
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
@@ -1225,6 +1530,7 @@
             document.getElementById('drawer-receipt-view').classList.remove('hidden');
 
             renderOrders();
+            syncDashboardData();
         }
 
         // Re-Order Helper from History
@@ -1236,6 +1542,32 @@
             }
             openOrderDrawer(ord.service_id, ord.link, ord.quantity);
             showToast("Buyurtma ma'lumotlari yuklandi! 🔁", "✨");
+        }
+
+        // Live Order Status Check against Provider
+        async function checkOrderStatus(orderId, event) {
+            if (event) event.stopPropagation();
+            showToast("Holat tekshirilmoqda...", "⏳");
+            try {
+                const res = await fetch('/api/order/status', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ order_id: orderId })
+                });
+                const d = await res.json();
+                if (d && d.ok && d.order) {
+                    const ord = userOrders.find(o => String(o.id) === String(orderId));
+                    if (ord) {
+                        ord.status = d.order.status;
+                        renderOrders();
+                    }
+                    showToast(`Holat: ${d.order.status}`, "✅");
+                } else {
+                    showToast("Holat yangilandi", "ℹ️");
+                }
+            } catch(e) {
+                showToast("Tekshirishda xatolik", "⚠️");
+            }
         }
 
         // Orders Tab Logic
@@ -1262,13 +1594,13 @@
 
             let filtered = [...userOrders];
             if (currentOrderStatusFilter === 'progress') {
-                filtered = filtered.filter(o => o.status === 'In progress' || o.status === 'Pending');
+                filtered = filtered.filter(o => o.status === 'In progress' || o.status === 'Pending' || o.status === 'Processing');
             } else if (currentOrderStatusFilter === 'completed') {
                 filtered = filtered.filter(o => o.status === 'Completed' || o.status === 'Bajarildi');
             }
 
             if (searchQ) {
-                filtered = filtered.filter(o => String(o.id).includes(searchQ) || o.service_name.toLowerCase().includes(searchQ) || o.link.toLowerCase().includes(searchQ));
+                filtered = filtered.filter(o => String(o.id).includes(searchQ) || (o.service_name || o.service || '').toLowerCase().includes(searchQ) || (o.link || '').toLowerCase().includes(searchQ));
             }
 
             if (filtered.length === 0) {
@@ -1283,36 +1615,49 @@
                 return;
             }
 
-            container.innerHTML = filtered.map(o => `
-                <div class="p-3.5 rounded-2xl liquid-glass-sm border-white/5 space-y-2.5">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-mono text-[10px] font-bold text-blue-400 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">#${o.id}</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">${o.platform || 'SMM'}</span>
+            container.innerHTML = filtered.map(o => {
+                const sName = o.service_name || o.service || 'SMM Xizmat';
+                const count = o.quantity || o.count || 0;
+                const statusStr = o.status || 'In progress';
+                const isCompleted = statusStr.toLowerCase().includes('completed') || statusStr.toLowerCase().includes('bajarildi');
+                const statusBadge = isCompleted 
+                    ? '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">✅ Bajarildi</span>'
+                    : '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>';
+
+                return `
+                    <div class="p-3.5 rounded-2xl liquid-glass-sm border-white/5 space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-mono text-[10px] font-bold text-blue-400 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">#${o.id}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">${o.network || o.platform || 'SMM'}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="checkOrderStatus('${o.id}', event)" title="Holatni tekshirish" class="text-xs text-gray-400 hover:text-white px-1.5 py-0.5 rounded-md bg-white/[0.04] active:scale-90">🔄</button>
+                                ${statusBadge}
+                            </div>
                         </div>
-                        <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>
-                    </div>
 
-                    <h4 class="font-bold text-xs text-white leading-tight">${escapeHtml(o.service_name)}</h4>
+                        <h4 class="font-bold text-xs text-white leading-tight">${escapeHtml(sName)}</h4>
 
-                    <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5 font-mono">
-                        <span>Miqdor: <b class="text-gray-100">${o.quantity.toLocaleString()} ta</b></span>
-                        <span>Jami: <b class="text-emerald-400">${o.price.toLocaleString()} so'm</b></span>
-                    </div>
+                        <div class="flex justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5 font-mono">
+                            <span>Miqdor: <b class="text-gray-100">${count.toLocaleString()} ta</b></span>
+                            <span>Jami: <b class="text-emerald-400">${(o.price || o.amount || 0).toLocaleString()} so'm</b></span>
+                        </div>
 
-                    <div class="flex justify-between items-center text-[10px] text-gray-500 pt-0.5">
-                        <span class="truncate max-w-[180px] font-mono text-gray-400">${escapeHtml(o.link)}</span>
-                        <span>${o.date}</span>
-                    </div>
+                        <div class="flex justify-between items-center text-[10px] text-gray-500 pt-0.5">
+                            <span class="truncate max-w-[180px] font-mono text-gray-400">${escapeHtml(o.link)}</span>
+                            <span>${o.time || o.date || ''}</span>
+                        </div>
 
-                    <!-- 1-Tap Re-Order Button -->
-                    <div class="pt-1 flex justify-end">
-                        <button onclick="reOrder('${o.id}')" class="px-3 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-300 font-bold text-[11px] flex items-center gap-1.5 ios-btn active:scale-95">
-                            <span>🔁 Qayta buyurtma berish</span>
-                        </button>
+                        <!-- 1-Tap Re-Order Button -->
+                        <div class="pt-1 flex justify-end">
+                            <button onclick="reOrder('${o.id}')" class="px-3 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-300 font-bold text-[11px] flex items-center gap-1.5 ios-btn active:scale-95">
+                                <span>🔁 Qayta buyurtma berish</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Standard 4-Tab Navigation
@@ -1337,10 +1682,13 @@
             }
 
             if (tab === 'orders') {
+                syncOrdersFromBackend();
                 renderOrders();
             } else if (tab === 'store') {
                 renderCategories();
                 renderServices();
+            } else if (tab === 'profile') {
+                syncDashboardData();
             }
 
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
@@ -1353,6 +1701,11 @@
                     tg.BackButton.hide();
                 }
             }
+        }
+
+        function toggleAiDrawer(open) {
+            switchTab('profile');
+            document.getElementById('ai-user-query').focus();
         }
 
         // Toast Popup
