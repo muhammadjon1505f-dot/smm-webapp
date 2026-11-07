@@ -296,7 +296,7 @@
                 </button>
                 <button onclick="switchTab('orders')" class="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-300 font-bold flex flex-col items-center gap-1 ios-btn">
                     <span class="text-lg">📦</span>
-                    <span class="text-xs">Buyurtmalar Tarixi</span>
+                    <span class="text-xs">Buyurtmalar</span>
                 </button>
             </div>
         </div>
@@ -379,9 +379,9 @@
             <div class="flex justify-between items-center">
                 <div>
                     <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">
-                        <span>📋</span> Buyurtmalar Tarixi
+                        <span>📋</span> Buyurtmalar
                     </h3>
-                    <p class="text-[11px] text-gray-400">Barcha berilgan buyurtmalaringizning jonli holati</p>
+                    <p class="text-[11px] text-gray-400">Barcha berilgan buyurtmalaringiz va to'lov cheklari</p>
                 </div>
                 <span id="orders-badge-count" class="text-xs font-mono px-3 py-1 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/25 font-bold">0 ta</span>
             </div>
@@ -480,10 +480,10 @@
                 <span class="text-[10px] tracking-tight">Kabinet</span>
             </button>
 
-            <!-- Tab 3: Tarix / Orders -->
+            <!-- Tab 3: Buyurtmalar / Orders -->
             <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">📦</span>
-                <span class="text-[10px] tracking-tight">Tarix</span>
+                <span class="text-[10px] tracking-tight">Buyurtmalar</span>
             </button>
 
             <!-- Tab 4: Hisob / Deposit -->
@@ -657,6 +657,101 @@
     </div>
 
     
+        <!-- ==================== CLICK / PAYME STYLE FULL RECEIPT MODAL ==================== -->
+    <div id="order-receipt-modal" class="sheet-container fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end md:items-center justify-center opacity-0 pointer-events-none p-0 md:p-4">
+        <div class="sheet-content liquid-glass w-full max-w-md rounded-t-[36px] md:rounded-[36px] p-6 space-y-4 border border-white/15 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar shadow-2xl">
+            <!-- Mobile swipe handle -->
+            <div class="w-12 h-1.5 rounded-full bg-white/25 mx-auto -mt-1 mb-2"></div>
+
+            <!-- Receipt Header -->
+            <div class="text-center space-y-2 pt-1">
+                <div id="rcp-status-icon" class="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl mx-auto shadow-lg shadow-emerald-500/20">
+                    ✓
+                </div>
+                <div class="space-y-0.5">
+                    <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400 font-mono">To'lov Cheki • Elektron Kvitansiya</span>
+                    <h3 id="rcp-total-amount" class="text-3xl font-black text-white font-mono tracking-tight">0 so'm</h3>
+                    <div id="rcp-status-badge" class="inline-block mt-1">
+                        <span class="text-[11px] font-bold px-3 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">Muvaffaqiyatli to'landi</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Click/Payme Style Serrated Cutout Divider -->
+            <div class="relative py-2">
+                <div class="border-t-2 border-dashed border-white/15 w-full"></div>
+            </div>
+
+            <!-- Detailed Receipt Table -->
+            <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5 text-xs font-mono">
+                <div class="flex justify-between items-start gap-2">
+                    <span class="text-gray-400 font-sans text-[11px]">Xizmat:</span>
+                    <span id="rcp-service-name" class="font-bold text-white text-right max-w-[220px] font-sans leading-snug">Telegram Obunachi</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Tarmoq:</span>
+                    <span id="rcp-network" class="text-indigo-300 font-bold">Telegram</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Nishon havola:</span>
+                    <div class="flex items-center gap-1.5 max-w-[220px]">
+                        <span id="rcp-link" class="text-blue-300 truncate font-mono text-[11px]">https://t.me/...</span>
+                        <button onclick="copyReceiptLink()" title="Nusxalash" class="text-xs text-gray-400 hover:text-white shrink-0 active:scale-90">📋</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Miqdor:</span>
+                    <span id="rcp-quantity" class="text-white font-bold">1,000 ta</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">1 dona narxi:</span>
+                    <span id="rcp-unit-price" class="text-gray-300 font-semibold">15 so'm</span>
+                </div>
+
+                <div class="flex justify-between items-center pt-2 border-t border-white/10">
+                    <span class="text-gray-400 font-sans text-[11px]">To'lov usuli:</span>
+                    <span class="text-emerald-400 font-sans font-bold flex items-center gap-1">
+                        <span>🟢</span> Asosiy Balans (Click/Payme)
+                    </span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Buyurtma ID:</span>
+                    <span id="rcp-order-id" class="text-blue-400 font-bold">#1090</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Chek raqami:</span>
+                    <span id="rcp-tx-id" class="text-gray-300 font-mono text-[10px]">TX-ORD-1090</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 font-sans text-[11px]">Vaqt:</span>
+                    <span id="rcp-time" class="text-gray-300 text-[11px]">07.11.2026, 14:15:22</span>
+                </div>
+            </div>
+
+            <!-- Receipt Actions -->
+            <div class="space-y-2 pt-1">
+                <button onclick="copyFullReceiptText()" class="w-full py-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/10 border border-white/10 text-white font-bold text-xs flex items-center justify-center gap-2 ios-btn active:scale-95">
+                    <span>📋 Chek ma'lumotlarini nusxalash</span>
+                </button>
+                <div class="flex gap-2">
+                    <button id="btn-rcp-check-status" onclick="checkReceiptStatus()" class="flex-1 py-3 rounded-2xl bg-blue-600/25 border border-blue-500/40 text-blue-300 font-bold text-xs ios-btn active:scale-95 flex items-center justify-center gap-1.5">
+                        <span>🔄 Holatni tekshirish</span>
+                    </button>
+                    <button onclick="closeOrderReceipt()" class="flex-1 py-3 rounded-2xl bg-white/10 hover:bg-white/15 text-gray-200 font-bold text-xs ios-btn active:scale-95">
+                        ✕ Yopish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== SUPPORT TICKETS DRAWER ==================== -->
     <div id="support-drawer" class="sheet-container fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center opacity-0 pointer-events-none p-0 md:p-4">
         <div class="sheet-content liquid-glass w-full max-w-lg rounded-t-[36px] md:rounded-[36px] p-5 space-y-4 border-t border-white/20 pb-8 max-h-[92vh] overflow-y-auto hide-scrollbar">
@@ -851,6 +946,108 @@
             return PLATFORM_ICONS[k] || "✨";
         }
 
+
+
+        // ==================== CLICK / PAYME STYLE FULL RECEIPT LOGIC ====================
+        let currentReceiptOrder = null;
+
+        function openOrderReceipt(orderId) {
+            const ord = userOrders.find(o => String(o.id) === String(orderId));
+            if (!ord) return;
+            currentReceiptOrder = ord;
+
+            const modal = document.getElementById('order-receipt-modal');
+            if (!modal) return;
+
+            const sName = ord.service_name || ord.service || 'SMM Xizmat';
+            const net = ord.network || ord.platform || 'SMM';
+            const qty = ord.quantity || ord.count || 0;
+            const price = ord.price || ord.amount || 0;
+            const unitPrice = qty > 0 ? (price / qty).toFixed(price >= 1000 ? 1 : 2) : 0;
+            const status = ord.status || 'In progress';
+            const isCompleted = status.toLowerCase().includes('completed') || status.toLowerCase().includes('bajarildi');
+            const isCanceled = status.toLowerCase().includes('canceled') || status.toLowerCase().includes('cancelled') || status.toLowerCase().includes('refunded');
+
+            const iconEl = document.getElementById('rcp-status-icon');
+            const badgeEl = document.getElementById('rcp-status-badge');
+
+            if (isCompleted) {
+                iconEl.innerHTML = '✓';
+                iconEl.className = 'w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl mx-auto shadow-lg shadow-emerald-500/20';
+                badgeEl.innerHTML = '<span class="text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">✅ Muvaffaqiyatli bajarildi</span>';
+            } else if (isCanceled) {
+                iconEl.innerHTML = '✕';
+                iconEl.className = 'w-14 h-14 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center text-2xl mx-auto shadow-lg shadow-rose-500/20';
+                badgeEl.innerHTML = '<span class="text-[11px] font-bold px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/25">❌ Bekor qilingan / Qaytarilgan</span>';
+            } else {
+                iconEl.innerHTML = '⏳';
+                iconEl.className = 'w-14 h-14 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-2xl mx-auto shadow-lg shadow-amber-500/20';
+                badgeEl.innerHTML = '<span class="text-[11px] font-bold px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>';
+            }
+
+            document.getElementById('rcp-total-amount').innerText = formatMoney(price);
+            document.getElementById('rcp-service-name').innerText = sName;
+            document.getElementById('rcp-network').innerText = net;
+            document.getElementById('rcp-link').innerText = ord.link || '';
+            document.getElementById('rcp-quantity').innerText = Number(qty).toLocaleString() + ' ta';
+            document.getElementById('rcp-unit-price').innerText = unitPrice + " so'm";
+            document.getElementById('rcp-order-id').innerText = '#' + ord.id;
+            document.getElementById('rcp-tx-id').innerText = 'TX-ORD-' + ord.id;
+            document.getElementById('rcp-time').innerText = ord.time || ord.date || new Date().toLocaleString();
+
+            modal.classList.add('active');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        function closeOrderReceipt() {
+            const modal = document.getElementById('order-receipt-modal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function copyReceiptLink() {
+            if (!currentReceiptOrder || !currentReceiptOrder.link) return;
+            navigator.clipboard.writeText(currentReceiptOrder.link).then(() => {
+                showToast("Havola nusxalandi! 📋", "✅");
+            }).catch(() => {
+                showToast(currentReceiptOrder.link, "📋");
+            });
+        }
+
+        function copyFullReceiptText() {
+            if (!currentReceiptOrder) return;
+            const ord = currentReceiptOrder;
+            const text = `🧾 TO'LOV CHEKI (Muxa SMM)
+================================
+To'lov tizimi: Click & Payme
+Buyurtma ID: #${ord.id}
+Chek raqami: TX-ORD-${ord.id}
+Xizmat: ${ord.service_name || ord.service || 'SMM'}
+Tarmoq: ${ord.network || ord.platform || 'SMM'}
+Nishon havola: ${ord.link || ''}
+Miqdor: ${(ord.quantity || ord.count || 0).toLocaleString()} ta
+Jami to'lov: ${formatMoney(ord.price || ord.amount || 0)}
+Holati: ${ord.status || 'In progress'}
+Sana: ${ord.time || ord.date || ''}
+================================
+To'lov muvaffaqiyatli amalga oshirildi ✅`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Chek matni nusxalandi! 📋", "✅");
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            }).catch(() => {
+                showToast("Chek nusxalandi!", "📋");
+            });
+        }
+
+        async function checkReceiptStatus() {
+            if (!currentReceiptOrder) return;
+            const btn = document.getElementById('btn-rcp-check-status');
+            if (btn) btn.innerHTML = `<span>⏳ Tekshirilmoqda...</span>`;
+            await checkOrderStatus(currentReceiptOrder.id);
+            if (btn) btn.innerHTML = `<span>🔄 Holatni tekshirish</span>`;
+            const updated = userOrders.find(o => String(o.id) === String(currentReceiptOrder.id));
+            if (updated) openOrderReceipt(updated.id);
+        }
 
         // ==================== SUPPORT TICKETS SYSTEM ====================
         function openSupportDrawer(view = 'list') {
@@ -1159,6 +1356,7 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeDrawer();
+                closeOrderReceipt();
                 closeSupportDrawer();
                 closeAdminBalanceModal();
             }
@@ -1913,19 +2111,23 @@
                 const count = o.quantity || o.count || 0;
                 const statusStr = o.status || 'In progress';
                 const isCompleted = statusStr.toLowerCase().includes('completed') || statusStr.toLowerCase().includes('bajarildi');
-                const statusBadge = isCompleted 
-                    ? '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">✅ Bajarildi</span>'
-                    : '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>';
+                const isCanceled = statusStr.toLowerCase().includes('canceled') || statusStr.toLowerCase().includes('cancelled') || statusStr.toLowerCase().includes('refunded');
+                
+                let statusBadge = '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-amber-500/15 text-amber-300 border border-amber-500/25">⏳ Bajarilmoqda</span>';
+                if (isCompleted) {
+                    statusBadge = '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">✅ Bajarildi</span>';
+                } else if (isCanceled) {
+                    statusBadge = '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-rose-500/15 text-rose-300 border border-rose-500/25">❌ Qaytarildi</span>';
+                }
 
                 return `
-                    <div class="p-3.5 rounded-2xl liquid-glass-sm border-white/5 space-y-2.5">
+                    <div onclick="openOrderReceipt('${o.id}')" class="p-3.5 rounded-2xl liquid-glass-sm border-white/5 space-y-2.5 cursor-pointer hover:border-white/20 active:scale-[0.98] transition-all ios-btn">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-1.5">
                                 <span class="font-mono text-[10px] font-bold text-blue-400 px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">#${o.id}</span>
                                 <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/20">${o.network || o.platform || 'SMM'}</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <button onclick="checkOrderStatus('${o.id}', event)" title="Holatni tekshirish" class="text-xs text-gray-400 hover:text-white px-1.5 py-0.5 rounded-md bg-white/[0.04] active:scale-90">🔄</button>
                                 ${statusBadge}
                             </div>
                         </div>
@@ -1938,15 +2140,10 @@
                         </div>
 
                         <div class="flex justify-between items-center text-[10px] text-gray-500 pt-0.5">
-                            <span class="truncate max-w-[180px] font-mono text-gray-400">${escapeHtml(o.link)}</span>
-                            <span>${o.time || o.date || ''}</span>
-                        </div>
-
-                        <!-- 1-Tap Re-Order Button -->
-                        <div class="pt-1 flex justify-end">
-                            <button onclick="reOrder('${o.id}')" class="px-3 py-1.5 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-300 font-bold text-[11px] flex items-center gap-1.5 ios-btn active:scale-95">
-                                <span>🔁 Qayta buyurtma berish</span>
-                            </button>
+                            <span class="truncate max-w-[170px] font-mono text-gray-400">${escapeHtml(o.link)}</span>
+                            <span class="text-emerald-400 font-sans font-semibold flex items-center gap-1">
+                                <span>🧾 Chek</span> <span>➔</span>
+                            </span>
                         </div>
                     </div>
                 `;
