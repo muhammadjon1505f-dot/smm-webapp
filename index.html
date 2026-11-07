@@ -481,10 +481,9 @@
             </button>
 
             <!-- Tab 3: Tarix / Orders -->
-            <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn relative">
+            <button onclick="switchTab('orders')" id="tab-btn-orders" class="dock-btn flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl text-gray-400 font-medium transition-all ios-btn">
                 <span class="text-lg">📦</span>
                 <span class="text-[10px] tracking-tight">Tarix</span>
-                <span id="dock-orders-badge" class="hidden absolute top-0.5 right-3 w-2 h-2 rounded-full bg-blue-400"></span>
             </button>
 
             <!-- Tab 4: Hisob / Deposit -->
@@ -1228,11 +1227,6 @@
         function updateProfileStats() {
             const badge = document.getElementById('orders-badge-count');
             if (badge) badge.innerText = userOrders.length + ' ta';
-            const dockBadge = document.getElementById('dock-orders-badge');
-            if (dockBadge) {
-                if (userOrders.length > 0) dockBadge.classList.remove('hidden');
-                else dockBadge.classList.add('hidden');
-            }
         }
 
         // 1. Multi-Parallel Dashboard & Metrics Sync
